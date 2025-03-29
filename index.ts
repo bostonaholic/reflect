@@ -62,11 +62,13 @@ async function main(): Promise<void> {
       fetchClosedIssues(baseCommand, dateRange)
     ]);
 
+    console.log(); // Add spacing after GitHub fetch results
     console.log(chalk.blue('Generating markdown content...'));
     const markdownContent = await generateMarkdownContent([...prs, ...issues]);
     await writeFileSafely("contributions.md", markdownContent);
     console.log(chalk.green('✓ Markdown file generated: output/contributions.md'));
     
+    console.log(); // Add spacing before summary stats
     console.log(chalk.blue(`Fetched ${chalk.bold(prs.length)} PRs and ${chalk.bold(issues.length)} issues for ${chalk.bold(username)}`));
     console.log(chalk.blue(`From ${formatDateForDisplay(startDate)} to ${formatDateForDisplay(endDate)}`));
 
@@ -76,11 +78,13 @@ async function main(): Promise<void> {
         throw new Error('OPENAI_API_KEY environment variable is required for brag document generation');
       }
 
+      console.log(); // Add spacing before summary generation
       console.log(chalk.blue('Generating summary document...'));
       const summary = await generateSummaryFromContributions(markdownContent, apiKey);
       await writeFileSafely("summarized_contributions.md", summary);
       console.log(chalk.green('✓ Summary document generated: output/summarized_contributions.md'));
       
+      console.log(); // Add spacing before brag generation
       console.log(chalk.blue('Generating brag document...'));
       const brag = await generateBragFromSummary(summary, apiKey, startDate, endDate);
       await writeFileSafely("brag_document.md", brag);
