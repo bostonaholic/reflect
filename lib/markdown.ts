@@ -16,10 +16,16 @@ export async function generateMarkdownContent(items: Item[]): Promise<string> {
   return markdownContent;
 }
 
-export async function generateSummaryFromContributions(contributionsContent: string, apiKey: string): Promise<string> {
-  return generateContributionsSummary(contributionsContent, apiKey);
+export async function generateSummaryFromContributions(markdownContent: string, apiKey: string): Promise<string> {
+  return generateContributionsSummary(markdownContent, apiKey);
 }
 
-export async function generateBragFromSummary(contributionsSummary: string, apiKey: string): Promise<string> {
-  return generateBragDocument(contributionsSummary, apiKey);
+export async function generateBragFromSummary(summary: string, apiKey: string, startDate: Date, endDate: Date): Promise<string> {
+  return generateBragDocument(summary, apiKey, startDate, endDate);
+}
+
+export async function generateSummaryAndBrag(markdownContent: string, apiKey: string, startDate: Date, endDate: Date): Promise<{ summary: string; brag: string }> {
+  const summary = await generateSummaryFromContributions(markdownContent, apiKey);
+  const brag = await generateBragFromSummary(summary, apiKey, startDate, endDate);
+  return { summary, brag };
 }
