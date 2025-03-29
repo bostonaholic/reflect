@@ -40,7 +40,7 @@ You can run the script in one of two ways:
 Run directly with ts-node:
 
 ```bash
-npx ts-node reflect.ts
+npx ts-node index.ts
 ```
 
 ### Production Mode
@@ -48,7 +48,7 @@ npx ts-node reflect.ts
 Compile and run:
 
 ```bash
-npx tsc reflect.ts && node reflect.js
+npx tsc --outDir dist && node dist/index.js
 ```
 
 ## Output
