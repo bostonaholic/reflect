@@ -2,16 +2,16 @@
 
 A Node.js tool that generates a reflection document of your GitHub activity by collecting and formatting merged pull requests and closed issues.
 
-## Quickstart
+## Quickstart 🚀
 
-### Prerequisites
+### Prerequisites ⚙️
 
 1. Install Node.js v22 or higher
-2. Install and authenticate GitHub CLI (`gh`):
+2. Install and authenticate GitHub CLI (`gh`)
 3. Install npm or yarn package manager
 4. OpenAI API key (optional, for summary and brag document generation)
 
-### Usage
+### Usage 💻
 
 1. Install dependencies:
 ```bash
@@ -28,20 +28,20 @@ This will generate three markdown files in the `output` directory:
 - A summarized version of your contributions
 - A professional brag document highlighting your achievements
 
-## Features
+## Features ✨
 
-- Fetches merged pull requests and closed issues from GitHub
-- Filters by author and date range (last 6 months by default)
-- Generates a clean, chronological markdown document
-- Combines both PRs and issues into a single reflection document
-- Uses GitHub CLI for efficient data retrieval
-- Optional AI-powered summary and brag document generation
+- 📥 Fetches merged pull requests and closed issues from GitHub
+- 🔍 Filters by author and date range (last 6 months by default)
+- 📝 Generates a clean, chronological markdown document
+- 🔄 Combines both PRs and issues into a single reflection document
+- ⚡ Uses GitHub CLI for efficient data retrieval
+- 🤖 Optional AI-powered summary and brag document generation
 
-## Usage
+## Usage 🛠️
 
 You can run the script in one of two ways:
 
-### Development Mode
+### Development Mode 🔧
 
 Run directly with ts-node:
 
@@ -55,7 +55,7 @@ Example:
 npx ts-node index.ts bostonaholic 6 --brag --api-key sk-...
 ```
 
-### Production Mode
+### Production Mode 🚀
 
 Compile and run:
 
@@ -69,18 +69,18 @@ Example:
 npx tsc --outDir dist && node dist/index.js bostonaholic 6 --brag --api-key sk-...
 ```
 
-### Arguments
+### Arguments 📋
 
 - `github-username`: Your GitHub username to fetch activity for
 - `months-to-look-back`: Number of months to look back for activity (must be a positive number)
 - `--brag`: Optional flag to generate a summary and brag document
 - `--api-key`: OpenAI API key (optional if set in .env file)
 
-## Output
+## Output 📁
 
 The script will generate one or more markdown files in the `output` directory:
 
-### output/contributions.md
+### output/contributions.md 📊
 Contains:
 - A chronological list of your merged pull requests and closed issues
 - Each item includes:
@@ -90,7 +90,7 @@ Contains:
 - Items are sorted by closing date (most recent first)
 - Activity for the specified time period
 
-### output/summarized.md (with --brag flag)
+### output/summarized.md (with --brag flag) 📝
 Contains:
 - A technical summary of your contributions
 - Groups similar contributions together
@@ -98,7 +98,7 @@ Contains:
 - Identifies patterns in the work
 - Notes significant architectural changes
 
-### output/brag_document.md (with --brag flag)
+### output/brag_document.md (with --brag flag) 🎯
 Contains:
 - A professional achievement-oriented document
 - Highlights technical expertise and impact
@@ -108,7 +108,7 @@ Contains:
 
 Note: The `output` directory and all generated files are automatically git-ignored to prevent accidental commits.
 
-## Troubleshooting
+## Troubleshooting 🔍
 
 1. Make sure your GitHub CLI (`gh`) is authenticated:
 
