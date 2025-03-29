@@ -20,7 +20,7 @@ npm install
 
 2. Run the tool:
 ```bash
-npx ts-node index.ts <github-username> <months-to-look-back> --brag --api-key=sk-...
+npx ts-node index.ts --username <github-username> --months <months-to-look-back> --brag --api-key=sk-...
 ```
 
 This will generate three markdown files in the `output` directory:
@@ -46,13 +46,13 @@ You can run the script in one of two ways:
 Run directly with ts-node:
 
 ```bash
-npx ts-node index.ts <github-username> <months-to-look-back> [--brag] [--api-key <openai-api-key>]
+npx ts-node index.ts --username <github-username> --months <months-to-look-back> [--brag] [--api-key <openai-api-key>]
 ```
 
 Example:
 
 ```bash
-npx ts-node index.ts bostonaholic 6 --brag --api-key sk-...
+npx ts-node index.ts --username bostonaholic --months 6 --brag --api-key=sk-...
 ```
 
 ### Production Mode 🚀
@@ -60,21 +60,28 @@ npx ts-node index.ts bostonaholic 6 --brag --api-key sk-...
 Compile and run:
 
 ```bash
-npx tsc --outDir dist && node dist/index.js <github-username> <months-to-look-back> [--brag] [--api-key <openai-api-key>]
+npx tsc --outDir dist && node dist/index.js --username <github-username> --months <months-to-look-back> [--brag] [--api-key <openai-api-key>]
 ```
 
 Example:
 
 ```bash
-npx tsc --outDir dist && node dist/index.js bostonaholic 6 --brag --api-key sk-...
+npx tsc --outDir dist && node dist/index.js --username <github-username> --months <months-to-look-back> --brag --api-key=sk-...
 ```
 
 ### Arguments 📋
 
-- `github-username`: Your GitHub username to fetch activity for
-- `months-to-look-back`: Number of months to look back for activity (must be a positive number)
-- `--brag`: Optional flag to generate a summary and brag document
-- `--api-key`: OpenAI API key (optional if set in .env file)
+- `-u, --username <username>`: Your GitHub username to fetch activity for
+- `-m, --months <number>`: Number of months to look back for activity (must be a positive number)
+- `-b, --brag`: Optional flag to generate a summary and brag document
+- `-k, --api-key <key>`: OpenAI API key (optional if set in .env file)
+
+### Environment Variables 🔐
+
+You can also set the OpenAI API key in your `.env` file:
+```
+OPENAI_API_KEY=sk-...
+```
 
 ## Output 📁
 
@@ -100,11 +107,11 @@ Contains:
 
 ### output/brag_document.md (with --brag flag) 🎯
 Contains:
-- A professional achievement-oriented document
-- Highlights technical expertise and impact
-- Emphasizes business value and problem-solving
-- Showcases leadership and collaboration
-- Demonstrates innovation and creativity
+- A professional brag document highlighting your achievements
+- Focuses on business impact and value
+- Emphasizes collaboration and leadership
+- Highlights key metrics and improvements
+- Suitable for performance reviews or portfolio
 
 Note: The `output` directory and all generated files are automatically git-ignored to prevent accidental commits.
 
