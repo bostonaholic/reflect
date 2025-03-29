@@ -42,7 +42,8 @@ export async function fetchMergedPRs(baseCommand: string, dateRange: string): Pr
       spinner.warn(chalk.yellow('⚠️  PR Warning: ' + result.stderr));
     }
     const prs = JSON.parse(result.stdout);
-    spinner.succeed(chalk.green(`Fetched ${prs.length} pull requests`));
+    const count = prs.length;
+    spinner.succeed(chalk.green(`Fetched ${count} pull request${count === 1 ? '' : 's'}`));
     return prs;
   } catch (error) {
     spinner.fail(chalk.red('Failed to fetch PRs'));
@@ -60,7 +61,8 @@ export async function fetchClosedIssues(baseCommand: string, dateRange: string):
       spinner.warn(chalk.yellow('⚠️  Issue Warning: ' + result.stderr));
     }
     const issues = JSON.parse(result.stdout);
-    spinner.succeed(chalk.green(`Fetched ${issues.length} issues`));
+    const count = issues.length;
+    spinner.succeed(chalk.green(`Fetched ${count} issue${count === 1 ? '' : 's'}`));
     return issues;
   } catch (error) {
     spinner.fail(chalk.red('Failed to fetch issues'));
