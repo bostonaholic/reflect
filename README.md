@@ -40,7 +40,13 @@ You can run the script in one of two ways:
 Run directly with ts-node:
 
 ```bash
-npx ts-node index.ts
+npx ts-node index.ts <github-username> <months-to-look-back>
+```
+
+Example:
+
+```bash
+npx ts-node index.ts bostonaholic 6
 ```
 
 ### Production Mode
@@ -48,8 +54,19 @@ npx ts-node index.ts
 Compile and run:
 
 ```bash
-npx tsc --outDir dist && node dist/index.js
+npx tsc --outDir dist && node dist/index.js <github-username> <months-to-look-back>
 ```
+
+Example:
+
+```bash
+npx tsc --outDir dist && node dist/index.js bostonaholic 6
+```
+
+### Arguments
+
+- `github-username`: Your GitHub username to fetch activity for
+- `months-to-look-back`: Number of months to look back for activity (must be a positive number)
 
 ## Output
 
@@ -61,7 +78,7 @@ The script will generate a file called `merged_prs_and_issues.md` in the current
   - Closing date
   - Description/body
 - Items are sorted by closing date (most recent first)
-- The last 6 months of activity
+- Activity for the specified time period
 
 Note: The generated `merged_prs_and_issues.md` file is automatically git-ignored to prevent accidental commits.
 
@@ -85,4 +102,4 @@ gh auth login
 node --version
 ```
 
-3. If the script runs but generates an empty file, check your GitHub CLI permissions and ensure you have activity in the last 6 months.
+3. If the script runs but generates an empty file, check your GitHub CLI permissions and ensure you have activity in the specified time period.
