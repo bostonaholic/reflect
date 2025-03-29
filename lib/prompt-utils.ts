@@ -2,11 +2,6 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import chalk from 'chalk';
 
-/**
- * Reads a prompt from a markdown file
- * @param promptName Name of the prompt file (without .md extension)
- * @returns The prompt content as a string
- */
 export async function readPrompt(promptName: string): Promise<string> {
   const promptPath = path.join(__dirname, 'prompts', `${promptName}.md`);
   try {
