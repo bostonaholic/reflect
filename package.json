@@ -5,6 +5,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "commander": "^13.1.0",
     "dotenv": "^16.4.7"
   }
 }

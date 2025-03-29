@@ -1,4 +1,5 @@
 import { config } from 'dotenv';
+import { Command } from 'commander';
 
 function loadEnv() {
   const configResult = config();
@@ -12,39 +13,8 @@ function loadEnv() {
 interface CliArgs {
   username: string;
   months: number;
-  generateBrag?: boolean;
+  generateBrag: boolean;
   apiKey?: string;
-}
-
-interface ValidationResult<T> {
-  isValid: boolean;
-  value?: T;
-}
-
-function validArgCount(args: string[]): boolean {
-  return args.length >= 2 && args.length <= 4;
-}
-
-function validateUsername(username: string): ValidationResult<string> {
-  if (!username || username.trim().length === 0) {
-    return { isValid: false };
-  }
-  return { isValid: true, value: username.trim() };
-}
-
-function validateMonths(monthsStr: string): ValidationResult<number> {
-  const months = parseInt(monthsStr, 10);
-  if (isNaN(months) || months <= 0) {
-    return { isValid: false };
-  }
-  return { isValid: true, value: months };
-}
-
-function validateApiKey(apiKey: string): ValidationResult<string> {
-  if (!apiKey || apiKey.trim().length === 0) {
-    return { isValid: false };
-  }
-  return { isValid: true, value: apiKey.trim() };
 }
 
 function getApiKeyFromEnv(): string | undefined {
@@ -56,68 +26,39 @@ function getApiKeyFromEnv(): string | undefined {
   return apiKey;
 }
 
-function validateArgs(args: string[]): ValidationResult<CliArgs> {
-  if (!validArgCount(args)) {
-    console.error("Usage: npx ts-node index.ts <github-username> <months-to-look-back> [--brag] [--api-key <openai-api-key>]");
-    console.error("Example: npx ts-node index.ts bostonaholic 6 --brag --api-key sk-...");
-    console.error("Note: You can also set OPENAI_API_KEY in your .env file");
-    return { isValid: false };
-  }
+export function getCommandLineArgs(): CliArgs {
+  const program = new Command();
 
-  const usernameResult = validateUsername(args[0]);
-  if (!usernameResult.isValid) {
-    console.error("Error: username cannot be empty");
-    return { isValid: false };
-  }
+  program
+    .name('reflect')
+    .description('Generate GitHub activity reports and brag documents')
+    .version('0.1.0')
+    .requiredOption('-u, --username <username>', 'GitHub username to analyze')
+    .requiredOption('-m, --months <number>', 'Number of months to look back', parseInt)
+    .option('-b, --brag', 'Generate a brag document')
+    .option('-k, --api-key <key>', 'OpenAI API key for brag document generation')
+    .addHelpText('after', `
+      Note: You can also set OPENAI_API_KEY in your .env file
+      Example: reflect -u bostonaholic -m 6 -b
+    `);
 
-  const monthsResult = validateMonths(args[1]);
-  if (!monthsResult.isValid) {
-    console.error("Error: months must be a positive number");
-    return { isValid: false };
-  }
+  program.parse();
 
-  let generateBrag = false;
-  let apiKey: string | undefined;
-
-  for (let i = 2; i < args.length; i++) {
-    if (args[i] === '--brag') {
-      generateBrag = true;
-    } else if (args[i] === '--api-key' && i + 1 < args.length) {
-      const apiKeyResult = validateApiKey(args[i + 1]);
-      if (!apiKeyResult.isValid) {
-        console.error("Error: API key cannot be empty");
-        return { isValid: false };
-      }
-      apiKey = apiKeyResult.value;
-      i++; // Skip the next argument since we've processed it
-    }
-  }
+  const options = program.opts();
 
   // If --brag is specified but no API key provided in command line, try to get it from environment
-  if (generateBrag && !apiKey) {
-    apiKey = getApiKeyFromEnv();
-    if (!apiKey) {
-      console.error("Error: API key is required when generating a brag document. Set it with --api-key or in your .env file");
-      return { isValid: false };
+  if (options.brag && !options.apiKey) {
+    options.apiKey = getApiKeyFromEnv();
+    if (!options.apiKey) {
+      console.error("Error: API key is required when generating a brag document. Set it with -k/--api-key or in your .env file");
+      process.exit(1);
     }
   }
 
   return {
-    isValid: true,
-    value: {
-      username: usernameResult.value!,
-      months: monthsResult.value!,
-      generateBrag,
-      apiKey
-    }
+    username: options.username,
+    months: options.months,
+    generateBrag: options.brag || false,
+    apiKey: options.apiKey
   };
-}
-
-export function getCommandLineArgs(): CliArgs {
-  const args = process.argv.slice(2);
-  const result = validateArgs(args);
-  if (!result.isValid) {
-    process.exit(1);
-  }
-  return result.value!;
 } 
