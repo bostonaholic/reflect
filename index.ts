@@ -5,7 +5,6 @@ import { generateMarkdownContent, generateSummaryFromContributions, generateBrag
 import { getCommandLineArgs } from "./lib/cli";
 import { calculateDateRange, formatDateRangeForGitHub, formatDateForDisplay } from "./lib/date-utils";
 import chalk from 'chalk';
-import ora from 'ora';
 
 const OUTPUT_DIR = "output";
 const ALLOWED_FILES = ["contributions.md", "summarized_contributions.md", "brag_document.md"];
@@ -24,6 +23,28 @@ async function writeFileSafely(filename: string, content: string): Promise<void>
   const outputPath = path.join(OUTPUT_DIR, safeFilename);
   
   await fs.mkdir(OUTPUT_DIR, { recursive: true });
+  
+  try {
+    await fs.access(outputPath);
+    // File exists, ask for confirmation
+    const readline = require('readline').createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+    
+    const answer = await new Promise<string>((resolve) => {
+      readline.question(chalk.yellow(`File ${safeFilename} already exists. Overwrite? (y/N) `), resolve);
+    });
+    readline.close();
+    
+    if (answer.toLowerCase() !== 'y') {
+      console.log(chalk.yellow(`Skipping ${safeFilename}`));
+      return;
+    }
+  } catch (error) {
+    // File doesn't exist, proceed with writing
+  }
+  
   await fs.writeFile(outputPath, content);
 }
 
@@ -41,10 +62,10 @@ async function main(): Promise<void> {
       fetchClosedIssues(baseCommand, dateRange)
     ]);
 
-    const markdownSpinner = ora(chalk.blue('Generating markdown content...')).start();
+    console.log(chalk.blue('Generating markdown content...'));
     const markdownContent = await generateMarkdownContent([...prs, ...issues]);
     await writeFileSafely("contributions.md", markdownContent);
-    markdownSpinner.succeed(chalk.green('Markdown file generated: output/contributions.md'));
+    console.log(chalk.green('✓ Markdown file generated: output/contributions.md'));
     
     console.log(chalk.blue(`Fetched ${chalk.bold(prs.length)} PRs and ${chalk.bold(issues.length)} issues for ${chalk.bold(username)}`));
     console.log(chalk.blue(`From ${formatDateForDisplay(startDate)} to ${formatDateForDisplay(endDate)}`));
@@ -55,15 +76,15 @@ async function main(): Promise<void> {
         throw new Error('OPENAI_API_KEY environment variable is required for brag document generation');
       }
 
-      const summarySpinner = ora(chalk.blue('Generating summary document...')).start();
+      console.log(chalk.blue('Generating summary document...'));
       const summary = await generateSummaryFromContributions(markdownContent, apiKey);
       await writeFileSafely("summarized_contributions.md", summary);
-      summarySpinner.succeed(chalk.green('Summary document generated: output/summarized_contributions.md'));
+      console.log(chalk.green('✓ Summary document generated: output/summarized_contributions.md'));
       
-      const bragSpinner = ora(chalk.blue('Generating brag document...')).start();
+      console.log(chalk.blue('Generating brag document...'));
       const brag = await generateBragFromSummary(summary, apiKey, startDate, endDate);
       await writeFileSafely("brag_document.md", brag);
-      bragSpinner.succeed(chalk.green('Brag document generated: output/brag_document.md'));
+      console.log(chalk.green('✓ Brag document generated: output/brag_document.md'));
     }
   } catch (error) {
     console.error(chalk.red('Execution error:'), error);
