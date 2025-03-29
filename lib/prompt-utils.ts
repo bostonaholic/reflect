@@ -1,5 +1,6 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import chalk from 'chalk';
 
 /**
  * Reads a prompt from a markdown file
@@ -11,7 +12,7 @@ export async function readPrompt(promptName: string): Promise<string> {
   try {
     return await fs.readFile(promptPath, 'utf-8');
   } catch (error) {
-    console.error(`Error reading prompt file ${promptName}:`, error);
+    console.error(chalk('❌ Error reading prompt file'), promptName, ':', error);
     throw error;
   }
 } 

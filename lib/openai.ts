@@ -1,6 +1,8 @@
+import chalk from 'chalk';
+
 export async function callOpenAI(prompt: string, content: string, apiKey: string): Promise<string> {
   try {
-    console.log('Making OpenAI API request...');
+    console.log(chalk('🤖 Making OpenAI API request...'));
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -26,7 +28,7 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
-      console.error('OpenAI API Error Details:', {
+      console.error(chalk('❌ OpenAI API Error Details:'), {
         status: response.status,
         statusText: response.statusText,
         error: errorData
@@ -37,9 +39,9 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
     const data = await response.json();
     return data.choices[0].message.content;
   } catch (error) {
-    console.error('Error in OpenAI API call:', error);
+    console.error(chalk('❌ Error in OpenAI API call:'), error);
     if (error instanceof Error) {
-      console.error('Error message:', error.message);
+      console.error(chalk('Error message:'), error.message);
     }
     throw error;
   }

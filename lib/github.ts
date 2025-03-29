@@ -1,6 +1,7 @@
 import { exec } from "child_process";
 import { promisify } from "util";
 import { Item } from "./types";
+import chalk from 'chalk';
 
 const execPromise = promisify(exec);
 
@@ -9,10 +10,10 @@ export async function fetchMergedPRs(baseCommand: string, dateRange: string): Pr
 
   try {
     const result = await execPromise(prCommand);
-    if (result.stderr) console.error("PR Error:", result.stderr);
+    if (result.stderr) console.error(chalk('⚠️  PR Warning:'), result.stderr);
     return JSON.parse(result.stdout);
   } catch (error) {
-    console.error("Error fetching PRs:", error);
+    console.error(chalk('❌ Error fetching PRs:'), error);
     return [];
   }
 }
@@ -22,10 +23,10 @@ export async function fetchClosedIssues(baseCommand: string, dateRange: string):
 
   try {
     const result = await execPromise(issueCommand);
-    if (result.stderr) console.error("Issue Error:", result.stderr);
+    if (result.stderr) console.error(chalk('⚠️  Issue Warning:'), result.stderr);
     return JSON.parse(result.stdout);
   } catch (error) {
-    console.error("Error fetching issues:", error);
+    console.error(chalk('❌ Error fetching issues:'), error);
     return [];
   }
 } 
