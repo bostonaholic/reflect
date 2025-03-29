@@ -4,6 +4,7 @@ import { generateMarkdownContent, generateSummaryFromContributions, generateBrag
 import { getCommandLineArgs } from "./lib/cli";
 import { calculateDateRange, formatDateRangeForGitHub, formatDateForDisplay } from "./lib/date-utils";
 import chalk from 'chalk';
+import ora from 'ora';
 
 async function main(): Promise<void> {
   try {
@@ -22,24 +23,27 @@ async function main(): Promise<void> {
     // Create output directory if it doesn't exist
     await fs.mkdir("output", { recursive: true });
 
+    const markdownSpinner = ora(chalk.blue('Generating markdown content...')).start();
     const markdownContent = await generateMarkdownContent([...prs, ...issues]);
     await fs.writeFile("output/contributions.md", markdownContent);
-    console.log(chalk.green('✓ Markdown file generated: output/contributions.md'));
-    console.log(chalk.blue(`📊 Fetched ${chalk.bold(prs.length)} PRs and ${chalk.bold(issues.length)} issues for ${chalk.bold(username)}`));
-    console.log(chalk.blue(`📅 From ${formatDateForDisplay(startDate)} to ${formatDateForDisplay(endDate)}`));
+    markdownSpinner.succeed(chalk.green('Markdown file generated: output/contributions.md'));
+    
+    console.log(chalk.blue(`Fetched ${chalk.bold(prs.length)} PRs and ${chalk.bold(issues.length)} issues for ${chalk.bold(username)}`));
+    console.log(chalk.blue(`From ${formatDateForDisplay(startDate)} to ${formatDateForDisplay(endDate)}`));
 
     if (generateBrag && apiKey) {
-      console.log(chalk.yellow('\n🔄 Generating summary and brag documents...'));
+      const summarySpinner = ora(chalk.blue('Generating summary document...')).start();
       const summary = await generateSummaryFromContributions(markdownContent, apiKey);
       await fs.writeFile("output/summarized.md", summary);
-      console.log(chalk.green('✓ Summary document generated: output/summarized.md'));
+      summarySpinner.succeed(chalk.green('Summary document generated: output/summarized.md'));
       
+      const bragSpinner = ora(chalk.blue('Generating brag document...')).start();
       const brag = await generateBragFromSummary(summary, apiKey, startDate, endDate);
       await fs.writeFile("output/brag_document.md", brag);
-      console.log(chalk.green('✓ Brag document generated: output/brag_document.md'));
+      bragSpinner.succeed(chalk.green('Brag document generated: output/brag_document.md'));
     }
   } catch (error) {
-    console.error(chalk.red('❌ Execution error:'), error);
+    console.error(chalk.red('Execution error:'), error);
     process.exit(1);
   }
 }

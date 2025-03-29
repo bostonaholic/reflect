@@ -5,9 +5,9 @@ import chalk from 'chalk';
 function loadEnv() {
   const configResult = config();
   if (configResult.error) {
-    console.log(chalk.yellow('⚠️  No .env file found, will use command line arguments for API key'));
+    console.log(chalk.yellow('No .env file found, will use command line arguments for API key'));
   } else {
-    console.log(chalk.green('✓ Loaded environment variables from .env file'));
+    console.log(chalk.green('Loaded environment variables from .env file'));
   }
 }
 
@@ -22,7 +22,7 @@ function getApiKeyFromEnv(): string | undefined {
   loadEnv();
   const apiKey = process.env.OPENAI_API_KEY;
   if (apiKey) {
-    console.log(chalk.blue('🔑 Using OpenAI API key from environment variable'));
+    console.log(chalk.blue('Using OpenAI API key from environment variable'));
   }
   return apiKey;
 }
@@ -51,7 +51,7 @@ export function getCommandLineArgs(): CliArgs {
   if (options.brag && !options.apiKey) {
     options.apiKey = getApiKeyFromEnv();
     if (!options.apiKey) {
-      console.error(chalk.red('❌ Error: API key is required when generating a brag document. Set it with -k/--api-key or in your .env file'));
+      console.error(chalk.red('Error: API key is required when generating a brag document. Set it with -k/--api-key or in your .env file'));
       process.exit(1);
     }
   }
