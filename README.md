@@ -8,9 +8,6 @@ A Node.js tool that generates a reflection document of your GitHub activity by c
 
 1. Install Node.js v22 or higher
 2. Install and authenticate GitHub CLI (`gh`):
-```bash
-gh auth login
-```
 3. Install npm or yarn package manager
 4. OpenAI API key (optional, for summary and brag document generation)
 
@@ -26,7 +23,10 @@ npm install
 npx ts-node index.ts <github-username> <months-to-look-back> --brag --api-key=sk-...
 ```
 
-This will generate a markdown file in the `output` directory containing your GitHub contributions.
+This will generate three markdown files in the `output` directory:
+- A detailed list of your GitHub contributions
+- A summarized version of your contributions
+- A professional brag document highlighting your achievements
 
 ## Features
 
@@ -36,14 +36,6 @@ This will generate a markdown file in the `output` directory containing your Git
 - Combines both PRs and issues into a single reflection document
 - Uses GitHub CLI for efficient data retrieval
 - Optional AI-powered summary and brag document generation
-
-## Prerequisites
-
-- Node.js v22 or higher
-- GitHub CLI (`gh`) installed and authenticated
-- npm or yarn package manager
-- OpenAI API key (optional, for summary and brag document generation)
-
 
 ## Usage
 
