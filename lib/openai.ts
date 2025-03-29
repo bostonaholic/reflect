@@ -30,8 +30,8 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
-      spinner.fail(chalk.red('OpenAI API request failed'));
-      console.error(chalk.red('OpenAI API Error Details:'), {
+      spinner.fail(chalk.red('✕ OpenAI API request failed'));
+      console.error(chalk.red('✕ OpenAI API Error Details:'), {
         status: chalk.yellow(response.status),
         statusText: chalk.yellow(response.statusText),
         error: errorData
@@ -43,10 +43,10 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
     spinner.succeed(chalk.green('OpenAI API request completed'));
     return data.choices[0].message.content;
   } catch (error) {
-    spinner.fail(chalk.red('OpenAI API request failed'));
-    console.error(chalk.red('Error in OpenAI API call:'), error);
+    spinner.fail(chalk.red('✕ OpenAI API request failed'));
+    console.error(chalk.red('✕ Error in OpenAI API call:'), error);
     if (error instanceof Error) {
-      console.error(chalk.red('Error message:'), chalk.yellow(error.message));
+      console.error(chalk.red('✕ Error message:'), chalk.yellow(error.message));
     }
     throw error;
   }

@@ -33,12 +33,12 @@ async function writeFileSafely(filename: string, content: string): Promise<void>
     });
     
     const answer = await new Promise<string>((resolve) => {
-      readline.question(chalk.yellow(`File ${safeFilename} already exists. Overwrite? (y/N) `), resolve);
+      readline.question(chalk.yellow(`! File ${safeFilename} already exists. Overwrite? (y/N) `), resolve);
     });
     readline.close();
     
     if (answer.toLowerCase() !== 'y') {
-      console.log(chalk.yellow(`Skipping ${safeFilename}`));
+      console.log(chalk.yellow(`! Skipping ${safeFilename}`));
       return;
     }
   } catch (error) {
@@ -91,7 +91,7 @@ async function main(): Promise<void> {
       console.log(chalk.green('✓ Brag document generated: output/brag_document.md'));
     }
   } catch (error) {
-    console.error(chalk.red('Execution error:'), error);
+    console.error(chalk.red('✕ Execution error:'), error);
     process.exit(1);
   }
 }

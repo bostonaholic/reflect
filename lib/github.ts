@@ -39,7 +39,7 @@ export async function fetchMergedPRs(baseCommand: string, dateRange: string): Pr
   try {
     const result = await execPromise(prCommand);
     if (result.stderr) {
-      spinner.warn(chalk.yellow('⚠️  PR Warning: ' + result.stderr));
+      spinner.warn(chalk.yellow('! PR Warning: ' + result.stderr));
     }
     const prs = JSON.parse(result.stdout);
     const count = prs.length;
@@ -62,7 +62,7 @@ export async function fetchClosedIssues(baseCommand: string, dateRange: string):
   try {
     const result = await execPromise(issueCommand);
     if (result.stderr) {
-      spinner.warn(chalk.yellow('⚠️  Issue Warning: ' + result.stderr));
+      spinner.warn(chalk.yellow('! Issue Warning: ' + result.stderr));
     }
     const issues = JSON.parse(result.stdout);
     const count = issues.length;
