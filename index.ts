@@ -30,7 +30,7 @@ async function writeFileSafely(filename: string, content: string): Promise<void>
 async function main(): Promise<void> {
   try {
     const { username, months, generateBrag } = getCommandLineArgs();
-    const baseCommand = `--author ${username} --limit 1000 --json title,body,closedAt `;
+    const baseCommand = `--author ${username} --limit 1000 --json title,body,closedAt,repository `;
     
     // Calculate date range
     const { startDate, endDate } = calculateDateRange(months);

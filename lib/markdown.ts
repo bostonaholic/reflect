@@ -8,6 +8,7 @@ export async function generateMarkdownContent(items: Item[]): Promise<string> {
   items.sort((a, b) => new Date(b.closedAt).getTime() - new Date(a.closedAt).getTime())
     .forEach((item) => {
       markdownContent += `## ${item.title}\n`;
+      markdownContent += `Repository: ${item.repository}\n`;
       markdownContent += `Closed at: ${item.closedAt}\n\n`;
       markdownContent += `${item.body}\n\n`;
       markdownContent += "---\n\n";

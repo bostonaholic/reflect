@@ -44,7 +44,11 @@ export async function fetchMergedPRs(baseCommand: string, dateRange: string): Pr
     const prs = JSON.parse(result.stdout);
     const count = prs.length;
     spinner.succeed(chalk.green(`Fetched ${count} pull request${count === 1 ? '' : 's'}`));
-    return prs;
+    
+    return prs.map((pr: any) => ({
+      ...pr,
+      repository: pr.repository?.nameWithOwner || 'Unknown'
+    }));
   } catch (error) {
     spinner.fail(chalk.red('Failed to fetch PRs'));
     handleGitHubError(error);
@@ -63,7 +67,11 @@ export async function fetchClosedIssues(baseCommand: string, dateRange: string):
     const issues = JSON.parse(result.stdout);
     const count = issues.length;
     spinner.succeed(chalk.green(`Fetched ${count} issue${count === 1 ? '' : 's'}`));
-    return issues;
+    
+    return issues.map((issue: any) => ({
+      ...issue,
+      repository: issue.repository?.nameWithOwner || 'Unknown'
+    }));
   } catch (error) {
     spinner.fail(chalk.red('Failed to fetch issues'));
     handleGitHubError(error);
