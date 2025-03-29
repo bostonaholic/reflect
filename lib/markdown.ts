@@ -1,4 +1,6 @@
 import { Item } from "./types";
+import { generateContributionsSummary } from "./contributions-summarizer";
+import { generateBragDocument } from "./brag-generator";
 
 export async function generateMarkdownContent(items: Item[]): Promise<string> {
   let markdownContent = "# Merged Pull Requests and Closed Issues\n\n";
@@ -12,4 +14,12 @@ export async function generateMarkdownContent(items: Item[]): Promise<string> {
     });
 
   return markdownContent;
-} 
+}
+
+export async function generateSummaryFromContributions(contributionsContent: string, apiKey: string): Promise<string> {
+  return generateContributionsSummary(contributionsContent, apiKey);
+}
+
+export async function generateBragFromSummary(contributionsSummary: string, apiKey: string): Promise<string> {
+  return generateBragDocument(contributionsSummary, apiKey);
+}

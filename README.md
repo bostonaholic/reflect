@@ -9,12 +9,14 @@ A Node.js tool that generates a reflection document of your GitHub activity by c
 - Generates a clean, chronological markdown document
 - Combines both PRs and issues into a single reflection document
 - Uses GitHub CLI for efficient data retrieval
+- Optional AI-powered summary and brag document generation
 
 ## Prerequisites
 
 - Node.js v22 or higher
 - GitHub CLI (`gh`) installed and authenticated
 - npm or yarn package manager
+- OpenAI API key (optional, for summary and brag document generation)
 
 ## Installation
 
@@ -31,6 +33,11 @@ cd reflect
 npm install
 ```
 
+3. (Optional) Set up your OpenAI API key:
+   - Copy `.env.example` to `.env`
+   - Add your OpenAI API key to the `.env` file:
+   - Note: The `.env` file is automatically git-ignored
+
 ## Usage
 
 You can run the script in one of two ways:
@@ -40,13 +47,13 @@ You can run the script in one of two ways:
 Run directly with ts-node:
 
 ```bash
-npx ts-node index.ts <github-username> <months-to-look-back>
+npx ts-node index.ts <github-username> <months-to-look-back> [--brag] [--api-key <openai-api-key>]
 ```
 
 Example:
 
 ```bash
-npx ts-node index.ts bostonaholic 6
+npx ts-node index.ts bostonaholic 6 --brag
 ```
 
 ### Production Mode
@@ -54,24 +61,28 @@ npx ts-node index.ts bostonaholic 6
 Compile and run:
 
 ```bash
-npx tsc --outDir dist && node dist/index.js <github-username> <months-to-look-back>
+npx tsc --outDir dist && node dist/index.js <github-username> <months-to-look-back> [--brag] [--api-key <openai-api-key>]
 ```
 
 Example:
 
 ```bash
-npx tsc --outDir dist && node dist/index.js bostonaholic 6
+npx tsc --outDir dist && node dist/index.js bostonaholic 6 --brag
 ```
 
 ### Arguments
 
 - `github-username`: Your GitHub username to fetch activity for
 - `months-to-look-back`: Number of months to look back for activity (must be a positive number)
+- `--brag`: Optional flag to generate a summary and brag document
+- `--api-key`: OpenAI API key (optional if set in .env file)
 
 ## Output
 
-The script will generate a file called `merged_prs_and_issues.md` in the current directory. This file will contain:
+The script will generate one or more markdown files in the `output` directory:
 
+### output/contributions.md
+Contains:
 - A chronological list of your merged pull requests and closed issues
 - Each item includes:
   - Title
@@ -80,7 +91,23 @@ The script will generate a file called `merged_prs_and_issues.md` in the current
 - Items are sorted by closing date (most recent first)
 - Activity for the specified time period
 
-Note: The generated `merged_prs_and_issues.md` file is automatically git-ignored to prevent accidental commits.
+### output/summarized.md (with --brag flag)
+Contains:
+- A technical summary of your contributions
+- Groups similar contributions together
+- Highlights key technical changes and improvements
+- Identifies patterns in the work
+- Notes significant architectural changes
+
+### output/brag_document.md (with --brag flag)
+Contains:
+- A professional achievement-oriented document
+- Highlights technical expertise and impact
+- Emphasizes business value and problem-solving
+- Showcases leadership and collaboration
+- Demonstrates innovation and creativity
+
+Note: The `output` directory and all generated files are automatically git-ignored to prevent accidental commits.
 
 ## Troubleshooting
 
@@ -103,3 +130,8 @@ node --version
 ```
 
 3. If the script runs but generates an empty file, check your GitHub CLI permissions and ensure you have activity in the specified time period.
+
+4. If you get an error about the OpenAI API key:
+   - Make sure you've either provided it with the `--api-key` flag
+   - Or set it in your `.env` file
+   - Check that the API key is valid and has sufficient credits

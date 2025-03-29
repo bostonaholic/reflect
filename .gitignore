@@ -1,3 +1,4 @@
 node_modules/
 dist/
-merged_prs_and_issues.md
+output/
+.env
