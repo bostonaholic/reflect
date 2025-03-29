@@ -12,7 +12,7 @@ export async function readPrompt(promptName: string): Promise<string> {
   try {
     return await fs.readFile(promptPath, 'utf-8');
   } catch (error) {
-    console.error(chalk('❌ Error reading prompt file'), promptName, ':', error);
+    console.error(chalk.red('❌ Error reading prompt file'), chalk.yellow(promptName), ':', error);
     throw error;
   }
 } 
