@@ -8,7 +8,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 
 const OUTPUT_DIR = "output";
-const ALLOWED_FILES = ["contributions.md", "summarized.md", "brag_document.md"];
+const ALLOWED_FILES = ["contributions.md", "summarized_contributions.md", "brag_document.md"];
 
 function sanitizeFilename(filename: string): string {
   // Remove any path traversal attempts and ensure the filename is in the allowed list
@@ -57,8 +57,8 @@ async function main(): Promise<void> {
 
       const summarySpinner = ora(chalk.blue('Generating summary document...')).start();
       const summary = await generateSummaryFromContributions(markdownContent, apiKey);
-      await writeFileSafely("summarized.md", summary);
-      summarySpinner.succeed(chalk.green('Summary document generated: output/summarized.md'));
+      await writeFileSafely("summarized_contributions.md", summary);
+      summarySpinner.succeed(chalk.green('Summary document generated: output/summarized_contributions.md'));
       
       const bragSpinner = ora(chalk.blue('Generating brag document...')).start();
       const brag = await generateBragFromSummary(summary, apiKey, startDate, endDate);

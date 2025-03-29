@@ -114,7 +114,7 @@ Contains:
 - Items are sorted by closing date (most recent first)
 - Activity for the specified time period
 
-### output/summarized.md (with --brag flag) 📝
+### output/summarized_contributions.md (with --brag flag) 📝
 Contains:
 - A technical summary of your contributions
 - Groups similar contributions together
