@@ -2,6 +2,32 @@
 
 A Node.js tool that generates a reflection document of your GitHub activity by collecting and formatting merged pull requests and closed issues.
 
+## Quickstart
+
+### Prerequisites
+
+1. Install Node.js v22 or higher
+2. Install and authenticate GitHub CLI (`gh`):
+```bash
+gh auth login
+```
+3. Install npm or yarn package manager
+4. OpenAI API key (optional, for summary and brag document generation)
+
+### Usage
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Run the tool:
+```bash
+npx ts-node index.ts <github-username> <months-to-look-back> --brag --api-key=sk-...
+```
+
+This will generate a markdown file in the `output` directory containing your GitHub contributions.
+
 ## Features
 
 - Fetches merged pull requests and closed issues from GitHub
@@ -18,25 +44,6 @@ A Node.js tool that generates a reflection document of your GitHub activity by c
 - npm or yarn package manager
 - OpenAI API key (optional, for summary and brag document generation)
 
-## Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/bostonaholic/reflect.git
-cd reflect
-```
-
-2. Install dependencies:
-
-```bash
-npm install
-```
-
-3. (Optional) Set up your OpenAI API key:
-   - Copy `.env.example` to `.env`
-   - Add your OpenAI API key to the `.env` file:
-   - Note: The `.env` file is automatically git-ignored
 
 ## Usage
 
@@ -53,7 +60,7 @@ npx ts-node index.ts <github-username> <months-to-look-back> [--brag] [--api-key
 Example:
 
 ```bash
-npx ts-node index.ts bostonaholic 6 --brag
+npx ts-node index.ts bostonaholic 6 --brag --api-key sk-...
 ```
 
 ### Production Mode
@@ -67,7 +74,7 @@ npx tsc --outDir dist && node dist/index.js <github-username> <months-to-look-ba
 Example:
 
 ```bash
-npx tsc --outDir dist && node dist/index.js bostonaholic 6 --brag
+npx tsc --outDir dist && node dist/index.js bostonaholic 6 --brag --api-key sk-...
 ```
 
 ### Arguments
