@@ -18,9 +18,15 @@ A Node.js tool that generates a reflection document of your GitHub activity by c
 npm install
 ```
 
-2. Run the tool:
+2. Set up your environment variables:
 ```bash
-npx ts-node index.ts --username <github-username> --months <months-to-look-back> --brag --api-key=sk-...
+# Create a .env file with your OpenAI API key
+cp .env{.example,}
+```
+
+3. Run the tool:
+```bash
+npx ts-node index.ts --username <github-username> --months <months-to-look-back> --brag
 ```
 
 This will generate three markdown files in the `output` directory:
@@ -36,6 +42,7 @@ This will generate three markdown files in the `output` directory:
 - 🔄 Combines both PRs and issues into a single reflection document
 - ⚡ Uses GitHub CLI for efficient data retrieval
 - 🤖 Optional AI-powered summary and brag document generation
+- 🔒 Secure handling of API keys and sensitive data
 
 ## Usage 🛠️
 
@@ -46,13 +53,13 @@ You can run the script in one of two ways:
 Run directly with ts-node:
 
 ```bash
-npx ts-node index.ts --username <github-username> --months <months-to-look-back> [--brag] [--api-key <openai-api-key>]
+npx ts-node index.ts --username <github-username> --months <months-to-look-back> [--brag]
 ```
 
 Example:
 
 ```bash
-npx ts-node index.ts --username bostonaholic --months 6 --brag --api-key=sk-...
+npx ts-node index.ts --username bostonaholic --months 6 --brag
 ```
 
 ### Production Mode 🚀
@@ -60,13 +67,13 @@ npx ts-node index.ts --username bostonaholic --months 6 --brag --api-key=sk-...
 Compile and run:
 
 ```bash
-npx tsc --outDir dist && node dist/index.js --username <github-username> --months <months-to-look-back> [--brag] [--api-key <openai-api-key>]
+npx tsc --outDir dist && node dist/index.js --username <github-username> --months <months-to-look-back> [--brag]
 ```
 
 Example:
 
 ```bash
-npx tsc --outDir dist && node dist/index.js --username <github-username> --months <months-to-look-back> --brag --api-key=sk-...
+npx tsc --outDir dist && node dist/index.js --username bostonaholic --months 6 --brag
 ```
 
 ### Arguments 📋
@@ -74,14 +81,24 @@ npx tsc --outDir dist && node dist/index.js --username <github-username> --month
 - `-u, --username <username>`: Your GitHub username to fetch activity for
 - `-m, --months <number>`: Number of months to look back for activity (must be a positive number)
 - `-b, --brag`: Optional flag to generate a summary and brag document
-- `-k, --api-key <key>`: OpenAI API key (optional if set in .env file)
 
 ### Environment Variables 🔐
 
-You can also set the OpenAI API key in your `.env` file:
+Required environment variables:
+- `OPENAI_API_KEY`: Your OpenAI API key (required only when using the --brag flag)
+
+Set these in your `.env` file:
 ```
 OPENAI_API_KEY=sk-...
 ```
+
+## Security Considerations 🔒
+
+- API keys are only accepted through environment variables, not command-line arguments
+- All file operations are sanitized to prevent path traversal attacks
+- GitHub API rate limits are properly handled with informative error messages
+- Input validation is performed on all user-provided parameters
+- Output files are restricted to a predefined list of allowed filenames
 
 ## Output 📁
 
@@ -138,6 +155,6 @@ node --version
 3. If the script runs but generates an empty file, check your GitHub CLI permissions and ensure you have activity in the specified time period.
 
 4. If you get an error about the OpenAI API key:
-   - Make sure you've either provided it with the `--api-key` flag
-   - Or set it in your `.env` file
+   - Make sure you've set it in your `.env` file
    - Check that the API key is valid and has sufficient credits
+   - Verify the .env file is in the correct location

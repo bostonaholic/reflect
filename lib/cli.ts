@@ -15,14 +15,14 @@ interface CliArgs {
   username: string;
   months: number;
   generateBrag: boolean;
-  apiKey?: string;
 }
 
-function getApiKeyFromEnv(): string | undefined {
+function getApiKeyFromEnv(): string {
   loadEnv();
   const apiKey = process.env.OPENAI_API_KEY;
-  if (apiKey) {
-    console.log(chalk.blue('Using OpenAI API key from environment variable'));
+  if (!apiKey) {
+    console.error(chalk.red('Error: OPENAI_API_KEY environment variable is required for brag document generation'));
+    process.exit(1);
   }
   return apiKey;
 }
@@ -37,9 +37,8 @@ export function getCommandLineArgs(): CliArgs {
     .requiredOption('-u, --username <username>', 'GitHub username to analyze')
     .requiredOption('-m, --months <number>', 'Number of months to look back', parseInt)
     .option('-b, --brag', 'Generate a brag document')
-    .option('-k, --api-key <key>', 'OpenAI API key for brag document generation')
     .addHelpText('after', `
-      Note: You can also set OPENAI_API_KEY in your .env file
+      Note: Set OPENAI_API_KEY in your .env file for brag document generation
       Example: reflect -u bostonaholic -m 6 -b
     `);
 
@@ -47,19 +46,26 @@ export function getCommandLineArgs(): CliArgs {
 
   const options = program.opts();
 
-  // If --brag is specified but no API key provided in command line, try to get it from environment
-  if (options.brag && !options.apiKey) {
-    options.apiKey = getApiKeyFromEnv();
-    if (!options.apiKey) {
-      console.error(chalk.red('Error: API key is required when generating a brag document. Set it with -k/--api-key or in your .env file'));
-      process.exit(1);
-    }
+  // Validate username format
+  if (!/^[a-zA-Z0-9-]+$/.test(options.username)) {
+    console.error(chalk.red('Error: Invalid GitHub username format'));
+    process.exit(1);
+  }
+
+  // Validate months is positive
+  if (options.months <= 0) {
+    console.error(chalk.red('Error: Months must be a positive number'));
+    process.exit(1);
+  }
+
+  // If --brag is specified, ensure API key is available
+  if (options.brag) {
+    getApiKeyFromEnv();
   }
 
   return {
     username: options.username,
     months: options.months,
-    generateBrag: options.brag || false,
-    apiKey: options.apiKey
+    generateBrag: options.brag || false
   };
 } 

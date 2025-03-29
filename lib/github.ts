@@ -6,6 +6,32 @@ import ora from 'ora';
 
 const execPromise = promisify(exec);
 
+interface GitHubError {
+  message: string;
+  status: number;
+  rateLimit?: {
+    limit: number;
+    remaining: number;
+    reset: number;
+  };
+}
+
+function handleGitHubError(error: any): never {
+  if (error.stderr) {
+    try {
+      const errorData = JSON.parse(error.stderr);
+      if (errorData.message?.includes('rate limit exceeded')) {
+        const resetTime = new Date(errorData.rateLimit?.reset * 1000).toLocaleTimeString();
+        throw new Error(`GitHub API rate limit exceeded. Resets at ${resetTime}`);
+      }
+      throw new Error(errorData.message || 'GitHub API error');
+    } catch (parseError) {
+      throw new Error(`GitHub API error: ${error.stderr}`);
+    }
+  }
+  throw error;
+}
+
 export async function fetchMergedPRs(baseCommand: string, dateRange: string): Promise<Item[]> {
   const prCommand = `gh search prs ${baseCommand} --merged true --merged-at ${dateRange}`;
   const spinner = ora(chalk.blue('Fetching merged pull requests...')).start();
@@ -20,8 +46,7 @@ export async function fetchMergedPRs(baseCommand: string, dateRange: string): Pr
     return prs;
   } catch (error) {
     spinner.fail(chalk.red('Failed to fetch PRs'));
-    console.error(chalk.red('❌ Error fetching PRs:'), error);
-    return [];
+    handleGitHubError(error);
   }
 }
 
@@ -39,7 +64,6 @@ export async function fetchClosedIssues(baseCommand: string, dateRange: string):
     return issues;
   } catch (error) {
     spinner.fail(chalk.red('Failed to fetch issues'));
-    console.error(chalk.red('❌ Error fetching issues:'), error);
-    return [];
+    handleGitHubError(error);
   }
 } 
