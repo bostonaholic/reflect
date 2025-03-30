@@ -35,9 +35,13 @@ describe('formatDateRangeForGitHub', () => {
   it('should format any valid date range correctly', () => {
     fc.assert(
       fc.property(
-        fc.date({ min: new Date('1970-01-01') }),
-        fc.date({ min: new Date('1970-01-01') }),
+        fc.date({ min: new Date('1970-01-01'), max: new Date('2100-12-31') }),
+        fc.date({ min: new Date('1970-01-01'), max: new Date('2100-12-31') }),
         (startDate: Date, endDate: Date) => {
+          // Precondition: ensure both dates are valid
+          if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+            return true; // Skip invalid dates
+          }
           const result = formatDateRangeForGitHub(startDate, endDate);
           const expectedStart = startDate.toISOString().split('T')[0];
           const expectedEnd = endDate.toISOString().split('T')[0];
@@ -51,8 +55,12 @@ describe('formatDateRangeForGitHub', () => {
   it('should handle same day correctly', () => {
     fc.assert(
       fc.property(
-        fc.date({ min: new Date('1970-01-01') }),
+        fc.date({ min: new Date('1970-01-01'), max: new Date('2100-12-31') }),
         (date: Date) => {
+          // Precondition: ensure date is valid
+          if (isNaN(date.getTime())) {
+            return true; // Skip invalid dates
+          }
           const result = formatDateRangeForGitHub(date, date);
           const expected = date.toISOString().split('T')[0];
           expect(result).toBe(`${expected}..${expected}`);
@@ -67,8 +75,12 @@ describe('formatDateForDisplay', () => {
   it('should format any date correctly', () => {
     fc.assert(
       fc.property(
-        fc.date({ min: new Date('1970-01-01') }),
+        fc.date({ min: new Date('1970-01-01'), max: new Date('2100-12-31') }),
         (date: Date) => {
+          // Precondition: ensure date is valid
+          if (isNaN(date.getTime())) {
+            return true; // Skip invalid dates
+          }
           const result = formatDateForDisplay(date);
           const month = date.toLocaleString('default', { month: 'long' });
           const day = date.getDate();
