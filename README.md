@@ -28,7 +28,7 @@ cp .env{.example,}
 
 3. Run the tool:
 ```bash
-./script/run --username <github-username> --months <months-to-look-back> --brag
+./script/run --username <github-username> --lookback <months-to-look-back> --brag
 ```
 
 This will generate three markdown files in the `output` directory:
@@ -50,19 +50,22 @@ This will generate three markdown files in the `output` directory:
 
 Run the tool:
 ```bash
-./script/run --username <github-username> --months <months-to-look-back> [--brag]
+./script/run --username <github-username> --lookback <months-to-look-back> [--brag]
 ```
 
 Example:
 ```bash
-./script/run --username bostonaholic --months 6 --brag
+./script/run --username bostonaholic --lookback 6 --brag
 ```
 
 ### Arguments 📋
 
+**Required:**
 - `-u, --username <username>`: Your GitHub username to fetch activity for
-- `-m, --months <number>`: Number of months to look back for activity (must be a positive number)
-- `--model <model>`: OpenAI model to use for AI-powered features (default: gpt-4o-mini)
+- `-l, --lookback <number>`: Number of months to look back for activity (must be a positive number)
+
+**Optional:**
+- `-m, --model <model>`: OpenAI model to use (e.g., gpt-4, gpt-3.5-turbo), defaults to gpt-4o-mini
 - `-b, --brag`: Optional flag to generate a summary and brag document
 - `-i, --include-orgs <orgs...>`: Only include contributions from these organizations (mutually exclusive with --exclude-orgs)
 - `-e, --exclude-orgs <orgs...>`: Exclude contributions from these organizations (mutually exclusive with --include-orgs)
@@ -71,22 +74,17 @@ Example:
 
 Basic usage:
 ```bash
-./script/run --username bostonaholic --months 6 --brag
-```
-
-Using a different OpenAI model:
-```bash
-./script/run --username bostonaholic --months 6 --brag --model gpt-3.5-turbo
+./script/run --username bostonaholic --lookback 6 --brag
 ```
 
 Filter by specific organizations:
 ```bash
-./script/run --username bostonaholic --months 6 --include-orgs "shopify" "github"
+./script/run --username bostonaholic --lookback 6 --include-orgs "shopify" "github"
 ```
 
 Exclude specific organizations:
 ```bash
-./script/run --username bostonaholic --months 6 --exclude-orgs "secret" "archived"
+./script/run --username bostonaholic --lookback 6 --exclude-orgs "secret" "archived"
 ```
 
 ### Environment Variables 🔐

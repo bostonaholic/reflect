@@ -13,7 +13,7 @@ function loadEnv() {
 
 interface CliArgs {
   username: string;
-  months: number;
+  lookback: number;
   generateBrag: boolean;
   debug: boolean;
   includeOrgs?: string[];
@@ -76,17 +76,17 @@ export function getCommandLineArgs(): CliArgs {
     .description('Generate GitHub activity reports and brag documents')
     .version('0.1.0')
     .requiredOption('-u, --username <username>', 'GitHub username to analyze')
-    .requiredOption('-m, --months <number>', 'Number of months to look back', parseInt)
-    .option('--model <model>', 'OpenAI model to use (e.g., gpt-4, gpt-3.5-turbo)', 'gpt-4o-mini')
+    .requiredOption('-l, --lookback <number>', 'Number of months to look back', parseInt)
+    .option('-m, --model <model>', 'OpenAI model to use (e.g., gpt-4, gpt-3.5-turbo)', 'gpt-4o-mini')
     .option('-b, --brag', 'Generate a brag document')
     .option('-d, --debug', 'Enable debug mode for detailed OpenAI API information')
     .option('-i, --include-orgs <orgs...>', 'Only include contributions to these organizations')
     .option('-e, --exclude-orgs <orgs...>', 'Exclude contributions to these organizations')
     .addHelpText('after', `
         Note: Set OPENAI_API_KEY in your .env file for brag document generation
-        Example: reflect --username bostonaholic --months 6 --brag
-        Example with org filters: reflect --username bostonaholic --months 6 --include-orgs "Shopify"
-        Example with org filters: reflect --username bostonaholic --months 6 --exclude-orgs "secret"
+        Example: reflect --username bostonaholic --lookback 6 --brag
+        Example with org filters: reflect --username bostonaholic --lookback 6 --include-orgs "Shopify"
+        Example with org filters: reflect --username bostonaholic --lookback 6 --exclude-orgs "secret"
       `);
     
     program.parse();
@@ -94,13 +94,13 @@ export function getCommandLineArgs(): CliArgs {
   const options = program.opts();
 
   validateUsername(options.username);
-  validateMonths(options.months);
+  validateMonths(options.lookback);
   validateBragOption(options.brag);
   validateOrgFilters(options.includeOrgs, options.excludeOrgs);
 
   return {
     username: options.username,
-    months: options.months,
+    lookback: options.lookback,
     generateBrag: options.brag || false,
     debug: options.debug || false,
     includeOrgs: options.includeOrgs,
