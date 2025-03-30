@@ -69,7 +69,7 @@ async function main(): Promise<void> {
     console.log(chalk.green('✓ Markdown file generated: output/contributions.md'));
     
     console.log(); // Add spacing before summary stats
-    console.log(chalk.blue(`Fetched ${chalk.bold(prs.length)} PRs and ${chalk.bold(issues.length)} issues for ${chalk.bold(username)}`));
+    console.log(chalk.green(`Fetched ${chalk.bold(prs.length)} ${prs.length === 1 ? 'PR' : 'PRs'} and ${chalk.bold(issues.length)} ${issues.length === 1 ? 'issue' : 'issues'} for ${chalk.bold(username)}`));
     console.log(chalk.blue(`From ${formatDateForDisplay(startDate)} to ${formatDateForDisplay(endDate)}`));
 
     if (generateBrag) {
