@@ -6,6 +6,7 @@ export default {
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {
       useESM: true,
+      tsconfig: 'tsconfig.json'
     }],
   },
   transformIgnorePatterns: [
@@ -15,4 +16,7 @@ export default {
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
+  testEnvironmentOptions: {
+    url: 'http://127.0.0.1',
+  }
 }; 
