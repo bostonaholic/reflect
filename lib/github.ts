@@ -1,5 +1,5 @@
 import { graphql } from "@octokit/graphql";
-import { Item } from "./types";
+import { GitHubPr, GitHubIssue } from "./types";
 import chalk from 'chalk';
 import ora from 'ora';
 
@@ -46,7 +46,7 @@ interface SearchResult {
   };
 }
 
-export async function fetchMergedPRs(username: string, dateRange: string): Promise<Item[]> {
+export async function fetchMergedPRs(username: string, dateRange: string): Promise<GitHubPr[]> {
   const spinner = ora(chalk.blue('Fetching merged pull requests...')).start();
   const graphqlClient = getGraphQLClient();
 
@@ -91,7 +91,8 @@ export async function fetchMergedPRs(username: string, dateRange: string): Promi
       title: pr.title,
       body: pr.body || '',
       closedAt: pr.closedAt,
-      repository: pr.repository.nameWithOwner
+      repository: pr.repository.nameWithOwner,
+      type: 'pr' as const
     }));
   } catch (error) {
     spinner.fail(chalk.red('Failed to fetch PRs'));
@@ -102,7 +103,7 @@ export async function fetchMergedPRs(username: string, dateRange: string): Promi
   }
 }
 
-export async function fetchClosedIssues(username: string, dateRange: string): Promise<Item[]> {
+export async function fetchClosedIssues(username: string, dateRange: string): Promise<GitHubIssue[]> {
   const spinner = ora(chalk.blue('Fetching closed issues...')).start();
   const graphqlClient = getGraphQLClient();
 
@@ -147,7 +148,8 @@ export async function fetchClosedIssues(username: string, dateRange: string): Pr
       title: issue.title,
       body: issue.body || '',
       closedAt: issue.closedAt,
-      repository: issue.repository.nameWithOwner
+      repository: issue.repository.nameWithOwner,
+      type: 'issue' as const
     }));
   } catch (error) {
     spinner.fail(chalk.red('Failed to fetch issues'));
