@@ -6,16 +6,6 @@ import ora from 'ora';
 
 const execPromise = promisify(exec);
 
-interface GitHubError {
-  message: string;
-  status: number;
-  rateLimit?: {
-    limit: number;
-    remaining: number;
-    reset: number;
-  };
-}
-
 function handleGitHubError(error: any): never {
   if (error.stderr) {
     try {
@@ -25,7 +15,7 @@ function handleGitHubError(error: any): never {
         throw new Error(`GitHub API rate limit exceeded. Resets at ${resetTime}`);
       }
       throw new Error(errorData.message || 'GitHub API error');
-    } catch (parseError) {
+    } catch {
       throw new Error(`GitHub API error: ${error.stderr}`);
     }
   }
