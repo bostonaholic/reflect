@@ -29,12 +29,14 @@ function getApiKeyFromEnv(): string {
 }
 
 function isValidGitHubUsername(username: string): boolean {
-  return /^[a-zA-Z0-9-]+$/.test(username);
+  return /^[a-zA-Z0-9_-]+$/.test(username);
 }
 
 function isValidMonths(months: number): boolean {
   return months > 0;
 }
+
+export { isValidGitHubUsername, isValidMonths };
 
 function validateUsername(username: string): void {
   if (!isValidGitHubUsername(username)) {

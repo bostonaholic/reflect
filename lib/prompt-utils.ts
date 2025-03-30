@@ -1,6 +1,9 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import chalk from 'chalk';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export async function readPrompt(promptName: string): Promise<string> {
   const promptPath = path.join(__dirname, 'prompts', `${promptName}.md`);
