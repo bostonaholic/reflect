@@ -10,9 +10,3 @@ export async function fetchGitHubData(username: string, dateRange: string): Prom
   ]);
   return { prs, issues };
 }
-
-export function logFetchStats(prs: any[], issues: any[], username: string, startDate: Date, endDate: Date): void {
-  addVisualSpacing();
-  console.log(chalk.green(`Fetched ${chalk.bold(prs.length)} ${prs.length === 1 ? 'PR' : 'PRs'} and ${chalk.bold(issues.length)} ${issues.length === 1 ? 'issue' : 'issues'} for ${chalk.bold(username)}`));
-  console.log(chalk.blue(`From ${formatDateForDisplay(startDate)} to ${formatDateForDisplay(endDate)}`));
-} 

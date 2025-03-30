@@ -1,9 +1,10 @@
 import chalk from 'chalk';
 import ora from 'ora';
 import OpenAI from 'openai';
+import { addVisualSpacing } from './console-utils.js';
 
 export async function callOpenAI(prompt: string, content: string, apiKey: string, debug: boolean = false): Promise<string> {
-  const spinner = ora(chalk.blue('Making OpenAI API request...')).start();
+  const spinner = ora(chalk.cyan('Making OpenAI API request...')).start();
 
   try {
     const openai = new OpenAI({
@@ -29,12 +30,13 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
     spinner.succeed(chalk.green('OpenAI API request completed'));
 
     if (debug) {
-      console.log(chalk.blue('\nDebug Information:'));
-      console.log(chalk.yellow('Prompt Tokens:'), chalk.white(completion.usage?.prompt_tokens));
-      console.log(chalk.yellow('Completion Tokens:'), chalk.white(completion.usage?.completion_tokens));
-      console.log(chalk.yellow('Total Tokens:'), chalk.white(completion.usage?.total_tokens));
-      console.log(chalk.yellow('Model:'), chalk.white(completion.model));
-      console.log(chalk.yellow('Finish Reason:'), chalk.white(completion.choices[0].finish_reason));
+      console.log(chalk.cyan('\n[DEBUG] LLM Information:'));
+      console.log(chalk.yellow('[DEBUG] Prompt Tokens:'), chalk.white(completion.usage?.prompt_tokens));
+      console.log(chalk.yellow('[DEBUG] Completion Tokens:'), chalk.white(completion.usage?.completion_tokens));
+      console.log(chalk.yellow('[DEBUG] Total Tokens:'), chalk.white(completion.usage?.total_tokens));
+      console.log(chalk.yellow('[DEBUG] Model:'), chalk.white(completion.model));
+      console.log(chalk.yellow('[DEBUG] Finish Reason:'), chalk.white(completion.choices[0].finish_reason));
+      addVisualSpacing();
     }
 
     return completion.choices[0].message.content || '';

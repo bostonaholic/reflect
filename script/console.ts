@@ -33,7 +33,7 @@ Object.assign(replServer.context, {
 });
 
 // Add some helpful information
-console.log(chalk.blue('\nWelcome to the Reflect REPL!'));
+console.log(chalk.cyan('\nWelcome to the Reflect REPL!'));
 console.log(chalk.gray('\nAvailable modules and functions:'));
 console.log(chalk.gray('- getCommandLineArgs()'));
 console.log(chalk.gray('- calculateDateRange(months)'));

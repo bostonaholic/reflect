@@ -1,6 +1,6 @@
 import { getCommandLineArgs } from "./lib/cli.js";
 import { calculateDateRange, formatDateRangeForGitHub } from "./lib/date-utils.js";
-import { fetchGitHubData, logFetchStats } from "./lib/github-utils.js";
+import { fetchGitHubData } from "./lib/github-utils.js";
 import { generateAndWriteContributions, handleBragGeneration } from "./lib/document-utils.js";
 import { addVisualSpacing } from "./lib/console-utils.js";
 import chalk from 'chalk';
@@ -16,7 +16,7 @@ async function main(): Promise<void> {
     addVisualSpacing();
     
     const markdownContent = await generateAndWriteContributions(prs, issues);
-    logFetchStats(prs, issues, username, startDate, endDate);
+    addVisualSpacing();
 
     if (generateBrag) {
       const apiKey = process.env.OPENAI_API_KEY;

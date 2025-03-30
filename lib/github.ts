@@ -47,7 +47,7 @@ interface SearchResult {
 }
 
 export async function fetchMergedPRs(username: string, dateRange: string): Promise<GitHubPr[]> {
-  const spinner = ora(chalk.blue('Fetching merged pull requests...')).start();
+  const spinner = ora(chalk.cyan('Fetching merged pull requests...')).start();
   const graphqlClient = getGraphQLClient();
 
   try {
@@ -74,13 +74,13 @@ export async function fetchMergedPRs(username: string, dateRange: string): Promi
     `;
 
     if (process.env.DEBUG) {
-      console.log(chalk.yellow('Debug: GraphQL Query:'), query);
+      console.log(chalk.yellow('[DEBUG] GraphQL Query:'), query);
     }
 
     const result = await graphqlClient<SearchResult>(query);
     
     if (process.env.DEBUG) {
-      console.log(chalk.yellow('Debug: GraphQL Response:'), JSON.stringify(result, null, 2));
+      console.log(chalk.yellow('[DEBUG] GraphQL Response:'), JSON.stringify(result, null, 2));
     }
 
     const prs = result.search.nodes;
@@ -104,7 +104,7 @@ export async function fetchMergedPRs(username: string, dateRange: string): Promi
 }
 
 export async function fetchClosedIssues(username: string, dateRange: string): Promise<GitHubIssue[]> {
-  const spinner = ora(chalk.blue('Fetching closed issues...')).start();
+  const spinner = ora(chalk.cyan('Fetching closed issues...')).start();
   const graphqlClient = getGraphQLClient();
 
   try {
@@ -131,13 +131,13 @@ export async function fetchClosedIssues(username: string, dateRange: string): Pr
     `;
 
     if (process.env.DEBUG) {
-      console.log(chalk.yellow('Debug: GraphQL Query:'), query);
+      console.log(chalk.yellow('[DEBUG] GraphQL Query:'), query);
     }
 
     const result = await graphqlClient<SearchResult>(query);
     
     if (process.env.DEBUG) {
-      console.log(chalk.yellow('Debug: GraphQL Response:'), JSON.stringify(result, null, 2));
+      console.log(chalk.yellow('[DEBUG] GraphQL Response:'), JSON.stringify(result, null, 2));
     }
 
     const issues = result.search.nodes;
@@ -154,7 +154,7 @@ export async function fetchClosedIssues(username: string, dateRange: string): Pr
   } catch (error) {
     spinner.fail(chalk.red('Failed to fetch issues'));
     if (process.env.DEBUG) {
-      console.error(chalk.yellow('Debug: Error details:'), error);
+      console.error(chalk.yellow('[DEBUG] Error details:'), error);
     }
     handleGitHubError(error);
   }
