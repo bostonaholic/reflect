@@ -50,7 +50,7 @@ async function writeFileSafely(filename: string, content: string): Promise<void>
 
 async function main(): Promise<void> {
   try {
-    const { username, months, generateBrag } = getCommandLineArgs();
+    const { username, months, generateBrag, debug } = getCommandLineArgs();
     const baseCommand = `--author ${username} --limit 1000 --json title,body,closedAt,repository `;
     
     // Calculate date range
@@ -80,13 +80,13 @@ async function main(): Promise<void> {
 
       console.log(); // Add spacing before summary generation
       console.log(chalk.blue('Generating summary document...'));
-      const summary = await generateSummaryFromContributions(markdownContent, apiKey);
+      const summary = await generateSummaryFromContributions(markdownContent, apiKey, debug);
       await writeFileSafely("summarized_contributions.md", summary);
       console.log(chalk.green('✓ Summary document generated: output/summarized_contributions.md'));
       
       console.log(); // Add spacing before brag generation
       console.log(chalk.blue('Generating brag document...'));
-      const brag = await generateBragFromSummary(summary, apiKey, startDate, endDate);
+      const brag = await generateBragFromSummary(summary, apiKey, startDate, endDate, debug);
       await writeFileSafely("brag_document.md", brag);
       console.log(chalk.green('✓ Brag document generated: output/brag_document.md'));
     }

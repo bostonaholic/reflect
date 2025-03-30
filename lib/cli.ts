@@ -15,6 +15,7 @@ interface CliArgs {
   username: string;
   months: number;
   generateBrag: boolean;
+  debug: boolean;
 }
 
 function getApiKeyFromEnv(): string {
@@ -37,6 +38,7 @@ export function getCommandLineArgs(): CliArgs {
     .requiredOption('-u, --username <username>', 'GitHub username to analyze')
     .requiredOption('-m, --months <number>', 'Number of months to look back', parseInt)
     .option('-b, --brag', 'Generate a brag document')
+    .option('-d, --debug', 'Enable debug mode for detailed OpenAI API information')
     .addHelpText('after', `
       Note: Set OPENAI_API_KEY in your .env file for brag document generation
       Example: reflect -u bostonaholic -m 6 -b
@@ -66,6 +68,7 @@ export function getCommandLineArgs(): CliArgs {
   return {
     username: options.username,
     months: options.months,
-    generateBrag: options.brag || false
+    generateBrag: options.brag || false,
+    debug: options.debug || false
   };
 } 
