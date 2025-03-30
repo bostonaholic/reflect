@@ -7,9 +7,9 @@ import chalk from 'chalk';
 
 async function main(): Promise<void> {
   try {
-    const { username, months, generateBrag, debug, includeOrgs, excludeOrgs, model } = getCommandLineArgs();
+    const { username, lookback, generateBrag, debug, includeOrgs, excludeOrgs, model } = getCommandLineArgs();
     
-    const { startDate, endDate } = calculateDateRange(months);
+    const { startDate, endDate } = calculateDateRange(lookback);
     const dateRange = formatDateRangeForGitHub(startDate, endDate);
     
     const { prs, issues } = await fetchGitHubData(username, dateRange, includeOrgs, excludeOrgs);
