@@ -1,53 +1,102 @@
-import { isValidGitHubUsername, isValidMonths } from '../cli.js';
+import { isValidGitHubUsername, isValidMonths, getCommandLineArgs } from '../cli.js';
+import * as fc from 'fast-check';
+import { jest, describe, it, expect, beforeEach, afterAll } from '@jest/globals';
 
 describe('CLI Validation Functions', () => {
   describe('isValidGitHubUsername', () => {
     it('should accept valid GitHub usernames', () => {
-      const validUsernames = [
-        'bostonaholic',
-        'user123',
-        'user-name',
-        'user_name',
-        '123user',
-        'a'
-      ];
-
-      validUsernames.forEach(username => {
-        expect(isValidGitHubUsername(username)).toBe(true);
-      });
+      fc.assert(
+        fc.property(
+          fc.string({ minLength: 1, maxLength: 39 }),
+          (username: string) => {
+            // Only test if the username matches the pattern
+            if (/^[a-zA-Z0-9_-]+$/.test(username)) {
+              expect(isValidGitHubUsername(username)).toBe(true);
+            }
+          }
+        ),
+        { numRuns: 100 }
+      );
     });
 
     it('should reject invalid GitHub usernames', () => {
-      const invalidUsernames = [
-        'user name', // contains space
-        'user@name', // contains special character
-        'user/name', // contains slash
-        '', // empty string
-        'user.name', // contains dot
-        'user:name'  // contains colon
-      ];
+      fc.assert(
+        fc.property(
+          fc.string({ minLength: 1 }),
+          (username: string) => {
+            // Only test if the username contains invalid characters
+            if (/[^a-zA-Z0-9_-]/.test(username)) {
+              expect(isValidGitHubUsername(username)).toBe(false);
+            }
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
 
-      invalidUsernames.forEach(username => {
-        expect(isValidGitHubUsername(username)).toBe(false);
-      });
+    it('should reject usernames longer than 39 characters', () => {
+      fc.assert(
+        fc.property(
+          fc.string({ minLength: 40 }),
+          (username: string) => {
+            // Only test if the username contains valid characters
+            if (/^[a-zA-Z0-9_-]+$/.test(username)) {
+              expect(isValidGitHubUsername(username)).toBe(false);
+            }
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+
+    it('should reject empty usernames', () => {
+      fc.assert(
+        fc.property(
+          fc.constant(''),
+          (username: string) => {
+            expect(isValidGitHubUsername(username)).toBe(false);
+          }
+        ),
+        { numRuns: 1 }
+      );
     });
   });
 
   describe('isValidMonths', () => {
-    it('should accept positive numbers', () => {
-      const validMonths = [1, 2, 3, 12, 24, 100];
-
-      validMonths.forEach(months => {
-        expect(isValidMonths(months)).toBe(true);
-      });
+    it('should accept valid months (1-36)', () => {
+      fc.assert(
+        fc.property(
+          fc.integer({ min: 1, max: 36 }),
+          (months: number) => {
+            expect(isValidMonths(months)).toBe(true);
+          }
+        ),
+        { numRuns: 100 }
+      );
     });
 
     it('should reject non-positive numbers', () => {
-      const invalidMonths = [0, -1, -2, -3, -12, -24, -100];
+      fc.assert(
+        fc.property(
+          fc.integer({ max: 0 }),
+          (months: number) => {
+            expect(isValidMonths(months)).toBe(false);
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
 
-      invalidMonths.forEach(months => {
-        expect(isValidMonths(months)).toBe(false);
-      });
+    it('should reject months greater than 36', () => {
+      fc.assert(
+        fc.property(
+          fc.integer({ min: 37 }),
+          (months: number) => {
+            expect(isValidMonths(months)).toBe(false);
+          }
+        ),
+        { numRuns: 100 }
+      );
     });
   });
 }); 

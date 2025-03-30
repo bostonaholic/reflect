@@ -1,5 +1,6 @@
-import { jest } from '@jest/globals';
+import { jest, describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { calculateDateRange, formatDateRangeForGitHub, formatDateForDisplay } from '../date-utils.js';
+import * as fc from 'fast-check';
 
 describe('calculateDateRange', () => {
   beforeEach(() => {
@@ -11,56 +12,71 @@ describe('calculateDateRange', () => {
     jest.useRealTimers();
   });
 
-  it('should calculate correct date range for 1 month', () => {
-    const { startDate, endDate } = calculateDateRange(1);
-    expect(startDate.toISOString().split('T')[0]).toBe('2024-03-01');
-    expect(endDate.toISOString().split('T')[0]).toBe('2024-03-30');
-  });
-
-  it('should calculate correct date range for 3 months', () => {
-    const { startDate, endDate } = calculateDateRange(3);
-    expect(startDate.toISOString().split('T')[0]).toBe('2023-12-30');
-    expect(endDate.toISOString().split('T')[0]).toBe('2024-03-30');
-  });
-
-  it('should calculate correct date range for 12 months', () => {
-    const { startDate, endDate } = calculateDateRange(12);
-    expect(startDate.toISOString().split('T')[0]).toBe('2023-03-30');
-    expect(endDate.toISOString().split('T')[0]).toBe('2024-03-30');
+  it('should calculate correct date range for any valid number of months', () => {
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 1, max: 36 }),
+        (months: number) => {
+          const { startDate, endDate } = calculateDateRange(months);
+          const expectedEndDate = new Date('2024-03-30T12:00:00Z');
+          const expectedStartDate = new Date(expectedEndDate);
+          expectedStartDate.setMonth(expectedStartDate.getMonth() - months);
+          
+          expect(startDate.toISOString().split('T')[0]).toBe(expectedStartDate.toISOString().split('T')[0]);
+          expect(endDate.toISOString().split('T')[0]).toBe(expectedEndDate.toISOString().split('T')[0]);
+        }
+      ),
+      { numRuns: 100 }
+    );
   });
 });
 
 describe('formatDateRangeForGitHub', () => {
-  it('should format date range correctly', () => {
-    const startDate = new Date('2024-01-01T12:00:00Z');
-    const endDate = new Date('2024-03-30T12:00:00Z');
-    const result = formatDateRangeForGitHub(startDate, endDate);
-    expect(result).toBe('2024-01-01..2024-03-30');
+  it('should format any valid date range correctly', () => {
+    fc.assert(
+      fc.property(
+        fc.date({ min: new Date('1970-01-01') }),
+        fc.date({ min: new Date('1970-01-01') }),
+        (startDate: Date, endDate: Date) => {
+          const result = formatDateRangeForGitHub(startDate, endDate);
+          const expectedStart = startDate.toISOString().split('T')[0];
+          const expectedEnd = endDate.toISOString().split('T')[0];
+          expect(result).toBe(`${expectedStart}..${expectedEnd}`);
+        }
+      ),
+      { numRuns: 100 }
+    );
   });
 
-  it('should handle same day', () => {
-    const date = new Date('2024-03-30T12:00:00Z');
-    const result = formatDateRangeForGitHub(date, date);
-    expect(result).toBe('2024-03-30..2024-03-30');
+  it('should handle same day correctly', () => {
+    fc.assert(
+      fc.property(
+        fc.date({ min: new Date('1970-01-01') }),
+        (date: Date) => {
+          const result = formatDateRangeForGitHub(date, date);
+          const expected = date.toISOString().split('T')[0];
+          expect(result).toBe(`${expected}..${expected}`);
+        }
+      ),
+      { numRuns: 100 }
+    );
   });
 });
 
 describe('formatDateForDisplay', () => {
-  it('should format date correctly', () => {
-    const date = new Date('2024-03-30T12:00:00Z');
-    const result = formatDateForDisplay(date);
-    expect(result).toBe('March 30, 2024');
-  });
-
-  it('should handle different months', () => {
-    const date = new Date('2024-01-15T12:00:00Z');
-    const result = formatDateForDisplay(date);
-    expect(result).toBe('January 15, 2024');
-  });
-
-  it('should handle different years', () => {
-    const date = new Date('2023-12-31T12:00:00Z');
-    const result = formatDateForDisplay(date);
-    expect(result).toBe('December 31, 2023');
+  it('should format any date correctly', () => {
+    fc.assert(
+      fc.property(
+        fc.date({ min: new Date('1970-01-01') }),
+        (date: Date) => {
+          const result = formatDateForDisplay(date);
+          const month = date.toLocaleString('default', { month: 'long' });
+          const day = date.getDate();
+          const year = date.getFullYear();
+          expect(result).toBe(`${month} ${day}, ${year}`);
+        }
+      ),
+      { numRuns: 100 }
+    );
   });
 }); 
