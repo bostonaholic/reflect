@@ -28,6 +28,34 @@ function getApiKeyFromEnv(): string {
   return apiKey;
 }
 
+function isValidGitHubUsername(username: string): boolean {
+  return /^[a-zA-Z0-9-]+$/.test(username);
+}
+
+function isValidMonths(months: number): boolean {
+  return months > 0;
+}
+
+function validateUsername(username: string): void {
+  if (!isValidGitHubUsername(username)) {
+    console.error(chalk.red('✕ Error: Invalid GitHub username format'));
+    process.exit(1);
+  }
+}
+
+function validateMonths(months: number): void {
+  if (!isValidMonths(months)) {
+    console.error(chalk.red('✕ Error: Months must be a positive number'));
+    process.exit(1);
+  }
+}
+
+function validateBragOption(brag: boolean): void {
+  if (brag) {
+    getApiKeyFromEnv();
+  }
+}
+
 export function getCommandLineArgs(): CliArgs {
   const program = new Command();
 
@@ -48,22 +76,9 @@ export function getCommandLineArgs(): CliArgs {
 
   const options = program.opts();
 
-  // Validate username format
-  if (!/^[a-zA-Z0-9-]+$/.test(options.username)) {
-    console.error(chalk.red('✕ Error: Invalid GitHub username format'));
-    process.exit(1);
-  }
-
-  // Validate months is positive
-  if (options.months <= 0) {
-    console.error(chalk.red('✕ Error: Months must be a positive number'));
-    process.exit(1);
-  }
-
-  // If --brag is specified, ensure API key is available
-  if (options.brag) {
-    getApiKeyFromEnv();
-  }
+  validateUsername(options.username);
+  validateMonths(options.months);
+  validateBragOption(options.brag);
 
   return {
     username: options.username,
