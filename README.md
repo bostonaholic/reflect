@@ -9,21 +9,21 @@ A Node.js tool that generates a reflection document of your GitHub activity by c
 
 ### Prerequisites ⚙️
 
-1. Install Node.js v22 or higher
+1. Install [nodenv](https://github.com/nodenv/nodenv) (preferred) or [nvm](https://github.com/nvm-sh/nvm)
 2. Install npm or yarn package manager
 3. GitHub Personal Access Token (PAT) with `repo` and `read:org` scopes
 4. OpenAI API key (optional, for summary and brag document generation)
 
 ### Usage 💻
 
-1. Install dependencies:
-```bash
-npm install
-```
-
-2. Set up your environment variables:
+1. Set up your environment variables:
 ```bash
 cp .env{.example,}
+```
+
+2. Run the setup script to configure your environment:
+```bash
+./script/setup
 ```
 
 3. Run the tool:
