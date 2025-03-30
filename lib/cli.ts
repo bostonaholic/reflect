@@ -82,8 +82,9 @@ export function getCommandLineArgs(): CliArgs {
     .option('-e, --exclude-orgs <orgs...>', 'Exclude contributions to these organizations')
     .addHelpText('after', `
       Note: Set OPENAI_API_KEY in your .env file for brag document generation
-      Example: reflect -u bostonaholic -m 6 -b
-      Example with org filters: reflect -u bostonaholic -m 6 -i "Shopify"
+      Example: reflect --username bostonaholic --months 6 --brag
+      Example with org filters: reflect --username bostonaholic --months 6 --include-orgs "Shopify"
+      Example with org filters: reflect --username bostonaholic --months 6 --exclude-orgs "secret"
     `);
 
   program.parse();
