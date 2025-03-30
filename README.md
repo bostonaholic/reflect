@@ -20,7 +20,6 @@ npm install
 
 2. Set up your environment variables:
 ```bash
-# Create a .env file with your API keys
 cp .env{.example,}
 ```
 
@@ -144,27 +143,29 @@ Note: The `output` directory and all generated files are automatically git-ignor
 
 ## Troubleshooting 🔍
 
-1. Make sure your GitHub CLI (`gh`) is authenticated:
-
-```bash
-gh auth status
-```
-
-If not authenticated, run:
-
-```bash
-gh auth login
-```
-
-2. If you get TypeScript errors, ensure you're using Node.js v22 or higher:
+1. If you get TypeScript errors, ensure you're using Node.js v22 or higher:
 
 ```bash
 node --version
 ```
 
-3. If the script runs but generates an empty file, check your GitHub CLI permissions and ensure you have activity in the specified time period.
+2. If you get GitHub API errors:
+   - Verify your GitHub Personal Access Token (PAT) is correctly set in your `.env` file
+   - Check that your PAT has the required scopes (`repo` and `read:org`)
+   - Ensure your PAT hasn't expired (they can be set to expire after a certain time)
+   - Verify you have access to the repositories you're trying to fetch data from
+
+3. If the script runs but generates an empty file:
+   - Check that you have activity in the specified time period
+   - Verify your GitHub username is correct
+   - Ensure you have the necessary permissions to access the repositories
 
 4. If you get an error about the OpenAI API key:
    - Make sure you've set it in your `.env` file
    - Check that the API key is valid and has sufficient credits
    - Verify the .env file is in the correct location
+
+5. If you get environment variable errors:
+   - Ensure your `.env` file exists and is properly formatted
+   - Check that there are no spaces around the `=` sign in your `.env` file
+   - Verify the `.env` file is in the root directory of the project
