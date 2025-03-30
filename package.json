@@ -12,6 +12,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
     "@octokit/graphql": "^8.2.1",
     "chalk": "^5.4.1",
     "commander": "^13.1.0",

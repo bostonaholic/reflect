@@ -1,4 +1,4 @@
-import { GitHubPr, GitHubIssue } from "./types.js";
+import { GitHubPr, GitHubIssue, LlmOptions } from "./types.js";
 import { generateContributionsSummary } from "./contributions-summarizer.js";
 import { generateBragDocument } from "./brag-generator.js";
 
@@ -18,10 +18,10 @@ export async function generateMarkdownContent(items: (GitHubPr | GitHubIssue)[])
   return markdownContent;
 }
 
-export async function generateSummaryFromContributions(markdownContent: string, apiKey: string, model: string = 'gpt-4', debug: boolean = false): Promise<string> {
-  return generateContributionsSummary(markdownContent, apiKey, model, debug);
+export async function generateSummaryFromContributions(markdownContent: string, apiKey: string, llmOptions: LlmOptions, debug: boolean): Promise<string> {
+  return generateContributionsSummary(markdownContent, apiKey, llmOptions, debug);
 }
 
-export async function generateBragFromSummary(summary: string, apiKey: string, startDate: Date, endDate: Date, model: string = 'gpt-4', debug: boolean = false): Promise<string> {
-  return generateBragDocument(summary, apiKey, startDate, endDate, model, debug);
+export async function generateBragFromSummary(summary: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions, debug: boolean): Promise<string> {
+  return generateBragDocument(summary, apiKey, startDate, endDate, llmOptions, debug);
 }

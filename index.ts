@@ -5,9 +5,17 @@ import { generateAndWriteContributions, handleBragGeneration } from "./lib/docum
 import { addVisualSpacing } from "./lib/console-utils.js";
 import chalk from 'chalk';
 
+function getApiKeyFromEnv(provider: string): string | undefined {
+  if (provider === 'openai') {
+    return process.env.OPENAI_API_KEY;
+  } else if (provider === 'anthropic') {
+    return process.env.ANTHROPIC_API_KEY;
+  }
+}
+
 async function main(): Promise<void> {
   try {
-    const { username, lookback, generateBrag, debug, includeOrgs, excludeOrgs, model } = getCommandLineArgs();
+    const { username, lookback, generateBrag, debug, includeOrgs, excludeOrgs, llmOptions } = getCommandLineArgs();
     
     const { startDate, endDate } = calculateDateRange(lookback);
     const dateRange = formatDateRangeForGitHub(startDate, endDate);
@@ -19,11 +27,11 @@ async function main(): Promise<void> {
     addVisualSpacing();
 
     if (generateBrag) {
-      const apiKey = process.env.OPENAI_API_KEY;
+      const apiKey = getApiKeyFromEnv(llmOptions.provider);
       if (!apiKey) {
-        throw new Error('OPENAI_API_KEY environment variable is required for brag document generation');
+        throw new Error('LLM API key environment variable is required for brag document generation');
       }
-      await handleBragGeneration(markdownContent, apiKey, startDate, endDate, model, debug);
+      await handleBragGeneration(markdownContent, apiKey, startDate, endDate, llmOptions, debug);
     }
   } catch (error) {
     console.error(chalk.red('✕ Execution error:'), error);

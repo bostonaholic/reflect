@@ -2,8 +2,9 @@ import chalk from 'chalk';
 import ora from 'ora';
 import OpenAI from 'openai';
 import { addVisualSpacing } from './console-utils.js';
+import { LlmOptions } from './types.js';
 
-export async function callOpenAI(prompt: string, content: string, apiKey: string, model: string = 'gpt-4o-mini', debug: boolean = false): Promise<string> {
+export async function callOpenAI(prompt: string, content: string, apiKey: string, llmOptions: LlmOptions, debug: boolean = false): Promise<string> {
   const spinner = ora(chalk.cyan('Making OpenAI API request...')).start();
 
   try {
@@ -12,7 +13,7 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
     });
 
     const completion = await openai.chat.completions.create({
-      model: model,
+      model: llmOptions.model || 'gpt-4o-mini',
       messages: [
         {
           role: 'system',

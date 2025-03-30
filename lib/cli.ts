@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
 import { Command } from 'commander';
 import chalk from 'chalk';
+import { LlmOptions } from './types.js';
 
 function loadEnv() {
   const configResult = config();
@@ -18,7 +19,7 @@ interface CliArgs {
   debug: boolean;
   includeOrgs?: string[];
   excludeOrgs?: string[];
-  model?: string;
+  llmOptions: LlmOptions;
 }
 
 function getApiKeyFromEnv(): string {
@@ -77,7 +78,8 @@ export function getCommandLineArgs(): CliArgs {
     .version('0.1.0')
     .requiredOption('-u, --username <username>', 'GitHub username to analyze')
     .requiredOption('-l, --lookback <number>', 'Number of months to look back', parseInt)
-    .option('-m, --model <model>', 'OpenAI model to use (e.g., gpt-4, gpt-3.5-turbo)', 'gpt-4o-mini')
+    .option('-p, --provider <provider>', 'LLM provider to use (e.g., openai, anthropic)', 'openai')
+    .option('-m, --model <model>', 'OpenAI model to use (e.g., gpt-4, gpt-3.5-turbo)')
     .option('-b, --brag', 'Generate a brag document')
     .option('-d, --debug', 'Enable debug mode for detailed OpenAI API information')
     .option('-i, --include-orgs <orgs...>', 'Only include contributions to these organizations')
@@ -105,6 +107,9 @@ export function getCommandLineArgs(): CliArgs {
     debug: options.debug || false,
     includeOrgs: options.includeOrgs,
     excludeOrgs: options.excludeOrgs,
-    model: options.model
+    llmOptions: {
+      provider: options.provider || 'openai',
+      model: options.model
+    } as LlmOptions
   };
 } 

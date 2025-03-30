@@ -12,3 +12,8 @@ export interface GitHubPr extends GitHubContribution {
 export interface GitHubIssue extends GitHubContribution {
   type: 'issue';
 } 
+
+export interface LlmOptions {
+  provider: string;
+  model?: string;
+}
