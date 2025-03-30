@@ -24,9 +24,3 @@ export async function generateSummaryFromContributions(markdownContent: string, 
 export async function generateBragFromSummary(summary: string, apiKey: string, startDate: Date, endDate: Date, debug: boolean = false): Promise<string> {
   return generateBragDocument(summary, apiKey, startDate, endDate, debug);
 }
-
-export async function generateSummaryAndBrag(markdownContent: string, apiKey: string, startDate: Date, endDate: Date, debug: boolean = false): Promise<{ summary: string; brag: string }> {
-  const summary = await generateSummaryFromContributions(markdownContent, apiKey, debug);
-  const brag = await generateBragFromSummary(summary, apiKey, startDate, endDate, debug);
-  return { summary, brag };
-}
