@@ -33,7 +33,7 @@ function isValidGitHubUsername(username: string): boolean {
 }
 
 function isValidMonths(months: number): boolean {
-  return months > 0;
+  return months > 0 && months <= 36;
 }
 
 export { isValidGitHubUsername, isValidMonths };
@@ -47,7 +47,7 @@ function validateUsername(username: string): void {
 
 function validateMonths(months: number): void {
   if (!isValidMonths(months)) {
-    console.error(chalk.red('✕ Error: Months must be a positive number'));
+    console.error(chalk.red('✕ Error: Months must be a positive number and not exceed 36'));
     process.exit(1);
   }
 }
