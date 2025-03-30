@@ -171,3 +171,9 @@ node --version
    - Ensure your `.env` file exists and is properly formatted
    - Check that there are no spaces around the `=` sign in your `.env` file
    - Verify the `.env` file is in the root directory of the project
+
+## Links 🔗
+
+- [Hacker News](https://news.ycombinator.com/item?id=43519484)
+- [X](https://x.com/bostonaholic/status/1906119726948073824)
+- [LinkedIn](https://www.linkedin.com/posts/bostonaholic_github-bostonaholicreflect-an-ai-tool-activity-7311885477546991616-JDzT)
