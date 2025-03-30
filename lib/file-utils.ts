@@ -1,6 +1,7 @@
 import * as fs from "fs/promises";
 import * as path from "path";
 import chalk from 'chalk';
+import * as readline from 'readline';
 
 const OUTPUT_DIR = "output";
 const ALLOWED_FILES = ["contributions.md", "summarized_contributions.md", "brag_document.md"];
@@ -28,15 +29,15 @@ export async function checkFileExists(filePath: string): Promise<boolean> {
 }
 
 export async function promptForOverwrite(filename: string): Promise<boolean> {
-  const readline = require('readline').createInterface({
+  const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
   
   const answer = await new Promise<string>((resolve) => {
-    readline.question(chalk.yellow(`! File ${filename} already exists. Overwrite? (y/N) `), resolve);
+    rl.question(chalk.yellow(`! File ${filename} already exists. Overwrite? (y/N) `), resolve);
   });
-  readline.close();
+  rl.close();
   
   return answer.toLowerCase() === 'y';
 }
