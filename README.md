@@ -28,7 +28,7 @@ cp .env{.example,}
 
 3. Run the tool:
 ```bash
-npx ts-node index.ts --username <github-username> --months <months-to-look-back> --brag
+./script/run --username <github-username> --months <months-to-look-back> --brag
 ```
 
 This will generate three markdown files in the `output` directory:
@@ -48,34 +48,14 @@ This will generate three markdown files in the `output` directory:
 
 ## Usage 🛠️
 
-You can run the script in one of two ways:
-
-### Development Mode 🔧
-
-Run directly with ts-node:
-
+Run the tool:
 ```bash
-npx ts-node index.ts --username <github-username> --months <months-to-look-back> [--brag]
+./script/run --username <github-username> --months <months-to-look-back> [--brag]
 ```
 
 Example:
-
 ```bash
-npx ts-node index.ts --username bostonaholic --months 6 --brag
-```
-
-### Production Mode 🚀
-
-Compile and run:
-
-```bash
-npx tsc --outDir dist && node dist/index.js --username <github-username> --months <months-to-look-back> [--brag]
-```
-
-Example:
-
-```bash
-npx tsc --outDir dist && node dist/index.js --username bostonaholic --months 6 --brag
+./script/run --username bostonaholic --months 6 --brag
 ```
 
 ### Arguments 📋
