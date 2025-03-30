@@ -42,7 +42,7 @@ export async function promptForOverwrite(filename: string): Promise<boolean> {
   return answer.toLowerCase() === 'y';
 }
 
-export async function writeFileSafely(filename: string, content: string): Promise<void> {
+export async function writeFileSafely(filename: string, content: string): Promise<string> {
   const safeFilename = sanitizeFilename(filename);
   const outputPath = path.join(OUTPUT_DIR, safeFilename);
   
@@ -52,10 +52,11 @@ export async function writeFileSafely(filename: string, content: string): Promis
   if (fileExists) {
     const shouldOverwrite = await promptForOverwrite(safeFilename);
     if (!shouldOverwrite) {
-      console.log(chalk.yellow(`! Skipping ${safeFilename}`));
-      return;
+      console.log(chalk.yellow(`! Using existing contents of ${safeFilename}`));
+      return await fs.readFile(outputPath, 'utf-8');
     }
   }
   
   await fs.writeFile(outputPath, content);
+  return content;
 } 
