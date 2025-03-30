@@ -7,8 +7,8 @@ A Node.js tool that generates a reflection document of your GitHub activity by c
 ### Prerequisites ⚙️
 
 1. Install Node.js v22 or higher
-2. Install and authenticate GitHub CLI (`gh`)
-3. Install npm or yarn package manager
+2. Install npm or yarn package manager
+3. GitHub Personal Access Token (PAT) with `repo` and `read:org` scopes
 4. OpenAI API key (optional, for summary and brag document generation)
 
 ### Usage 💻
@@ -20,7 +20,7 @@ npm install
 
 2. Set up your environment variables:
 ```bash
-# Create a .env file with your OpenAI API key
+# Create a .env file with your API keys
 cp .env{.example,}
 ```
 
@@ -40,7 +40,7 @@ This will generate three markdown files in the `output` directory:
 - 🔍 Filters by author and date range (last 6 months by default)
 - 📝 Generates a clean, chronological markdown document
 - 🔄 Combines both PRs and issues into a single reflection document
-- ⚡ Uses GitHub CLI for efficient data retrieval
+- ⚡ Uses GitHub's official Octokit API client for efficient data retrieval
 - 🤖 Optional AI-powered summary and brag document generation
 - 🔒 Secure handling of API keys and sensitive data
 
@@ -85,12 +85,21 @@ npx tsc --outDir dist && node dist/index.js --username bostonaholic --months 6 -
 ### Environment Variables 🔐
 
 Required environment variables:
+- `GITHUB_TOKEN`: Your GitHub Personal Access Token (required)
 - `OPENAI_API_KEY`: Your OpenAI API key (required only when using the --brag flag)
 
 Set these in your `.env` file:
 ```
+GITHUB_TOKEN=ghp_...
 OPENAI_API_KEY=sk-...
 ```
+
+To create a GitHub Personal Access Token:
+1. Go to GitHub Settings > Developer Settings > Personal Access Tokens > Tokens (classic)
+2. Generate a new token with the following scopes:
+   - `repo` (Full control of private repositories)
+   - `read:org` (Read organization data)
+3. Copy the token and add it to your `.env` file
 
 ## Security Considerations 🔒
 
@@ -99,6 +108,7 @@ OPENAI_API_KEY=sk-...
 - GitHub API rate limits are properly handled with informative error messages
 - Input validation is performed on all user-provided parameters
 - Output files are restricted to a predefined list of allowed filenames
+- GitHub tokens are never logged or exposed in error messages
 
 ## Output 📁
 

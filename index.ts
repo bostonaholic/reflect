@@ -51,15 +51,14 @@ async function writeFileSafely(filename: string, content: string): Promise<void>
 async function main(): Promise<void> {
   try {
     const { username, months, generateBrag, debug } = getCommandLineArgs();
-    const baseCommand = `--author ${username} --limit 1000 --json title,body,closedAt,repository `;
     
     // Calculate date range
     const { startDate, endDate } = calculateDateRange(months);
     const dateRange = formatDateRangeForGitHub(startDate, endDate);
     
     const [prs, issues] = await Promise.all([
-      fetchMergedPRs(baseCommand, dateRange),
-      fetchClosedIssues(baseCommand, dateRange)
+      fetchMergedPRs(username, dateRange),
+      fetchClosedIssues(username, dateRange)
     ]);
 
     console.log(); // Add spacing after GitHub fetch results
