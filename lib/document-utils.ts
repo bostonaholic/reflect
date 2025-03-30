@@ -1,5 +1,6 @@
 import { generateMarkdownContent, generateSummaryFromContributions, generateBragFromSummary } from "./markdown.js";
 import { writeFileSafely } from "./file-utils.js";
+import { addVisualSpacing } from "./console-utils.js";
 import chalk from 'chalk';
 
 export async function generateAndWriteContributions(prs: any[], issues: any[]): Promise<string> {
@@ -11,7 +12,7 @@ export async function generateAndWriteContributions(prs: any[], issues: any[]): 
 }
 
 export async function generateAndWriteSummary(markdownContent: string, apiKey: string, debug: boolean): Promise<string> {
-  console.log(); // Add spacing before summary generation
+  addVisualSpacing();
   console.log(chalk.blue('Generating summary document...'));
   let summary = await generateSummaryFromContributions(markdownContent, apiKey, debug);
   summary = await writeFileSafely("summarized_contributions.md", summary);
@@ -20,7 +21,7 @@ export async function generateAndWriteSummary(markdownContent: string, apiKey: s
 }
 
 export async function generateAndWriteBrag(summary: string, apiKey: string, startDate: Date, endDate: Date, debug: boolean): Promise<void> {
-  console.log(); // Add spacing before brag generation
+  addVisualSpacing();
   console.log(chalk.blue('Generating brag document...'));
   let brag = await generateBragFromSummary(summary, apiKey, startDate, endDate, debug);
   brag = await writeFileSafely("brag_document.md", brag);
