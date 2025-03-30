@@ -1,0 +1,34 @@
+#!/bin/bash
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+# Check for Node version manager
+if command -v nodenv >/dev/null 2>&1; then
+  # Use nodenv
+  if [ -f ".node-version" ] && [ -z "$(nodenv version 2>/dev/null)" ]; then
+    echo "==> Installing Node via nodenv…"
+    nodenv install --skip-existing
+  fi
+elif [ -f "$HOME/.nvm/nvm.sh" ]; then
+  # Use nvm
+  echo "==> Loading nvm…"
+  # shellcheck disable=SC1091
+  source "$HOME/.nvm/nvm.sh"
+  if [ -f ".node-version" ]; then
+    NODE_VERSION=$(cat .node-version)
+    echo "==> Installing Node $NODE_VERSION via nvm…"
+    nvm install "$NODE_VERSION"
+    nvm use "$NODE_VERSION"
+  fi
+fi
+
+command -v npm >/dev/null 2>&1  || {
+  npm install -g npm
+}
+
+if [ -f "package.json" ]; then
+  echo "==> Installing npm dependencies…"
+  npm install >/dev/null 2>&1
+fi
