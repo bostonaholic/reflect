@@ -1,5 +1,5 @@
-import { generateMarkdownContent, generateSummaryFromContributions, generateBragFromSummary } from "./markdown";
-import { writeFileSafely } from "./file-utils";
+import { generateMarkdownContent, generateSummaryFromContributions, generateBragFromSummary } from "./markdown.js";
+import { writeFileSafely } from "./file-utils.js";
 import chalk from 'chalk';
 
 export async function generateAndWriteContributions(prs: any[], issues: any[]): Promise<string> {

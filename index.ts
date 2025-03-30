@@ -1,7 +1,7 @@
-import { getCommandLineArgs } from "./lib/cli";
-import { calculateDateRange, formatDateRangeForGitHub } from "./lib/date-utils";
-import { fetchGitHubData, logFetchStats } from "./lib/github-utils";
-import { generateAndWriteContributions, handleBragGeneration } from "./lib/document-utils";
+import { getCommandLineArgs } from "./lib/cli.js";
+import { calculateDateRange, formatDateRangeForGitHub } from "./lib/date-utils.js";
+import { fetchGitHubData, logFetchStats } from "./lib/github-utils.js";
+import { generateAndWriteContributions, handleBragGeneration } from "./lib/document-utils.js";
 import chalk from 'chalk';
 
 async function main(): Promise<void> {

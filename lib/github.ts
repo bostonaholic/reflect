@@ -1,5 +1,5 @@
 import { graphql } from "@octokit/graphql";
-import { GitHubPr, GitHubIssue } from "./types";
+import { GitHubPr, GitHubIssue } from "./types.js";
 import chalk from 'chalk';
 import ora from 'ora';
 

@@ -1,6 +1,6 @@
-import { GitHubPr, GitHubIssue } from "./types";
-import { generateContributionsSummary } from "./contributions-summarizer";
-import { generateBragDocument } from "./brag-generator";
+import { GitHubPr, GitHubIssue } from "./types.js";
+import { generateContributionsSummary } from "./contributions-summarizer.js";
+import { generateBragDocument } from "./brag-generator.js";
 
 export async function generateMarkdownContent(items: (GitHubPr | GitHubIssue)[]): Promise<string> {
   let markdownContent = '# GitHub Activity Report\n\n';
