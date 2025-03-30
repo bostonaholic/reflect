@@ -1,6 +1,6 @@
-import { callOpenAI } from './openai';
-import { formatDateForDisplay } from './date-utils';
-import { readPrompt } from './prompt-utils';
+import { callOpenAI } from './openai.js';
+import { formatDateForDisplay } from './date-utils.js';
+import { readPrompt } from './prompt-utils.js';
 
 export async function generateBragDocument(summary: string, apiKey: string, startDate: Date, endDate: Date, debug: boolean = false): Promise<string> {
   const prompt = await readPrompt('brag-document');
