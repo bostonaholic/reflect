@@ -22,8 +22,17 @@ fi
 
 echo "==> Running tests…"
 
+# Check if --coverage flag is present
+if [[ "$*" == *"--coverage"* ]]; then
+  # Set Node.js options for ES modules
+  export NODE_OPTIONS="--experimental-vm-modules --no-warnings"
+  
+  # Remove --coverage from arguments if present
+  args=("$@")
+  args=("${args[@]/--coverage/}")
+  npx jest --coverage "${args[@]}"
 # Check if --watch flag is present
-if [[ "$*" == *"--watch"* ]]; then
+elif [[ "$*" == *"--watch"* ]]; then
   # Remove --watch from arguments if present
   args=("$@")
   args=("${args[@]/--watch/}")
