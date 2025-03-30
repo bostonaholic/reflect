@@ -46,7 +46,7 @@ export async function fetchMergedPRs(baseCommand: string, dateRange: string): Pr
 }
 
 export async function fetchClosedIssues(baseCommand: string, dateRange: string): Promise<Item[]> {
-  const issueCommand = `gh search issues ${baseCommand} --created ${dateRange}`;
+  const issueCommand = `gh search issues ${baseCommand} --created ${dateRange} --state closed`;
   const spinner = ora(chalk.blue('Fetching closed issues...')).start();
 
   try {
@@ -56,7 +56,7 @@ export async function fetchClosedIssues(baseCommand: string, dateRange: string):
     }
     const issues = JSON.parse(result.stdout);
     const count = issues.length;
-    spinner.succeed(chalk.green(`Fetched ${count} issue${count === 1 ? '' : 's'}`));
+    spinner.succeed(chalk.green(`Fetched ${count} closed issue${count === 1 ? '' : 's'}`));
     
     return issues.map((issue: any) => ({
       ...issue,
