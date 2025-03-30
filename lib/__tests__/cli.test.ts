@@ -1,4 +1,4 @@
-import { isValidGitHubUsername, isValidMonths } from './cli.js';
+import { isValidGitHubUsername, isValidMonths } from '../cli.js';
 
 describe('CLI Validation Functions', () => {
   describe('isValidGitHubUsername', () => {
