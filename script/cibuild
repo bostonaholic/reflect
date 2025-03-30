@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+export ENV="test"
+
+echo "Running tests…"
+date "+%H:%M:%S"
+
+script/test
+
+echo "Tests completed at…"
+date "+%H:%M:%S"

@@ -8,35 +8,38 @@ script/bootstrap
 
 echo "==> Setting up environment variables…"
 
-# Check if .env file exists
-if [ ! -f ".env" ]; then
-  echo "Error: .env file not found. Please copy .env.example to .env and fill in your values."
-  exit 1
-fi
-
-# Source the .env file
-# shellcheck disable=SC1091
-source .env
-
-# Check required environment variables
-required_vars=(
-  "GITHUB_TOKEN"
-  "OPENAI_API_KEY"
-)
-
-missing_vars=()
-
-for var in "${required_vars[@]}"; do
-  if [ -z "${!var}" ]; then
-    missing_vars+=("$var")
+# Skip environment setup in test environment
+if [ "$ENV" != "test" ]; then
+  # Check if .env file exists
+  if [ ! -f ".env" ]; then
+    echo "Error: .env file not found. Please copy .env.example to .env and fill in your values."
+    exit 1
   fi
-done
 
-if [ ${#missing_vars[@]} -ne 0 ]; then
-  echo "Error: The following required environment variables are not set:"
-  printf '%s\n' "${missing_vars[@]}"
-  echo "Please set these variables in your .env file."
-  exit 1
+  # Source the .env file
+  # shellcheck disable=SC1091
+  source .env
+
+  # Check required environment variables
+  required_vars=(
+    "GITHUB_TOKEN"
+    "OPENAI_API_KEY"
+  )
+
+  missing_vars=()
+
+  for var in "${required_vars[@]}"; do
+    if [ -z "${!var}" ]; then
+      missing_vars+=("$var")
+    fi
+  done
+
+  if [ ${#missing_vars[@]} -ne 0 ]; then
+    echo "Error: The following required environment variables are not set:"
+    printf '%s\n' "${missing_vars[@]}"
+    echo "Please set these variables in your .env file."
+    exit 1
+  fi
 fi
 
 echo "==> App is now ready to go!"
