@@ -18,6 +18,7 @@ interface CliArgs {
   debug: boolean;
   includeOrgs?: string[];
   excludeOrgs?: string[];
+  model?: string;
 }
 
 function getApiKeyFromEnv(): string {
@@ -76,18 +77,19 @@ export function getCommandLineArgs(): CliArgs {
     .version('0.1.0')
     .requiredOption('-u, --username <username>', 'GitHub username to analyze')
     .requiredOption('-m, --months <number>', 'Number of months to look back', parseInt)
+    .option('--model <model>', 'OpenAI model to use (e.g., gpt-4, gpt-3.5-turbo)', 'gpt-4o-mini')
     .option('-b, --brag', 'Generate a brag document')
     .option('-d, --debug', 'Enable debug mode for detailed OpenAI API information')
     .option('-i, --include-orgs <orgs...>', 'Only include contributions to these organizations')
     .option('-e, --exclude-orgs <orgs...>', 'Exclude contributions to these organizations')
     .addHelpText('after', `
-      Note: Set OPENAI_API_KEY in your .env file for brag document generation
-      Example: reflect --username bostonaholic --months 6 --brag
-      Example with org filters: reflect --username bostonaholic --months 6 --include-orgs "Shopify"
-      Example with org filters: reflect --username bostonaholic --months 6 --exclude-orgs "secret"
-    `);
-
-  program.parse();
+        Note: Set OPENAI_API_KEY in your .env file for brag document generation
+        Example: reflect --username bostonaholic --months 6 --brag
+        Example with org filters: reflect --username bostonaholic --months 6 --include-orgs "Shopify"
+        Example with org filters: reflect --username bostonaholic --months 6 --exclude-orgs "secret"
+      `);
+    
+    program.parse();
 
   const options = program.opts();
 
@@ -102,6 +104,7 @@ export function getCommandLineArgs(): CliArgs {
     generateBrag: options.brag || false,
     debug: options.debug || false,
     includeOrgs: options.includeOrgs,
-    excludeOrgs: options.excludeOrgs
+    excludeOrgs: options.excludeOrgs,
+    model: options.model
   };
 } 

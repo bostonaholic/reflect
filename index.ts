@@ -7,7 +7,7 @@ import chalk from 'chalk';
 
 async function main(): Promise<void> {
   try {
-    const { username, months, generateBrag, debug, includeOrgs, excludeOrgs } = getCommandLineArgs();
+    const { username, months, generateBrag, debug, includeOrgs, excludeOrgs, model } = getCommandLineArgs();
     
     const { startDate, endDate } = calculateDateRange(months);
     const dateRange = formatDateRangeForGitHub(startDate, endDate);
@@ -23,7 +23,7 @@ async function main(): Promise<void> {
       if (!apiKey) {
         throw new Error('OPENAI_API_KEY environment variable is required for brag document generation');
       }
-      await handleBragGeneration(markdownContent, apiKey, startDate, endDate, debug);
+      await handleBragGeneration(markdownContent, apiKey, startDate, endDate, model, debug);
     }
   } catch (error) {
     console.error(chalk.red('✕ Execution error:'), error);

@@ -62,6 +62,7 @@ Example:
 
 - `-u, --username <username>`: Your GitHub username to fetch activity for
 - `-m, --months <number>`: Number of months to look back for activity (must be a positive number)
+- `--model <model>`: OpenAI model to use for AI-powered features (default: gpt-4o-mini)
 - `-b, --brag`: Optional flag to generate a summary and brag document
 - `-i, --include-orgs <orgs...>`: Only include contributions from these organizations (mutually exclusive with --exclude-orgs)
 - `-e, --exclude-orgs <orgs...>`: Exclude contributions from these organizations (mutually exclusive with --include-orgs)
@@ -71,6 +72,11 @@ Example:
 Basic usage:
 ```bash
 ./script/run --username bostonaholic --months 6 --brag
+```
+
+Using a different OpenAI model:
+```bash
+./script/run --username bostonaholic --months 6 --brag --model gpt-3.5-turbo
 ```
 
 Filter by specific organizations:

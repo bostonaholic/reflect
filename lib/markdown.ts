@@ -18,10 +18,10 @@ export async function generateMarkdownContent(items: (GitHubPr | GitHubIssue)[])
   return markdownContent;
 }
 
-export async function generateSummaryFromContributions(markdownContent: string, apiKey: string, debug: boolean = false): Promise<string> {
-  return generateContributionsSummary(markdownContent, apiKey, debug);
+export async function generateSummaryFromContributions(markdownContent: string, apiKey: string, model: string = 'gpt-4', debug: boolean = false): Promise<string> {
+  return generateContributionsSummary(markdownContent, apiKey, model, debug);
 }
 
-export async function generateBragFromSummary(summary: string, apiKey: string, startDate: Date, endDate: Date, debug: boolean = false): Promise<string> {
-  return generateBragDocument(summary, apiKey, startDate, endDate, debug);
+export async function generateBragFromSummary(summary: string, apiKey: string, startDate: Date, endDate: Date, model: string = 'gpt-4', debug: boolean = false): Promise<string> {
+  return generateBragDocument(summary, apiKey, startDate, endDate, model, debug);
 }
