@@ -1,13 +1,14 @@
-import { Item } from "./types";
+import { GitHubPr, GitHubIssue } from "./types";
 import { generateContributionsSummary } from "./contributions-summarizer";
 import { generateBragDocument } from "./brag-generator";
 
-export async function generateMarkdownContent(items: Item[]): Promise<string> {
-  let markdownContent = "# Merged Pull Requests and Closed Issues\n\n";
+export async function generateMarkdownContent(items: (GitHubPr | GitHubIssue)[]): Promise<string> {
+  let markdownContent = '# GitHub Activity Report\n\n';
   
   items.sort((a, b) => new Date(b.closedAt).getTime() - new Date(a.closedAt).getTime())
     .forEach((item) => {
       markdownContent += `## ${item.title}\n`;
+      markdownContent += `Type: ${item.type === 'pr' ? 'Pull Request' : 'Issue'}\n`;
       markdownContent += `Repository: ${item.repository}\n`;
       markdownContent += `Closed at: ${item.closedAt}\n\n`;
       markdownContent += `${item.body}\n\n`;
