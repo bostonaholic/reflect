@@ -7,12 +7,12 @@ import chalk from 'chalk';
 
 async function main(): Promise<void> {
   try {
-    const { username, months, generateBrag, debug } = getCommandLineArgs();
+    const { username, months, generateBrag, debug, includeOrgs, excludeOrgs } = getCommandLineArgs();
     
     const { startDate, endDate } = calculateDateRange(months);
     const dateRange = formatDateRangeForGitHub(startDate, endDate);
     
-    const { prs, issues } = await fetchGitHubData(username, dateRange);
+    const { prs, issues } = await fetchGitHubData(username, dateRange, includeOrgs, excludeOrgs);
     addVisualSpacing();
     
     const markdownContent = await generateAndWriteContributions(prs, issues);

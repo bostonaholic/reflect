@@ -16,6 +16,8 @@ interface CliArgs {
   months: number;
   generateBrag: boolean;
   debug: boolean;
+  includeOrgs?: string[];
+  excludeOrgs?: string[];
 }
 
 function getApiKeyFromEnv(): string {
@@ -58,6 +60,13 @@ function validateBragOption(brag: boolean): void {
   }
 }
 
+function validateOrgFilters(includeOrgs?: string[], excludeOrgs?: string[]): void {
+  if (includeOrgs?.length && excludeOrgs?.length) {
+    console.error(chalk.red('✕ Error: Cannot use both --include-orgs and --exclude-orgs simultaneously'));
+    process.exit(1);
+  }
+}
+
 export function getCommandLineArgs(): CliArgs {
   const program = new Command();
 
@@ -69,9 +78,12 @@ export function getCommandLineArgs(): CliArgs {
     .requiredOption('-m, --months <number>', 'Number of months to look back', parseInt)
     .option('-b, --brag', 'Generate a brag document')
     .option('-d, --debug', 'Enable debug mode for detailed OpenAI API information')
+    .option('-i, --include-orgs <orgs...>', 'Only include contributions to these organizations')
+    .option('-e, --exclude-orgs <orgs...>', 'Exclude contributions to these organizations')
     .addHelpText('after', `
       Note: Set OPENAI_API_KEY in your .env file for brag document generation
       Example: reflect -u bostonaholic -m 6 -b
+      Example with org filters: reflect -u bostonaholic -m 6 -i "Shopify"
     `);
 
   program.parse();
@@ -81,11 +93,14 @@ export function getCommandLineArgs(): CliArgs {
   validateUsername(options.username);
   validateMonths(options.months);
   validateBragOption(options.brag);
+  validateOrgFilters(options.includeOrgs, options.excludeOrgs);
 
   return {
     username: options.username,
     months: options.months,
     generateBrag: options.brag || false,
-    debug: options.debug || false
+    debug: options.debug || false,
+    includeOrgs: options.includeOrgs,
+    excludeOrgs: options.excludeOrgs
   };
 } 

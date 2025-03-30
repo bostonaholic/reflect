@@ -63,6 +63,25 @@ Example:
 - `-u, --username <username>`: Your GitHub username to fetch activity for
 - `-m, --months <number>`: Number of months to look back for activity (must be a positive number)
 - `-b, --brag`: Optional flag to generate a summary and brag document
+- `-i, --include-orgs <orgs...>`: Only include contributions from these organizations (mutually exclusive with --exclude-orgs)
+- `-e, --exclude-orgs <orgs...>`: Exclude contributions from these organizations (mutually exclusive with --include-orgs)
+
+### Examples 🚀
+
+Basic usage:
+```bash
+./script/run --username bostonaholic --months 6 --brag
+```
+
+Filter by specific organizations:
+```bash
+./script/run --username bostonaholic --months 6 --include-orgs "shopify" "github"
+```
+
+Exclude specific organizations:
+```bash
+./script/run --username bostonaholic --months 6 --exclude-orgs "secret" "archived"
+```
 
 ### Environment Variables 🔐
 

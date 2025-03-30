@@ -2,6 +2,7 @@ import { graphql } from "@octokit/graphql";
 import { GitHubPr, GitHubIssue } from "./types.js";
 import chalk from 'chalk';
 import ora from 'ora';
+import { buildOrgFilter } from './github-utils.js';
 
 function handleGitHubError(error: any): never {
   // Handle GraphQL errors
@@ -46,16 +47,18 @@ interface SearchResult {
   };
 }
 
-export async function fetchMergedPRs(username: string, dateRange: string): Promise<GitHubPr[]> {
+export async function fetchMergedPRs(username: string, dateRange: string, includeOrgs?: string[], excludeOrgs?: string[]): Promise<GitHubPr[]> {
   const spinner = ora(chalk.cyan('Fetching merged pull requests...')).start();
   const graphqlClient = getGraphQLClient();
 
   try {
     const [startDate, endDate] = dateRange.split('..');
+    const orgFilter = buildOrgFilter(includeOrgs, excludeOrgs);
+
     const query = `
       query {
         search(
-          query: "author:${username} is:pr is:merged merged:${startDate}..${endDate}"
+          query: "author:${username} is:pr is:merged merged:${startDate}..${endDate}${orgFilter}"
           type: ISSUE
           first: 100
         ) {
@@ -103,16 +106,18 @@ export async function fetchMergedPRs(username: string, dateRange: string): Promi
   }
 }
 
-export async function fetchClosedIssues(username: string, dateRange: string): Promise<GitHubIssue[]> {
+export async function fetchClosedIssues(username: string, dateRange: string, includeOrgs?: string[], excludeOrgs?: string[]): Promise<GitHubIssue[]> {
   const spinner = ora(chalk.cyan('Fetching closed issues...')).start();
   const graphqlClient = getGraphQLClient();
 
   try {
     const [startDate, endDate] = dateRange.split('..');
+    const orgFilter = buildOrgFilter(includeOrgs, excludeOrgs);
+
     const query = `
       query {
         search(
-          query: "author:${username} is:issue is:closed created:${startDate}..${endDate}"
+          query: "author:${username} is:issue is:closed created:${startDate}..${endDate}${orgFilter}"
           type: ISSUE
           first: 100
         ) {
