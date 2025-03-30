@@ -174,6 +174,6 @@ node --version
 
 ## Links 🔗
 
-- [Hacker News](https://news.ycombinator.com/item?id=43519484)
-- [X](https://x.com/bostonaholic/status/1906119726948073824)
-- [LinkedIn](https://www.linkedin.com/posts/bostonaholic_github-bostonaholicreflect-an-ai-tool-activity-7311885477546991616-JDzT)
+- 🗞️ [Hacker News](https://news.ycombinator.com/item?id=43519484)
+- 🐦 [X](https://x.com/bostonaholic/status/1906119726948073824)
+- 💼 [LinkedIn](https://www.linkedin.com/posts/bostonaholic_github-bostonaholicreflect-an-ai-tool-activity-7311885477546991616-JDzT)
