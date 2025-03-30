@@ -1,6 +1,6 @@
 # Reflect
 
-![Reflect: An AI tool to generate your brag document](https://github.com/user-attachments/assets/a3a2c1ca-67ba-4802-9f97-e5b720a627c2)
+![Reflect: An AI tool to generate your brag document](assets/github-header-image.png)
 
 > [!IMPORTANT] 
 > While this tool helps document your GitHub contributions, it's crucial to remember that your impact and value to a company extends far beyond what's visible in GitHub. Many critical aspects of software engineering - such as mentoring, documentation, cross-team collaboration, and technical leadership - often happen outside of version control. For more on this topic, check out [Glue Work](https://www.noidea.dog/glue), an excellent resource about the often-overlooked but essential work that makes teams successful.
