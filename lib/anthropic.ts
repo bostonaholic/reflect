@@ -9,7 +9,8 @@ export async function callAnthropic(prompt: string, content: string, apiKey: str
 
   try {
     const anthropic = new Anthropic({
-      apiKey: apiKey
+      baseURL: process.env.ANTHROPIC_BASE_URL || undefined,
+      apiKey: apiKey,
     });
 
     const message = await anthropic.messages.create({

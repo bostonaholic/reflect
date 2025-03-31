@@ -114,8 +114,9 @@ Required for making LLM calls (one of):
 - `OPENAI_API_KEY`
 - `ANTHROPIC_API_KEY`
 
-Optional for using a different OpenAI-compatible endpoint:
+Optional for using a different provider-compatible endpoint:
 - `OPENAI_BASE_URL`
+- `ANTHROPIC_BASE_URL`
 
 ## Security Considerations 🔒
 
