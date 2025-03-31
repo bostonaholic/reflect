@@ -78,27 +78,30 @@ Basic usage:
 ./script/run --username bostonaholic --lookback 6 --brag
 ```
 
+Choose a model:
+```bash
+./script/run --username bostonaholic --lookback 6 --model gpt-3-5-turbo --brag
+```
+
+Choose an LLM provider and model
+```bash
+./script/run --username bostonaholic --lookback 6 --provider anthropic --model claude-3-7-sonnet-20250219 --brag
+```
+
 Filter by specific organizations:
 ```bash
-./script/run --username bostonaholic --lookback 6 --include-orgs "shopify" "github"
+./script/run --username bostonaholic --lookback 6 --include-orgs shopify github
 ```
 
 Exclude specific organizations:
 ```bash
-./script/run --username bostonaholic --lookback 6 --exclude-orgs "secret" "archived"
+./script/run --username bostonaholic --lookback 6 --exclude-orgs secret archived
 ```
 
 ### Environment Variables 🔐
 
 Required environment variables:
 - `GITHUB_TOKEN`: Your GitHub Personal Access Token (required)
-- `OPENAI_API_KEY`: Your OpenAI API key (required only when using the --brag flag)
-
-Set these in your `.env` file:
-```
-GITHUB_TOKEN=ghp_...
-OPENAI_API_KEY=sk-...
-```
 
 To create a GitHub Personal Access Token:
 1. Go to GitHub Settings > Developer Settings > Personal Access Tokens > Tokens (classic)
@@ -106,6 +109,10 @@ To create a GitHub Personal Access Token:
    - `repo` (Full control of private repositories)
    - `read:org` (Read organization data)
 3. Copy the token and add it to your `.env` file
+
+Required for making LLM calls (one of):
+- `OPENAI_API_KEY`
+- `ANTHROPIC_API_KEY`
 
 ## Security Considerations 🔒
 
