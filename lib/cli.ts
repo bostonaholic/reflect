@@ -12,7 +12,7 @@ function loadEnv() {
   }
 }
 
-interface CliArgs {
+export interface CliArgs {
   username: string;
   lookback: number;
   generateBrag: boolean;
