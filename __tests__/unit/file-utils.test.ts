@@ -1,6 +1,6 @@
 import { sanitizeFilename } from '../../lib/file-utils.js';
 import * as fc from 'fast-check';
-import { jest, describe, it, expect } from '@jest/globals';
+import { describe, it, expect } from '@jest/globals';
 
 describe('sanitizeFilename', () => {
   const validFilenames = ['contributions.md', 'summarized_contributions.md', 'brag_document.md'];

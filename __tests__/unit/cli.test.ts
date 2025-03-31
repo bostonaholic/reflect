@@ -1,6 +1,6 @@
-import { isValidGitHubUsername, isValidMonths, getCommandLineArgs } from '../../lib/cli.js';
+import { isValidGitHubUsername, isValidMonths } from '../../lib/cli.js';
 import * as fc from 'fast-check';
-import { jest, describe, it, expect, beforeEach, afterAll } from '@jest/globals';
+import { describe, it, expect } from '@jest/globals';
 
 describe('CLI Validation Functions', () => {
   describe('isValidGitHubUsername', () => {
