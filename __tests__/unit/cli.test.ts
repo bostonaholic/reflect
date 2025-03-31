@@ -1,4 +1,4 @@
-import { isValidGitHubUsername, isValidMonths, getCommandLineArgs } from '../cli.js';
+import { isValidGitHubUsername, isValidMonths, getCommandLineArgs } from '../../lib/cli.js';
 import * as fc from 'fast-check';
 import { jest, describe, it, expect, beforeEach, afterAll } from '@jest/globals';
 

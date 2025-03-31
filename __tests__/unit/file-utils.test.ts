@@ -1,4 +1,4 @@
-import { sanitizeFilename } from '../file-utils.js';
+import { sanitizeFilename } from '../../lib/file-utils.js';
 import * as fc from 'fast-check';
 import { jest, describe, it, expect } from '@jest/globals';
 

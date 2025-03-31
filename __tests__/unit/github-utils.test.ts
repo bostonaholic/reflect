@@ -1,4 +1,4 @@
-import { buildOrgFilter } from '../github-utils.js';
+import { buildOrgFilter } from '../../lib/github-utils.js';
 
 describe('buildOrgFilter', () => {
   it('should return empty string when no orgs provided', () => {

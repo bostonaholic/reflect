@@ -1,5 +1,5 @@
 import { jest, describe, it, expect, beforeEach, afterEach } from '@jest/globals';
-import { calculateDateRange, formatDateRangeForGitHub, formatDateForDisplay } from '../date-utils.js';
+import { calculateDateRange, formatDateRangeForGitHub, formatDateForDisplay } from '../../lib/date-utils.js';
 import * as fc from 'fast-check';
 
 describe('calculateDateRange', () => {
