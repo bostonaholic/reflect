@@ -9,6 +9,7 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
 
   try {
     const openai = new OpenAI({
+      baseURL: process.env.OPENAI_BASE_URL || undefined,
       apiKey: apiKey
     });
 
