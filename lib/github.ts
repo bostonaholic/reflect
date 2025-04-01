@@ -81,7 +81,7 @@ export async function fetchMergedPRs(username: string, dateRange: string, includ
     }
 
     const result = await graphqlClient<SearchResult>(query);
-    
+
     if (process.env.DEBUG) {
       console.log(chalk.yellow('[DEBUG] GraphQL Response:'), JSON.stringify(result, null, 2));
     }
@@ -89,7 +89,7 @@ export async function fetchMergedPRs(username: string, dateRange: string, includ
     const prs = result.search.nodes;
     const count = prs.length;
     spinner.succeed(chalk.green(`Fetched ${count} pull request${count === 1 ? '' : 's'}`));
-    
+
     return prs.map(pr => ({
       title: pr.title,
       body: pr.body || '',
@@ -140,7 +140,7 @@ export async function fetchClosedIssues(username: string, dateRange: string, inc
     }
 
     const result = await graphqlClient<SearchResult>(query);
-    
+
     if (process.env.DEBUG) {
       console.log(chalk.yellow('[DEBUG] GraphQL Response:'), JSON.stringify(result, null, 2));
     }
@@ -148,7 +148,7 @@ export async function fetchClosedIssues(username: string, dateRange: string, inc
     const issues = result.search.nodes;
     const count = issues.length;
     spinner.succeed(chalk.green(`Fetched ${count} closed issue${count === 1 ? '' : 's'}`));
-    
+
     return issues.map(issue => ({
       title: issue.title,
       body: issue.body || '',
@@ -163,4 +163,4 @@ export async function fetchClosedIssues(username: string, dateRange: string, inc
     }
     handleGitHubError(error);
   }
-} 
+}

@@ -16,15 +16,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '22.14.0'
         cache: 'npm'
-    
+
     - name: Install dependencies
       run: ./script/setup
-    
+
     - name: Run tests
-      run: script/cibuild 
+      run: script/cibuild

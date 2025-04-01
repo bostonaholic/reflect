@@ -10,9 +10,9 @@ export function formatDateRangeForGitHub(startDate: Date, endDate: Date): string
 }
 
 export function formatDateForDisplay(date: Date): string {
-  return date.toLocaleDateString(undefined, { 
+  return date.toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   });
-} 
+}

@@ -51,4 +51,4 @@ console.log(chalk.gray('- callAnthropic(prompt, content, apiKey, model, debug)')
 console.log(chalk.gray('- checkFileExists(filePath)'));
 console.log(chalk.gray('- readPrompt(promptName)'));
 console.log(chalk.gray('\nEnvironment variables are loaded from .env'));
-console.log(chalk.gray('\nType .help to see available REPL commands\n')); 
+console.log(chalk.gray('\nType .help to see available REPL commands\n'));

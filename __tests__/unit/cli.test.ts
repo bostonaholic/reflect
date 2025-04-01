@@ -99,4 +99,4 @@ describe('CLI Validation Functions', () => {
       );
     });
   });
-}); 
+});

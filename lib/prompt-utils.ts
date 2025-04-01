@@ -13,4 +13,4 @@ export async function readPrompt(promptName: string): Promise<string> {
     console.error(chalk.red('✕ Error reading prompt file'), chalk.yellow(promptName), ':', error);
     throw error;
   }
-} 
+}

@@ -33,21 +33,21 @@ export async function promptForOverwrite(filename: string): Promise<boolean> {
     input: process.stdin,
     output: process.stdout
   });
-  
+
   const answer = await new Promise<string>((resolve) => {
     rl.question(chalk.yellow(`! File ${filename} already exists. Overwrite? (y/N) `), resolve);
   });
   rl.close();
-  
+
   return answer.toLowerCase() === 'y';
 }
 
 export async function writeFileSafely(filename: string, content: string): Promise<{ content: string; didWrite: boolean }> {
   const safeFilename = sanitizeFilename(filename);
   const outputPath = path.join(OUTPUT_DIR, safeFilename);
-  
+
   await createOutputDirectory();
-  
+
   const fileExists = await checkFileExists(outputPath);
   if (fileExists) {
     const shouldOverwrite = await promptForOverwrite(safeFilename);
@@ -56,7 +56,7 @@ export async function writeFileSafely(filename: string, content: string): Promis
       return { content: await fs.readFile(outputPath, 'utf-8'), didWrite: false };
     }
   }
-  
+
   await fs.writeFile(outputPath, content);
   return { content, didWrite: true };
-} 
+}

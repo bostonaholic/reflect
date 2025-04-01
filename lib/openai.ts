@@ -49,4 +49,4 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
     }
     throw error;
   }
-} 
+}

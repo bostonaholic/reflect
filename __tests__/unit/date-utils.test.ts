@@ -21,7 +21,7 @@ describe('calculateDateRange', () => {
           const expectedEndDate = new Date('2024-03-30T12:00:00Z');
           const expectedStartDate = new Date(expectedEndDate);
           expectedStartDate.setMonth(expectedStartDate.getMonth() - months);
-          
+
           expect(startDate.toISOString().split('T')[0]).toBe(expectedStartDate.toISOString().split('T')[0]);
           expect(endDate.toISOString().split('T')[0]).toBe(expectedEndDate.toISOString().split('T')[0]);
         }
@@ -82,4 +82,4 @@ describe('formatDateForDisplay', () => {
       { numRuns: 100 }
     );
   });
-}); 
+});

@@ -13,4 +13,4 @@ export async function callLlm(prompt: string, content: string, apiKey: string, l
       console.error(chalk.red(`✕ Unsupported LLM provider: ${llmOptions.provider}`));
       process.exit(1);
   }
-} 
+}

@@ -90,8 +90,8 @@ export function getCommandLineArgs(): CliArgs {
         Example with org filters: reflect --username bostonaholic --lookback 6 --include-orgs "Shopify"
         Example with org filters: reflect --username bostonaholic --lookback 6 --exclude-orgs "secret"
       `);
-    
-    program.parse();
+
+  program.parse();
 
   const options = program.opts();
 
@@ -112,4 +112,4 @@ export function getCommandLineArgs(): CliArgs {
       model: options.model
     } as LlmOptions
   };
-} 
+}

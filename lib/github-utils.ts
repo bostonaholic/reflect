@@ -14,7 +14,7 @@ export function buildOrgFilter(includeOrgs?: string[], excludeOrgs?: string[]): 
 }
 
 export async function fetchGitHubData(
-  username: string, 
+  username: string,
   dateRange: string,
   includeOrgs?: string[],
   excludeOrgs?: string[]

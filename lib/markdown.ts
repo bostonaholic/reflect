@@ -4,7 +4,7 @@ import { generateBragDocument } from "./brag-generator.js";
 
 export async function generateMarkdownContent(items: (GitHubPr | GitHubIssue)[]): Promise<string> {
   let markdownContent = '# GitHub Activity Report\n\n';
-  
+
   items.sort((a, b) => new Date(b.closedAt).getTime() - new Date(a.closedAt).getTime())
     .forEach((item) => {
       markdownContent += `## ${item.title}\n`;

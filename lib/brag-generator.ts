@@ -7,4 +7,4 @@ export async function generateBragDocument(summary: string, apiKey: string, star
   const prompt = await readPrompt('brag-document');
   const content = `Time Period: From ${formatDateForDisplay(startDate)} to ${formatDateForDisplay(endDate)}\n\n${summary}`;
   return callLlm(prompt, content, apiKey, llmOptions, debug);
-} 
+}

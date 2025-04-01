@@ -38,4 +38,4 @@ export async function generateAndWriteBrag(summary: string, apiKey: string, star
 export async function handleBragGeneration(markdownContent: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions, debug: boolean): Promise<string> {
   const summary = await generateAndWriteSummary(markdownContent, apiKey, llmOptions, debug);
   return generateAndWriteBrag(summary, apiKey, startDate, endDate, llmOptions, debug);
-} 
+}
