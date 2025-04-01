@@ -1,5 +1,9 @@
 {
   "type": "module",
+  "engines": {
+    "node": ">=22.14.0",
+    "npm": ">=10.9.0"
+  },
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/node": "^22.13.14",
