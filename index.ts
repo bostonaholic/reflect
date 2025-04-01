@@ -16,13 +16,13 @@ function getApiKeyFromEnv(provider: string): string | undefined {
 
 export async function reflect(args: CliArgs): Promise<void> {
   const { username, lookback, generateBrag, debug, includeOrgs, excludeOrgs, llmOptions } = args;
-  
+
   const { startDate, endDate } = calculateDateRange(lookback);
   const dateRange = formatDateRangeForGitHub(startDate, endDate);
-  
+
   const { prs, issues } = await fetchGitHubData(username, dateRange, includeOrgs, excludeOrgs);
   addVisualSpacing();
-  
+
   const markdownContent = await generateAndWriteContributions(prs, issues);
   addVisualSpacing();
 
