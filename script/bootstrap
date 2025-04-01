@@ -30,7 +30,7 @@ command -v npm >/dev/null 2>&1  || {
 
 if [ -f "package.json" ]; then
   echo "==> Installing npm dependencies…"
-  if [ "$ENV" = "test" ]; then
+  if [ "$ENV" = "test" ] || [ ! -d "node_modules" ]; then
     npm ci >/dev/null 2>&1
   else
     npm install >/dev/null 2>&1
