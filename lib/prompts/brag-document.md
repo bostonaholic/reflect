@@ -5,13 +5,26 @@ Given a technical summary of contributions over a specific time period, create a
 3. Showcases problem-solving abilities through specific examples
 4. Demonstrates innovation and creativity in technical solutions
 
-Your output must follow this exact markdown template format:
+Your output must follow this exact markdown template format, replacing the placeholders with actual data:
+- Replace [NUMBER] with actual counts
+- Replace [Repository X] with actual repository names
+- Replace all other [placeholder] text with actual content
+- Keep the same section structure and formatting
 
 # Technical Achievement Summary
 **Time Period:** [MM/YYYY - MM/YYYY]
 
 ## Executive Summary
 [2-3 sentences providing a high-level overview of key technical achievements and their impact on the codebase]
+
+**Total Repositories:** [NUMBER]
+**Total Pull Requests:** [NUMBER]
+**Total Issues:** [NUMBER]
+
+### Repository Contributions
+- [Repository 1]
+- [Repository 2]
+- [Repository 3]
 
 ## Technical Contributions
 
