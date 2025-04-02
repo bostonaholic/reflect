@@ -1,7 +1,7 @@
 import { graphql } from "@octokit/graphql";
 import { GitHubPr, GitHubIssue } from "./types.js";
 import chalk from 'chalk';
-import ora from 'ora';
+import ora, { Ora } from 'ora';
 import { buildOrgFilter } from './github-utils.js';
 
 function handleGitHubError(error: any): never {
@@ -34,17 +34,48 @@ function getGraphQLClient() {
   });
 }
 
+type SearchResultItem = {
+  title: string;
+  body: string;
+  closedAt: string;
+  repository: {
+    nameWithOwner: string;
+  };
+};
+
 interface SearchResult {
   search: {
-    nodes: Array<{
-      title: string;
-      body: string;
-      closedAt: string;
-      repository: {
-        nameWithOwner: string;
-      };
-    }>;
+    nodes: SearchResultItem[];
+    pageInfo: {
+      hasNextPage: boolean;
+      endCursor: string;
+    };
   };
+}
+
+async function fetchAllSearchResults(
+  graphqlClient: ReturnType<typeof graphql.defaults>,
+  query: string,
+  spinner: Ora
+): Promise<SearchResultItem[]> {
+  let allResults: SearchResultItem[] = [];
+  let hasNextPage = true;
+  let endCursor: string | null = null;
+
+  while (hasNextPage) {
+    const paginatedQuery: string = query.replace('first: 100', `first: 100${endCursor ? `, after: "${endCursor}"` : ''}`);
+    const result: SearchResult = await graphqlClient(paginatedQuery);
+
+    allResults = allResults.concat(result.search.nodes);
+    hasNextPage = result.search.pageInfo.hasNextPage;
+    endCursor = result.search.pageInfo.endCursor;
+
+    if (hasNextPage) {
+      spinner.text = chalk.cyan(`Fetched ${allResults.length} items so far...`);
+    }
+  }
+
+  return allResults;
 }
 
 export async function fetchMergedPRs(username: string, dateRange: string, includeOrgs?: string[], excludeOrgs?: string[]): Promise<GitHubPr[]> {
@@ -72,25 +103,19 @@ export async function fetchMergedPRs(username: string, dateRange: string, includ
               }
             }
           }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
         }
       }
     `;
 
-    if (process.env.DEBUG) {
-      console.log(chalk.yellow('[DEBUG] GraphQL Query:'), query);
-    }
-
-    const result = await graphqlClient<SearchResult>(query);
-
-    if (process.env.DEBUG) {
-      console.log(chalk.yellow('[DEBUG] GraphQL Response:'), JSON.stringify(result, null, 2));
-    }
-
-    const prs = result.search.nodes;
+    const prs = await fetchAllSearchResults(graphqlClient, query, spinner);
     const count = prs.length;
     spinner.succeed(chalk.green(`Fetched ${count} pull request${count === 1 ? '' : 's'}`));
 
-    return prs.map(pr => ({
+    return prs.map((pr: SearchResultItem) => ({
       title: pr.title,
       body: pr.body || '',
       closedAt: pr.closedAt,
@@ -98,10 +123,7 @@ export async function fetchMergedPRs(username: string, dateRange: string, includ
       type: 'pr' as const
     }));
   } catch (error) {
-    spinner.fail(chalk.red('Failed to fetch PRs'));
-    if (process.env.DEBUG) {
-      console.error(chalk.yellow('Debug: Error details:'), error);
-    }
+    spinner.fail(chalk.red('✕ Failed to fetch PRs'));
     handleGitHubError(error);
   }
 }
@@ -131,25 +153,19 @@ export async function fetchClosedIssues(username: string, dateRange: string, inc
               }
             }
           }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
         }
       }
     `;
 
-    if (process.env.DEBUG) {
-      console.log(chalk.yellow('[DEBUG] GraphQL Query:'), query);
-    }
-
-    const result = await graphqlClient<SearchResult>(query);
-
-    if (process.env.DEBUG) {
-      console.log(chalk.yellow('[DEBUG] GraphQL Response:'), JSON.stringify(result, null, 2));
-    }
-
-    const issues = result.search.nodes;
+    const issues = await fetchAllSearchResults(graphqlClient, query, spinner);
     const count = issues.length;
     spinner.succeed(chalk.green(`Fetched ${count} closed issue${count === 1 ? '' : 's'}`));
 
-    return issues.map(issue => ({
+    return issues.map((issue: SearchResultItem) => ({
       title: issue.title,
       body: issue.body || '',
       closedAt: issue.closedAt,
@@ -157,10 +173,7 @@ export async function fetchClosedIssues(username: string, dateRange: string, inc
       type: 'issue' as const
     }));
   } catch (error) {
-    spinner.fail(chalk.red('Failed to fetch issues'));
-    if (process.env.DEBUG) {
-      console.error(chalk.yellow('[DEBUG] Error details:'), error);
-    }
+    spinner.fail(chalk.red('✕ Failed to fetch issues'));
     handleGitHubError(error);
   }
 }
