@@ -1,6 +1,6 @@
 import { isValidGitHubUsername, isValidMonths } from '../../lib/cli.js';
 import * as fc from 'fast-check';
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect } from 'vitest';
 
 describe('CLI Validation Functions', () => {
   describe('isValidGitHubUsername', () => {

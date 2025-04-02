@@ -1,5 +1,6 @@
 import { buildOrgFilter } from '../../lib/github-utils.js';
 import * as fc from 'fast-check';
+import { describe, it, expect } from 'vitest';
 
 describe('buildOrgFilter', () => {
   it('should return empty string for undefined or empty arrays', () => {

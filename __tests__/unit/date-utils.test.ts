@@ -1,15 +1,15 @@
-import { jest, describe, it, expect, beforeEach, afterEach } from '@jest/globals';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { calculateDateRange, formatDateRangeForGitHub, formatDateForDisplay } from '../../lib/date-utils.js';
 import * as fc from 'fast-check';
 
 describe('calculateDateRange', () => {
   beforeEach(() => {
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date('2024-03-30T12:00:00Z'));
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2024-03-30T12:00:00Z'));
   });
 
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('should calculate correct date range for any valid number of months', () => {
