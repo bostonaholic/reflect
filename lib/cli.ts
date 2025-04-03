@@ -80,6 +80,18 @@ function validateProvider(provider: LlmProvider): void {
     process.exit(1);
   }
 }
+
+function isValidModel(model: string): boolean {
+  return /^[a-zA-Z0-9._-]+$/.test(model);
+}
+
+function validateModel(model: string): void {
+  if (!isValidModel(model)) {
+    console.error(chalk.red(`✖ Error: Invalid model ${model}`));
+    process.exit(1);
+  }
+}
+
 export function getCommandLineArgs(): CliArgs {
   const program = new Command();
 
@@ -111,6 +123,7 @@ export function getCommandLineArgs(): CliArgs {
     validateBragOption(options.brag);
     validateOrgFilters(options.includeOrgs, options.excludeOrgs);
     validateProvider(options.provider);
+    validateModel(options.model);
 
     return {
       username: options.username,
