@@ -1,6 +1,5 @@
 import { generateMarkdownContent, generateSummaryFromContributions, generateBragFromSummary } from "./markdown.js";
 import { writeFileSafely } from "./file-utils.js";
-import { addVisualSpacing } from "./console-utils.js";
 import { LlmOptions } from "./types.js";
 import chalk from 'chalk';
 import ora from "ora";

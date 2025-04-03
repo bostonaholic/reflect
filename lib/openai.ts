@@ -1,7 +1,6 @@
 import chalk from 'chalk';
 import ora from 'ora';
 import OpenAI from 'openai';
-import { addVisualSpacing } from './console-utils.js';
 import { LlmOptions } from './types.js';
 
 export async function callOpenAI(prompt: string, content: string, apiKey: string, llmOptions: LlmOptions, debug: boolean = false): Promise<string> {
@@ -38,7 +37,6 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
       console.log(chalk.yellow('[DEBUG] Total Tokens:'), chalk.white(completion.usage?.total_tokens));
       console.log(chalk.yellow('[DEBUG] Model:'), chalk.white(completion.model));
       console.log(chalk.yellow('[DEBUG] Finish Reason:'), chalk.white(completion.choices[0].finish_reason));
-      addVisualSpacing();
     }
 
     return completion.choices[0].message.content || '';

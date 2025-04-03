@@ -1,7 +1,6 @@
 import { calculateDateRange, formatDateRangeForGitHub } from "./date-utils.js";
 import { fetchGitHubData } from "./github-utils.js";
 import { generateAndWriteContributions, handleBragGeneration } from "./document-utils.js";
-import { addVisualSpacing } from "./console-utils.js";
 import { CliArgs } from "./cli.js";
 
 function getApiKeyFromEnv(provider: string): string | undefined {
@@ -19,10 +18,8 @@ export async function reflect(args: CliArgs): Promise<void> {
     const dateRange = formatDateRangeForGitHub(startDate, endDate);
 
     const { prs, issues } = await fetchGitHubData(username, dateRange, includeOrgs, excludeOrgs);
-    addVisualSpacing();
 
     const markdownContent = await generateAndWriteContributions(prs, issues);
-    addVisualSpacing();
 
     if (generateBrag) {
         const apiKey = getApiKeyFromEnv(llmOptions.provider);

@@ -1,7 +1,4 @@
 import { fetchMergedPRs, fetchClosedIssues } from "./github.js";
-import chalk from 'chalk';
-import { formatDateForDisplay } from "./date-utils.js";
-import { addVisualSpacing } from "./console-utils.js";
 
 export function buildOrgFilter(includeOrgs?: string[], excludeOrgs?: string[]): string {
   if (includeOrgs?.length) {

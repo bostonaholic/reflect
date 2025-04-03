@@ -1,7 +1,6 @@
 import chalk from 'chalk';
 import ora from 'ora';
 import Anthropic from '@anthropic-ai/sdk';
-import { addVisualSpacing } from './console-utils.js';
 import { LlmOptions } from './types.js';
 
 export async function callAnthropic(prompt: string, content: string, apiKey: string, llmOptions: LlmOptions, debug: boolean = false): Promise<string> {
@@ -38,7 +37,6 @@ export async function callAnthropic(prompt: string, content: string, apiKey: str
       console.log(chalk.yellow('[DEBUG] Total Tokens:'), chalk.white(message.usage?.input_tokens + message.usage?.output_tokens));
       console.log(chalk.yellow('[DEBUG] Model:'), chalk.white(message.model));
       console.log(chalk.yellow('[DEBUG] Finish Reason:'), chalk.white(message.stop_reason));
-      addVisualSpacing();
     }
 
     return message.content[0].type === 'text' ? message.content[0].text : '';
