@@ -31,8 +31,6 @@ export interface CliArgs {
 }
 
 function getApiKeyFromEnv(): string {
-  loadEnv();
-
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     console.error(chalk.red('✖ Error: OPENAI_API_KEY environment variable is required for brag document generation'));
@@ -124,6 +122,8 @@ function validateModel(model: string): void {
 }
 
 export function getCommandLineArgs(): CliArgs {
+  loadEnv();
+
   const program = new Command();
 
   program
