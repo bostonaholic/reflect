@@ -1,0 +1,48 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Code Simplicity and Maintainability Rules
+
+## Code Organization
+- Follow consistent file structure
+- Use meaningful file and directory names
+- Implement proper separation of concerns
+- Keep files focused and single-purpose
+- Use appropriate module boundaries
+
+## Code Style
+- Follow consistent naming conventions
+- Use clear and descriptive variable names
+- Keep functions small and focused
+- Use appropriate comments
+- Follow DRY (Don't Repeat Yourself) principle
+
+## Code Quality
+- Maintain consistent code formatting
+- Remove unused code
+- Handle edge cases
+- Use appropriate abstraction levels
+- Implement proper error handling
+
+## Documentation
+- Write clear documentation
+- Keep documentation up to date
+- Include usage examples
+- Document complex algorithms
+- Maintain API documentation
+
+## Testing
+- Write maintainable tests
+- Use descriptive test names
+- Follow test organization best practices
+- Implement proper test coverage
+- Use appropriate testing patterns
+
+## Refactoring
+- Refactor when code smells are detected
+- Keep refactoring changes small
+- Maintain test coverage during refactoring
+- Document major refactoring changes
+- Review refactoring changes carefully

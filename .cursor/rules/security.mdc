@@ -1,0 +1,44 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Security Rules
+
+## Authentication and Authorization
+- Implement proper authentication mechanisms
+- Implement proper token handling
+
+## Data Security
+- Encrypt sensitive data at rest
+- Use HTTPS for all communications
+- Implement proper input validation
+- Sanitize user input
+
+## API Security
+- Implement rate limiting
+- Use proper API authentication
+- Validate all API inputs
+- Implement proper CORS policies
+- Use secure headers
+
+## Code Security
+- Keep dependencies updated
+- Scan for known vulnerabilities
+- Implement proper error handling
+- Use secure coding practices
+- Implement proper logging
+
+## Infrastructure Security
+- Use secure configuration management
+- Implement proper access controls
+- Use secure deployment practices
+- Implement proper monitoring
+- Use secure networking practices
+
+## Testing
+- Include security testing
+- Implement penetration testing
+- Use security scanning tools
+- Test for common vulnerabilities
+- Implement proper security monitoring
