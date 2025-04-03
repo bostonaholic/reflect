@@ -5,7 +5,11 @@ import { LlmOptions, LlmProvider } from './types.js';
 import ora from 'ora';
 import { VALID_PROVIDERS } from './llm.js';
 
+let envLoaded = false;
+
 function loadEnv() {
+  if (envLoaded) return;
+
   const spinner = ora('Loading environment variables...').start();
   const configResult = config();
   if (configResult.error) {
@@ -13,6 +17,7 @@ function loadEnv() {
   } else {
     spinner.succeed(chalk.green('Loaded environment variables from .env file'));
   }
+  envLoaded = true;
 }
 
 export interface CliArgs {
