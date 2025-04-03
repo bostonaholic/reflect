@@ -30,17 +30,7 @@ export interface CliArgs {
   llmOptions: LlmOptions;
 }
 
-function getApiKeyFromEnv(): string {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    console.error(chalk.red('✖ Error: OPENAI_API_KEY environment variable is required for brag document generation'));
-    process.exit(1);
-  }
-  return apiKey;
-}
-
 const GITHUB_USERNAME_REGEX = /^[a-zA-Z0-9_-]+$/;
-const MODEL_NAME_REGEX = /^[a-zA-Z0-9._-]+$/;
 
 function isValidGitHubUsername(username: string): boolean {
   return GITHUB_USERNAME_REGEX.test(username);
@@ -63,12 +53,6 @@ function validateMonths(months: number): void {
   if (!isValidMonths(months)) {
     console.error(chalk.red('✖ Error: Months must be a positive number and not exceed 36'));
     process.exit(1);
-  }
-}
-
-function validateBragOption(brag: boolean): void {
-  if (brag) {
-    getApiKeyFromEnv();
   }
 }
 
@@ -110,17 +94,6 @@ function validateProvider(provider: LlmProvider): void {
   }
 }
 
-function isValidModel(model: string): boolean {
-  return MODEL_NAME_REGEX.test(model);
-}
-
-function validateModel(model: string): void {
-  if (!isValidModel(model)) {
-    console.error(chalk.red(`✖ Error: Invalid model ${model}`));
-    process.exit(1);
-  }
-}
-
 export function getCommandLineArgs(): CliArgs {
   loadEnv();
 
@@ -151,10 +124,8 @@ export function getCommandLineArgs(): CliArgs {
 
     validateUsername(options.username);
     validateMonths(options.lookback);
-    validateBragOption(options.brag);
     validateOrgFilters(options.includeOrgs, options.excludeOrgs);
     validateProvider(options.provider);
-    validateModel(options.model);
 
     return {
       username: options.username,
