@@ -71,6 +71,24 @@ function validateOrgFilters(includeOrgs?: string[], excludeOrgs?: string[]): voi
     console.error(chalk.red('✖ Error: Cannot use both --include-orgs and --exclude-orgs simultaneously'));
     process.exit(1);
   }
+
+  if (includeOrgs?.length) {
+    for (const org of includeOrgs) {
+      if (!isValidGitHubUsername(org)) {
+        console.error(chalk.red(`✖ Error: Invalid organization name ${org}`));
+        process.exit(1);
+      }
+    }
+  }
+
+  if (excludeOrgs?.length) {
+    for (const org of excludeOrgs) {
+      if (!isValidGitHubUsername(org)) {
+        console.error(chalk.red(`✖ Error: Invalid organization name ${org}`));
+        process.exit(1);
+      }
+    }
+  }
 }
 
 function validateProvider(provider: LlmProvider): void {
