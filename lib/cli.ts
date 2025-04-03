@@ -3,6 +3,7 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import { LlmOptions } from './types.js';
 import ora from 'ora';
+import { VALID_PROVIDERS } from './llm.js';
 
 function loadEnv() {
   const spinner = ora('Loading environment variables...').start();
@@ -72,6 +73,13 @@ function validateOrgFilters(includeOrgs?: string[], excludeOrgs?: string[]): voi
   }
 }
 
+function validateProvider(provider: string): void {
+  if (!VALID_PROVIDERS.includes(provider)) {
+    console.error(chalk.red(`✖ Error: Invalid provider ${provider}`))
+    console.log(chalk.cyan(`! Valid providers are: ${VALID_PROVIDERS.join(', ')}`));
+    process.exit(1);
+  }
+}
 export function getCommandLineArgs(): CliArgs {
   const program = new Command();
 
@@ -102,6 +110,7 @@ export function getCommandLineArgs(): CliArgs {
     validateMonths(options.lookback);
     validateBragOption(options.brag);
     validateOrgFilters(options.includeOrgs, options.excludeOrgs);
+    validateProvider(options.provider);
 
     return {
       username: options.username,

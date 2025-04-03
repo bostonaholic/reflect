@@ -3,6 +3,8 @@ import { callAnthropic } from './anthropic.js';
 import { LlmOptions } from './types.js';
 import chalk from 'chalk';
 
+export const VALID_PROVIDERS = ['openai', 'anthropic'];
+
 export async function callLlm(prompt: string, content: string, apiKey: string, llmOptions: LlmOptions, debug?: boolean): Promise<string> {
   switch (llmOptions.provider.toLowerCase()) {
     case 'openai':
