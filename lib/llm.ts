@@ -10,7 +10,7 @@ export async function callLlm(prompt: string, content: string, apiKey: string, l
     case 'anthropic':
       return callAnthropic(prompt, content, apiKey, llmOptions, debug);
     default:
-      console.error(chalk.red(`✕ Unsupported LLM provider: ${llmOptions.provider}`));
+      console.error(chalk.red(`✖ Unsupported LLM provider: ${llmOptions.provider}`));
       process.exit(1);
   }
 }

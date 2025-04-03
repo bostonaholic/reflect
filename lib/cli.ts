@@ -29,7 +29,7 @@ function getApiKeyFromEnv(): string {
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    console.error(chalk.red('✕ Error: OPENAI_API_KEY environment variable is required for brag document generation'));
+    console.error(chalk.red('✖ Error: OPENAI_API_KEY environment variable is required for brag document generation'));
     process.exit(1);
   }
   return apiKey;
@@ -47,14 +47,14 @@ export { isValidGitHubUsername, isValidMonths };
 
 function validateUsername(username: string): void {
   if (!isValidGitHubUsername(username)) {
-    console.error(chalk.red('✕ Error: Invalid GitHub username format'));
+    console.error(chalk.red('✖ Error: Invalid GitHub username format'));
     process.exit(1);
   }
 }
 
 function validateMonths(months: number): void {
   if (!isValidMonths(months)) {
-    console.error(chalk.red('✕ Error: Months must be a positive number and not exceed 36'));
+    console.error(chalk.red('✖ Error: Months must be a positive number and not exceed 36'));
     process.exit(1);
   }
 }
@@ -67,7 +67,7 @@ function validateBragOption(brag: boolean): void {
 
 function validateOrgFilters(includeOrgs?: string[], excludeOrgs?: string[]): void {
   if (includeOrgs?.length && excludeOrgs?.length) {
-    console.error(chalk.red('✕ Error: Cannot use both --include-orgs and --exclude-orgs simultaneously'));
+    console.error(chalk.red('✖ Error: Cannot use both --include-orgs and --exclude-orgs simultaneously'));
     process.exit(1);
   }
 }
@@ -116,7 +116,7 @@ export function getCommandLineArgs(): CliArgs {
       } as LlmOptions
     };
   } catch (error) {
-    console.error(chalk.red('Error:'), error instanceof Error ? error.message : 'Unknown error occurred');
+    console.error(chalk.red('✖ Error:'), error instanceof Error ? error.message : 'Unknown error occurred');
     process.exit(1);
   }
 }

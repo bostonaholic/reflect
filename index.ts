@@ -7,7 +7,7 @@ async function main(): Promise<void> {
     const args = getCommandLineArgs();
     await reflect(args);
   } catch (error) {
-    console.error(chalk.red('✕ Execution error:'), error);
+    console.error(chalk.red('✖ Execution error:'), error);
     process.exit(1);
   }
 }
