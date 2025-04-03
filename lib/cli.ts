@@ -2,6 +2,7 @@ import { config } from 'dotenv';
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { LlmOptions } from './types.js';
+import { addVisualSpacing } from './console-utils.js';
 
 function loadEnv() {
   const configResult = config();
@@ -24,6 +25,8 @@ export interface CliArgs {
 
 function getApiKeyFromEnv(): string {
   loadEnv();
+  addVisualSpacing();
+
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     console.error(chalk.red('✕ Error: OPENAI_API_KEY environment variable is required for brag document generation'));
