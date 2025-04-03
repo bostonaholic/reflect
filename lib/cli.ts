@@ -3,13 +3,15 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import { LlmOptions } from './types.js';
 import { addVisualSpacing } from './console-utils.js';
+import ora from 'ora';
 
 function loadEnv() {
+  const spinner = ora('Loading environment variables...').start();
   const configResult = config();
   if (configResult.error) {
-    console.log(chalk.yellow('! No .env file found, will use command line arguments for API key'));
+    spinner.warn('No .env file found, will use command line arguments for API key');
   } else {
-    console.log(chalk.green('Loaded environment variables from .env file'));
+    spinner.succeed(chalk.green('Loaded environment variables from .env file'));
   }
 }
 
