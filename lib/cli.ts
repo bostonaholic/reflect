@@ -94,25 +94,29 @@ export function getCommandLineArgs(): CliArgs {
         Example with org filters: reflect --username bostonaholic --lookback 6 --exclude-orgs "secret"
       `);
 
-  program.parse();
+  try {
+    program.parse();
+    const options = program.opts();
 
-  const options = program.opts();
+    validateUsername(options.username);
+    validateMonths(options.lookback);
+    validateBragOption(options.brag);
+    validateOrgFilters(options.includeOrgs, options.excludeOrgs);
 
-  validateUsername(options.username);
-  validateMonths(options.lookback);
-  validateBragOption(options.brag);
-  validateOrgFilters(options.includeOrgs, options.excludeOrgs);
-
-  return {
-    username: options.username,
-    lookback: options.lookback,
-    generateBrag: options.brag || false,
-    debug: options.debug || false,
-    includeOrgs: options.includeOrgs,
-    excludeOrgs: options.excludeOrgs,
-    llmOptions: {
-      provider: options.provider || 'openai',
-      model: options.model
-    } as LlmOptions
-  };
+    return {
+      username: options.username,
+      lookback: options.lookback,
+      generateBrag: options.brag || false,
+      debug: options.debug || false,
+      includeOrgs: options.includeOrgs,
+      excludeOrgs: options.excludeOrgs,
+      llmOptions: {
+        provider: options.provider || 'openai',
+        model: options.model
+      } as LlmOptions
+    };
+  } catch (error) {
+    console.error(chalk.red('Error:'), error instanceof Error ? error.message : 'Unknown error occurred');
+    process.exit(1);
+  }
 }
