@@ -80,11 +80,12 @@ function validateOrgFilters(includeOrgs?: string[], excludeOrgs?: string[]): voi
     process.exit(1);
   }
 
+  const invalidOrgs = new Set<string>();
+
   if (includeOrgs?.length) {
     for (const org of includeOrgs) {
       if (!isValidGitHubUsername(org)) {
-        console.error(chalk.red(`✖ Error: Invalid organization name ${org}`));
-        process.exit(1);
+        invalidOrgs.add(org);
       }
     }
   }
@@ -92,10 +93,14 @@ function validateOrgFilters(includeOrgs?: string[], excludeOrgs?: string[]): voi
   if (excludeOrgs?.length) {
     for (const org of excludeOrgs) {
       if (!isValidGitHubUsername(org)) {
-        console.error(chalk.red(`✖ Error: Invalid organization name ${org}`));
-        process.exit(1);
+        invalidOrgs.add(org);
       }
     }
+  }
+
+  if (invalidOrgs.size > 0) {
+    console.error(chalk.red(`✖ Error: Invalid organization names: ${Array.from(invalidOrgs).join(', ')}`));
+    process.exit(1);
   }
 }
 
