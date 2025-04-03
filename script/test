@@ -24,7 +24,7 @@ echo "==> Running tests…"
 
 # Check if --coverage flag is present
 if [[ "$*" == *"--coverage"* ]]; then
-  npx vitest run --coverage
+  npm run test:coverage
 # Check if --watch flag is present
 elif [[ "$*" == *"--watch"* ]]; then
   npm run test:watch
