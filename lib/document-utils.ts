@@ -5,31 +5,31 @@ import chalk from 'chalk';
 import ora from "ora";
 
 export async function generateAndWriteContributions(prs: any[], issues: any[]): Promise<string> {
-  const spinner = ora('Generating markdown content...').start();
+  console.log(chalk.cyan('Generating markdown content...'));
   let markdownContent = await generateMarkdownContent([...prs, ...issues]);
   const result = await writeFileSafely("contributions.md", markdownContent);
   if (result.didWrite) {
-    spinner.succeed(chalk.green('Markdown file generated: output/contributions.md'));
+    console.log(chalk.green('✓ Markdown file generated: output/contributions.md'));
   }
   return result.content;
 }
 
 export async function generateAndWriteSummary(markdownContent: string, apiKey: string, llmOptions: LlmOptions, debug: boolean): Promise<string> {
-  const spinner = ora('Generating summary document...').start();
+  console.log(chalk.cyan('Generating summary document...'));
   let summary = await generateSummaryFromContributions(markdownContent, apiKey, llmOptions, debug);
   const result = await writeFileSafely("summarized_contributions.md", summary);
   if (result.didWrite) {
-    spinner.succeed(chalk.green('Summary document generated: output/summarized_contributions.md'));
+    console.log(chalk.green('✓ Summary document generated: output/summarized_contributions.md'));
   }
   return result.content;
 }
 
 export async function generateAndWriteBrag(summary: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions, debug: boolean): Promise<string> {
-  const spinner = ora('Generating brag document...').start();
+  console.log(chalk.cyan('Generating brag document...'));
   let brag = await generateBragFromSummary(summary, apiKey, startDate, endDate, llmOptions, debug);
   const result = await writeFileSafely("brag_document.md", brag);
   if (result.didWrite) {
-    spinner.succeed(chalk.green('Brag document generated: output/brag_document.md'));
+    console.log(chalk.green('✓ Brag document generated: output/brag_document.md'));
   }
   return result.content;
 }
