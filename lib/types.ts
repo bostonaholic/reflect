@@ -1,3 +1,5 @@
+import { VALID_PROVIDERS } from './llm.js';
+
 export interface GitHubContribution {
   title: string;
   body: string;
@@ -13,7 +15,9 @@ export interface GitHubIssue extends GitHubContribution {
   type: 'issue';
 }
 
+export type LlmProvider = typeof VALID_PROVIDERS[number];
+
 export interface LlmOptions {
-  provider: string;
+  provider: LlmProvider;
   model?: string;
 }

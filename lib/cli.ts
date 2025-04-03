@@ -1,7 +1,7 @@
 import { config } from 'dotenv';
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { LlmOptions } from './types.js';
+import { LlmOptions, LlmProvider } from './types.js';
 import ora from 'ora';
 import { VALID_PROVIDERS } from './llm.js';
 
@@ -73,7 +73,7 @@ function validateOrgFilters(includeOrgs?: string[], excludeOrgs?: string[]): voi
   }
 }
 
-function validateProvider(provider: string): void {
+function validateProvider(provider: LlmProvider): void {
   if (!VALID_PROVIDERS.includes(provider)) {
     console.error(chalk.red(`✖ Error: Invalid provider ${provider}`))
     console.log(chalk.cyan(`! Valid providers are: ${VALID_PROVIDERS.join(', ')}`));
