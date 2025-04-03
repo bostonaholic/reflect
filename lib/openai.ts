@@ -41,10 +41,9 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
 
     return completion.choices[0].message.content || '';
   } catch (error) {
-    spinner.fail(chalk.red('✕ OpenAI API request failed'));
-    console.error(chalk.red('✕ Error in OpenAI API call:'), error);
+    spinner.fail(chalk.red('OpenAI API request failed'));
     if (error instanceof Error) {
-      console.error(chalk.red('✕ Error message:'), error);
+      console.error(chalk.red('Error message:'), error);
     }
     throw error;
   }

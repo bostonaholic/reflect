@@ -22,10 +22,11 @@ function handleGitHubError(error: any): never {
   throw error;
 }
 
-function getGraphQLClient() {
+function getGraphQLClient(spinner: Ora) {
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
-    throw new Error('GITHUB_TOKEN environment variable is required');
+    spinner.fail(chalk.red('Error: GITHUB_TOKEN environment variable is required'));
+    process.exit(1);
   }
   return graphql.defaults({
     headers: {
@@ -80,7 +81,7 @@ async function fetchAllSearchResults(
 
 export async function fetchMergedPRs(username: string, dateRange: string, includeOrgs?: string[], excludeOrgs?: string[]): Promise<GitHubPr[]> {
   const spinner = ora(chalk.cyan('Fetching merged pull requests...')).start();
-  const graphqlClient = getGraphQLClient();
+  const graphqlClient = getGraphQLClient(spinner);
 
   try {
     const [startDate, endDate] = dateRange.split('..');
@@ -123,14 +124,14 @@ export async function fetchMergedPRs(username: string, dateRange: string, includ
       type: 'pr' as const
     }));
   } catch (error) {
-    spinner.fail(chalk.red('✕ Failed to fetch PRs'));
+    spinner.fail(chalk.red('Failed to fetch PRs'));
     handleGitHubError(error);
   }
 }
 
 export async function fetchClosedIssues(username: string, dateRange: string, includeOrgs?: string[], excludeOrgs?: string[]): Promise<GitHubIssue[]> {
   const spinner = ora(chalk.cyan('Fetching closed issues...')).start();
-  const graphqlClient = getGraphQLClient();
+  const graphqlClient = getGraphQLClient(spinner);
 
   try {
     const [startDate, endDate] = dateRange.split('..');
@@ -173,7 +174,7 @@ export async function fetchClosedIssues(username: string, dateRange: string, inc
       type: 'issue' as const
     }));
   } catch (error) {
-    spinner.fail(chalk.red('✕ Failed to fetch issues'));
+    spinner.fail(chalk.red('Failed to fetch issues'));
     handleGitHubError(error);
   }
 }

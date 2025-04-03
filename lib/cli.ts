@@ -8,7 +8,7 @@ function loadEnv() {
   const spinner = ora('Loading environment variables...').start();
   const configResult = config();
   if (configResult.error) {
-    spinner.warn('No .env file found, will use command line arguments for API key');
+    spinner.warn(chalk.yellow('No .env file found, proceeding without it'));
   } else {
     spinner.succeed(chalk.green('Loaded environment variables from .env file'));
   }

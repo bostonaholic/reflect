@@ -41,10 +41,9 @@ export async function callAnthropic(prompt: string, content: string, apiKey: str
 
     return message.content[0].type === 'text' ? message.content[0].text : '';
   } catch (error) {
-    spinner.fail(chalk.red('✕ Anthropic API request failed'));
-    console.error(chalk.red('✕ Error in Anthropic API call:'), error);
+    spinner.fail(chalk.red('Anthropic API request failed'));
     if (error instanceof Error) {
-      console.error(chalk.red('✕ Error message:'), error);
+      console.error(chalk.red('Error message:'), error);
     }
     throw error;
   }
