@@ -41,8 +41,11 @@ function getApiKeyFromEnv(): string {
   return apiKey;
 }
 
+const GITHUB_USERNAME_REGEX = /^[a-zA-Z0-9_-]+$/;
+const MODEL_NAME_REGEX = /^[a-zA-Z0-9._-]+$/;
+
 function isValidGitHubUsername(username: string): boolean {
-  return /^[a-zA-Z0-9_-]+$/.test(username);
+  return GITHUB_USERNAME_REGEX.test(username);
 }
 
 function isValidMonths(months: number): boolean {
@@ -105,7 +108,7 @@ function validateProvider(provider: LlmProvider): void {
 }
 
 function isValidModel(model: string): boolean {
-  return /^[a-zA-Z0-9._-]+$/.test(model);
+  return MODEL_NAME_REGEX.test(model);
 }
 
 function validateModel(model: string): void {
