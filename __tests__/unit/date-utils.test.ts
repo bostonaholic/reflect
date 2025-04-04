@@ -29,6 +29,13 @@ describe('calculateDateRange', () => {
       { numRuns: 100 }
     );
   });
+  
+  it('should use explicit startDate and endDate when provided over lookback', () => {
+    const { startDate, endDate } = calculateDateRange(6, '2025-01-15', '2025-03-15');
+    
+    expect(startDate.toISOString().split('T')[0]).toBe('2025-01-15');
+    expect(endDate.toISOString().split('T')[0]).toBe('2025-03-15');
+  });
 });
 
 describe('formatDateRangeForGitHub', () => {

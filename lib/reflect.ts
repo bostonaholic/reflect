@@ -12,10 +12,10 @@ function getApiKeyFromEnv(provider: string): string | undefined {
 }
 
 export async function reflect(args: CliArgs): Promise<void> {
-    const { username, lookback, generateBrag, debug, includeOrgs, excludeOrgs, llmOptions } = args;
+    const { username, lookback, startDate, endDate, generateBrag, debug, includeOrgs, excludeOrgs, llmOptions } = args;
 
-    const { startDate, endDate } = calculateDateRange(lookback);
-    const dateRange = formatDateRangeForGitHub(startDate, endDate);
+    const { startDate: calculatedStartDate, endDate: calculatedEndDate } = calculateDateRange(lookback, startDate, endDate);
+    const dateRange = formatDateRangeForGitHub(calculatedStartDate, calculatedEndDate);
 
     const { prs, issues } = await fetchGitHubData(username, dateRange, includeOrgs, excludeOrgs);
 
@@ -26,6 +26,6 @@ export async function reflect(args: CliArgs): Promise<void> {
         if (!apiKey) {
             throw new Error('LLM API key environment variable is required for brag document generation');
         }
-        await handleBragGeneration(markdownContent, apiKey, startDate, endDate, llmOptions, debug);
+        await handleBragGeneration(markdownContent, apiKey, calculatedStartDate, calculatedEndDate, llmOptions, debug);
     }
 } 
