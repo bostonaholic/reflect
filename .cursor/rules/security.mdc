@@ -16,11 +16,14 @@ alwaysApply: true
 - Sanitize user input
 
 ## API Security
-- Implement rate limiting
-- Use proper API authentication
-- Validate all API inputs
-- Implement proper CORS policies
-- Use secure headers
+- Securely store and manage API credentials
+- Use environment variables or secure credential stores for API keys
+- Implement proper API request validation
+- Handle API rate limiting and errors gracefully
+- Use secure API endpoints (HTTPS)
+- Implement proper API response validation
+- Cache API responses appropriately
+- Monitor API usage and errors
 
 ## Code Security
 - Keep dependencies updated
