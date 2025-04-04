@@ -1,6 +1,7 @@
 import { VALID_PROVIDERS } from './llm.js';
 
 export interface GitHubContribution {
+  url: string;
   title: string;
   body: string;
   closedAt: string;
