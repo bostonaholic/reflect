@@ -15,27 +15,35 @@ export async function callAnthropic(systemMessage: string, userMessage: string, 
 
     const message = await anthropic.messages.create({
       model: llmOptions.model || 'claude-3-7-sonnet-20250219',
+      temperature: 0.7,
+      max_tokens: 8192,
+      system: [{
+        type: 'text',
+        text: systemMessage,
+        cache_control: { type: 'ephemeral' }
+      }],
       messages: [
-        {
-          role: 'assistant',
-          content: systemMessage
-        },
         {
           role: 'user',
           content: userMessage
         }
-      ],
-      temperature: 0.7,
-      max_tokens: 1000
+      ]
     });
 
     spinner.succeed(chalk.green('Anthropic API request completed'));
 
     if (isDebug()) {
       console.log(chalk.cyan('\n[DEBUG] LLM Information:'));
-      console.log(chalk.yellow('[DEBUG] Prompt Tokens:'), chalk.white(message.usage?.input_tokens));
-      console.log(chalk.yellow('[DEBUG] Completion Tokens:'), chalk.white(message.usage?.output_tokens));
-      console.log(chalk.yellow('[DEBUG] Total Tokens:'), chalk.white(message.usage?.input_tokens + message.usage?.output_tokens));
+      console.log(chalk.yellow('[DEBUG] Prompt Input Tokens:'), chalk.white(message.usage?.input_tokens));
+      console.log(chalk.yellow('[DEBUG] Cache Input Tokens:'), chalk.white(message.usage?.cache_creation_input_tokens));
+      console.log(chalk.yellow('[DEBUG] Cache Read Input Tokens:'), chalk.white(message.usage?.cache_read_input_tokens));
+      console.log(chalk.yellow('[DEBUG] Completion Output Tokens:'), chalk.white(message.usage?.output_tokens));
+      console.log(chalk.yellow('[DEBUG] Total Tokens:'),
+        chalk.white(message.usage?.input_tokens +
+          (message.usage?.cache_creation_input_tokens || 0) +
+          (message.usage?.cache_read_input_tokens || 0) +
+          message.usage?.output_tokens)
+      );
       console.log(chalk.yellow('[DEBUG] Model:'), chalk.white(message.model));
       console.log(chalk.yellow('[DEBUG] Finish Reason:'), chalk.white(message.stop_reason));
     }
