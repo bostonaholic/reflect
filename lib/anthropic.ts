@@ -40,7 +40,7 @@ export async function callAnthropic(prompt: string, content: string, apiKey: str
       console.log(chalk.yellow('[DEBUG] Finish Reason:'), chalk.white(message.stop_reason));
     }
 
-    return message.content[0].type === 'text' ? message.content[0].text : '';
+    return message.content[0].type === 'text' ? message.content[0].text : 'Empty response from Anthropic';
   } catch (error) {
     spinner.fail(chalk.red('Anthropic API request failed'));
     if (error instanceof Error) {

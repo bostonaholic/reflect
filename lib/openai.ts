@@ -35,7 +35,7 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
       console.log(chalk.yellow('[DEBUG] Status:'), chalk.white(response.status));
     }
 
-    return response.output_text || '';
+    return response.output_text || 'Empty response from OpenAI';
   } catch (error) {
     spinner.fail(chalk.red('OpenAI API request failed'));
     if (error instanceof Error) {
