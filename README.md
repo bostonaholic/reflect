@@ -62,20 +62,29 @@ Example:
 
 **Required:**
 - `-u, --username <username>`: Your GitHub username to fetch activity for
+
+**One of the following date options is required:**
 - `-l, --lookback <number>`: Number of months to look back for activity (must be a positive number)
+- `-s, --start-date <date>`: Explicit start date in DD-MM-YYYY format, that must be used with --end-date
+- `-e, --end-date <date>`: Explicit end date in DD-MM-YYYY format, that must be used with --start-date
 
 **Optional:**
 - `-p, --provider <provider>`: LLM provider to use (e.g., openai, anthropic), defaults to openai
 - `-m, --model <model>`: OpenAI model to use (e.g., gpt-4, gpt-3.5-turbo), defaults to gpt-4o-mini
 - `-b, --brag`: Optional flag to generate a summary and brag document
 - `-i, --include-orgs <orgs...>`: Only include contributions from these organizations (mutually exclusive with --exclude-orgs)
-- `-e, --exclude-orgs <orgs...>`: Exclude contributions from these organizations (mutually exclusive with --include-orgs)
+- `-x, --exclude-orgs <orgs...>`: Exclude contributions from these organizations (mutually exclusive with --include-orgs)
 
 ### Examples 🚀
 
-Basic usage:
+Basic usage with lookback:
 ```bash
 ./script/run --username bostonaholic --lookback 6 --brag
+```
+
+Basic usage with explicit date range:
+```bash
+./script/run --username bostonaholic --start-date 2024-09-04 --end-date 2025-03-23 --brag
 ```
 
 Choose a model:
