@@ -69,6 +69,8 @@ Important formatting rules:
 7. Use bold text only for the summary statistics
 8. Ensure all sections are present, even if some have fewer items
 9. Use proper markdown spacing between sections
-
-Focus on technical accuracy and clarity.
-Replace all [placeholder] text with actual content while maintaining the same structure.
+10. Use consistent terminology throughout the document
+11. Maintain a professional and technical tone
+12. Focus on quantifiable results and specific technical details
+13. Use consistent formatting for dates, numbers, and technical terms
+14. Replace all [placeholder] text with actual content while maintaining the same structure
