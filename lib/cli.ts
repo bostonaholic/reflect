@@ -24,7 +24,7 @@ export interface CliArgs {
   username: string;
   lookback: number;
   generateBrag: boolean;
-  debug: boolean;
+  debug?: boolean;
   includeOrgs?: string[];
   excludeOrgs?: string[];
   llmOptions: LlmOptions;
@@ -94,6 +94,10 @@ function validateProvider(provider: LlmProvider): void {
   }
 }
 
+function warnDebugDeprecation(): void {
+  console.warn(chalk.yellow('! Warning: --debug is deprecated. Use DEBUG=1 in your environment instead.'));
+}
+
 export function getCommandLineArgs(): CliArgs {
   loadEnv();
 
@@ -122,6 +126,10 @@ export function getCommandLineArgs(): CliArgs {
     program.parse();
     const options = program.opts();
 
+    if (options.debug) {
+      warnDebugDeprecation();
+    }
+
     validateUsername(options.username);
     validateMonths(options.lookback);
     validateOrgFilters(options.includeOrgs, options.excludeOrgs);
@@ -131,7 +139,7 @@ export function getCommandLineArgs(): CliArgs {
       username: options.username,
       lookback: options.lookback,
       generateBrag: options.brag || false,
-      debug: options.debug || false,
+      debug: options.debug,
       includeOrgs: options.includeOrgs,
       excludeOrgs: options.excludeOrgs,
       llmOptions: {

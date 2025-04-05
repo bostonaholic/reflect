@@ -2,8 +2,9 @@ import chalk from 'chalk';
 import ora from 'ora';
 import OpenAI from 'openai';
 import { LlmOptions } from './types.js';
+import { isDebug } from './debug-utils.js';
 
-export async function callOpenAI(prompt: string, content: string, apiKey: string, llmOptions: LlmOptions, debug: boolean = false): Promise<string> {
+export async function callOpenAI(prompt: string, content: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
   const spinner = ora(chalk.cyan('Making OpenAI API request...')).start();
 
   try {
@@ -25,7 +26,7 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
 
     spinner.succeed(chalk.green('OpenAI API request completed'));
 
-    if (debug) {
+    if (isDebug()) {
       console.log(chalk.cyan('\n[DEBUG] LLM Information:'));
       console.log(chalk.yellow('[DEBUG] Input Tokens:'), chalk.white(response.usage?.input_tokens));
       console.log(chalk.yellow('[DEBUG] Output Tokens:'), chalk.white(response.usage?.output_tokens));

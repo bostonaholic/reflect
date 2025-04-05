@@ -16,9 +16,9 @@ export async function generateAndWriteContributions(prs: any[], issues: any[]): 
   return result.content;
 }
 
-export async function generateAndWriteSummary(markdownContent: string, apiKey: string, llmOptions: LlmOptions, debug: boolean): Promise<string> {
+export async function generateAndWriteSummary(markdownContent: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
   console.log(chalk.cyan('Generating summary document...'));
-  let summary = await generateContributionsSummary(markdownContent, apiKey, llmOptions, debug);
+  let summary = await generateContributionsSummary(markdownContent, apiKey, llmOptions);
   const result = await writeFileSafely("summarized_contributions.md", summary);
   if (result.didWrite) {
     console.log(chalk.green('✓ Summary document generated: output/summarized_contributions.md'));
@@ -26,9 +26,9 @@ export async function generateAndWriteSummary(markdownContent: string, apiKey: s
   return result.content;
 }
 
-export async function generateAndWriteBrag(summary: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions, debug: boolean): Promise<string> {
+export async function generateAndWriteBrag(summary: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions): Promise<string> {
   console.log(chalk.cyan('Generating brag document...'));
-  let brag = await generateBragDocument(summary, apiKey, startDate, endDate, llmOptions, debug);
+  let brag = await generateBragDocument(summary, apiKey, startDate, endDate, llmOptions);
   const result = await writeFileSafely("brag_document.md", brag);
   if (result.didWrite) {
     console.log(chalk.green('✓ Brag document generated: output/brag_document.md'));
@@ -36,7 +36,7 @@ export async function generateAndWriteBrag(summary: string, apiKey: string, star
   return result.content;
 }
 
-export async function handleBragGeneration(markdownContent: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions, debug: boolean): Promise<string> {
-  const summary = await generateAndWriteSummary(markdownContent, apiKey, llmOptions, debug);
-  return generateAndWriteBrag(summary, apiKey, startDate, endDate, llmOptions, debug);
+export async function handleBragGeneration(markdownContent: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions): Promise<string> {
+  const summary = await generateAndWriteSummary(markdownContent, apiKey, llmOptions);
+  return generateAndWriteBrag(summary, apiKey, startDate, endDate, llmOptions);
 }
