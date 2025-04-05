@@ -26,7 +26,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "test:coverage": "vitest run --coverage",
+    "test:coverage": "vitest run --coverage --reporter=junit --outputFile=test-report.junit.xml",
     "typecheck": "tsc --noEmit",
     "console": "tsx script/console.ts",
     "prepare": "husky"
