@@ -14,8 +14,7 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
     });
 
     const response = await openai.responses.create({
-      model: llmOptions.model || 'gpt-4o-mini',
-      max_output_tokens: 1024,
+      model: llmOptions.model || 'gpt-4o',
       instructions: prompt,
       input: content,
     });
