@@ -19,6 +19,10 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
       input: content,
     });
 
+    if (response.error) {
+      throw new Error(`OpenAI API error: ${response.error.message || 'Unknown error'}`);
+    }
+
     spinner.succeed(chalk.green('OpenAI API request completed'));
 
     if (debug) {
