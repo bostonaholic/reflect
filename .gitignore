@@ -3,3 +3,4 @@ dist/
 output/
 coverage/
 .env
+test-report.junit.xml
