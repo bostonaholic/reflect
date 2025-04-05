@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+# ensure everything in the app is up to date.
+script/update
+
+npx tsx index.ts "$@" 
