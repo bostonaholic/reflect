@@ -5,13 +5,13 @@ import chalk from 'chalk';
 
 export const VALID_PROVIDERS = ['openai', 'anthropic'] as const;
 
-export async function callLlm(prompt: string, content: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
+export async function callLlm(systemMessage: string, userMessage: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
   const provider = llmOptions.provider.toLowerCase() as LlmProvider;
 
   switch (provider) {
     case 'openai':
-      return callOpenAI(prompt, content, apiKey, llmOptions);
+      return callOpenAI(systemMessage, userMessage, apiKey, llmOptions);
     case 'anthropic':
-      return callAnthropic(prompt, content, apiKey, llmOptions);
+      return callAnthropic(systemMessage, userMessage, apiKey, llmOptions);
   }
 }

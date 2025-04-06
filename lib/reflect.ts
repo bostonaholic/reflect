@@ -23,13 +23,13 @@ export async function reflect(args: CliArgs): Promise<void> {
 
     const { prs, issues } = await fetchGitHubData(username, dateRange, includeOrgs, excludeOrgs);
 
-    const markdownContent = await generateAndWriteContributions(prs, issues);
+    const contributions = await generateAndWriteContributions(prs, issues);
 
     if (generateBrag) {
         const apiKey = getApiKeyFromEnv(llmOptions.provider);
         if (!apiKey) {
             throw new Error('LLM API key environment variable is required for brag document generation');
         }
-        await handleBragGeneration(markdownContent, apiKey, startDate, endDate, llmOptions);
+        await handleBragGeneration(contributions, apiKey, startDate, endDate, llmOptions);
     }
 } 

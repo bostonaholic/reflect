@@ -4,7 +4,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { LlmOptions } from './types.js';
 import { isDebug } from './debug-utils.js';
 
-export async function callAnthropic(prompt: string, content: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
+export async function callAnthropic(systemMessage: string, userMessage: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
   const spinner = ora(chalk.cyan('Making Anthropic API request...')).start();
 
   try {
@@ -18,11 +18,11 @@ export async function callAnthropic(prompt: string, content: string, apiKey: str
       messages: [
         {
           role: 'assistant',
-          content: prompt
+          content: systemMessage
         },
         {
           role: 'user',
-          content: content
+          content: userMessage
         }
       ],
       temperature: 0.7,

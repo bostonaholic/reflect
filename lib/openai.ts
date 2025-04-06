@@ -4,7 +4,7 @@ import OpenAI from 'openai';
 import { LlmOptions } from './types.js';
 import { isDebug } from './debug-utils.js';
 
-export async function callOpenAI(prompt: string, content: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
+export async function callOpenAI(systemMessage: string, userMessage: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
   const spinner = ora(chalk.cyan('Making OpenAI API request...')).start();
 
   try {
@@ -16,8 +16,8 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
     const response = await openai.responses.create({
       model: llmOptions.model || 'gpt-4o',
       temperature: 0.7,
-      instructions: prompt,
-      input: content,
+      instructions: systemMessage,
+      input: userMessage,
     });
 
     if (response.error) {

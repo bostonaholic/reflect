@@ -8,17 +8,17 @@ import { generateBragDocument } from "./brag-generator.js";
 
 export async function generateAndWriteContributions(prs: any[], issues: any[]): Promise<string> {
   console.log(chalk.cyan('Generating markdown content...'));
-  let markdownContent = await generateContributionsDocument([...prs, ...issues]);
-  const result = await writeFileSafely("contributions.md", markdownContent);
+  let contributions = await generateContributionsDocument([...prs, ...issues]);
+  const result = await writeFileSafely("contributions.md", contributions);
   if (result.didWrite) {
     console.log(chalk.green('✓ Markdown file generated: output/contributions.md'));
   }
   return result.content;
 }
 
-export async function generateAndWriteSummary(markdownContent: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
+export async function generateAndWriteSummary(contributions: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
   console.log(chalk.cyan('Generating summary document...'));
-  let summary = await generateContributionsSummary(markdownContent, apiKey, llmOptions);
+  let summary = await generateContributionsSummary(contributions, apiKey, llmOptions);
   const result = await writeFileSafely("summarized_contributions.md", summary);
   if (result.didWrite) {
     console.log(chalk.green('✓ Summary document generated: output/summarized_contributions.md'));
@@ -36,7 +36,7 @@ export async function generateAndWriteBrag(summary: string, apiKey: string, star
   return result.content;
 }
 
-export async function handleBragGeneration(markdownContent: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions): Promise<string> {
-  const summary = await generateAndWriteSummary(markdownContent, apiKey, llmOptions);
+export async function handleBragGeneration(contributions: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions): Promise<string> {
+  const summary = await generateAndWriteSummary(contributions, apiKey, llmOptions);
   return generateAndWriteBrag(summary, apiKey, startDate, endDate, llmOptions);
 }
