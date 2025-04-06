@@ -1,7 +1,6 @@
 import { writeFileSafely } from "./file-utils.js";
 import { LlmOptions } from "./types.js";
 import chalk from 'chalk';
-import ora from "ora";
 import { generateContributionsDocument } from "./contributions-generator.js";
 import { generateContributionsSummary } from "./contributions-summarizer.js";
 import { generateBragDocument } from "./brag-generator.js";
