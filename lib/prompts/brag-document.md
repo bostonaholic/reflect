@@ -85,7 +85,11 @@ Important formatting rules:
 7. Use bold text only for the time period
 8. Ensure all sections are present, even if some have fewer items
 9. Use proper markdown spacing between sections
-
-Focus on quantifiable results and specific technical contributions where possible.
-Make the language more achievement-oriented and impactful than the technical summary.
-Include the time period in the introduction and conclusion to provide context for the achievements.
+10. Use consistent terminology throughout the document
+11. Maintain a professional and technical tone
+12. Focus on quantifiable results and specific technical details
+13. Use consistent formatting for dates, numbers, and technical terms
+14. Replace all [placeholder] text with actual content while maintaining the same structure
+15. Use consistent achievement-oriented language
+16. Focus on business impact and technical excellence
+17. Maintain a clear progression from problem to solution to impact

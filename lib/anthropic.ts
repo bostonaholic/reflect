@@ -2,8 +2,9 @@ import chalk from 'chalk';
 import ora from 'ora';
 import Anthropic from '@anthropic-ai/sdk';
 import { LlmOptions } from './types.js';
+import { isDebug } from './debug-utils.js';
 
-export async function callAnthropic(prompt: string, content: string, apiKey: string, llmOptions: LlmOptions, debug: boolean = false): Promise<string> {
+export async function callAnthropic(prompt: string, content: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
   const spinner = ora(chalk.cyan('Making Anthropic API request...')).start();
 
   try {
@@ -30,7 +31,7 @@ export async function callAnthropic(prompt: string, content: string, apiKey: str
 
     spinner.succeed(chalk.green('Anthropic API request completed'));
 
-    if (debug) {
+    if (isDebug()) {
       console.log(chalk.cyan('\n[DEBUG] LLM Information:'));
       console.log(chalk.yellow('[DEBUG] Prompt Tokens:'), chalk.white(message.usage?.input_tokens));
       console.log(chalk.yellow('[DEBUG] Completion Tokens:'), chalk.white(message.usage?.output_tokens));
@@ -39,7 +40,7 @@ export async function callAnthropic(prompt: string, content: string, apiKey: str
       console.log(chalk.yellow('[DEBUG] Finish Reason:'), chalk.white(message.stop_reason));
     }
 
-    return message.content[0].type === 'text' ? message.content[0].text : '';
+    return message.content[0].type === 'text' ? message.content[0].text : 'Empty response from Anthropic';
   } catch (error) {
     spinner.fail(chalk.red('Anthropic API request failed'));
     if (error instanceof Error) {

@@ -26,7 +26,7 @@ export interface CliArgs {
   startDate?: string;
   endDate?: string;
   generateBrag: boolean;
-  debug: boolean;
+  debug?: boolean;
   includeOrgs?: string[];
   excludeOrgs?: string[];
   llmOptions: LlmOptions;
@@ -179,6 +179,10 @@ function validateDateRange(startDate: Date, endDate: Date): void {
   }
 }
 
+function warnDebugDeprecation(): void {
+  console.warn(chalk.yellow('! Warning: --debug is deprecated. Use DEBUG=1 in your environment instead.'));
+}
+
 export function getCommandLineArgs(): CliArgs {
   loadEnv();
 
@@ -210,6 +214,10 @@ export function getCommandLineArgs(): CliArgs {
     program.parse();
     const options = program.opts();
 
+    if (options.debug) {
+      warnDebugDeprecation();
+    }
+
     validateUsername(options.username);
     
     if (options.startDate && options.endDate) {
@@ -228,7 +236,7 @@ export function getCommandLineArgs(): CliArgs {
       username: options.username,
       lookback: options.lookback || 0,
       generateBrag: options.brag || false,
-      debug: options.debug || false,
+      debug: options.debug,
       includeOrgs: options.includeOrgs,
       excludeOrgs: options.excludeOrgs,
       startDate: options.startDate,
