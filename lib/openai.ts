@@ -15,6 +15,7 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
 
     const response = await openai.responses.create({
       model: llmOptions.model || 'gpt-4o',
+      temperature: 0.7,
       instructions: prompt,
       input: content,
     });
