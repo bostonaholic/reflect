@@ -2,7 +2,7 @@ import * as repl from 'repl';
 import { getCommandLineArgs } from '../lib/cli.js';
 import { calculateDateRange, formatDateRangeForGitHub } from '../lib/date-utils.js';
 import { fetchGitHubData } from '../lib/github-utils.js';
-import { fetchClosedIssues, fetchMergedPRs } from '../lib/github.js';
+import { fetchClosedIssues, fetchMergedPRs, fetchReviewedPRs } from '../lib/github.js';
 import { callOpenAI } from '../lib/openai.js';
 import { callAnthropic } from '../lib/anthropic.js';
 import { callLlm } from '../lib/llm.js';
@@ -29,6 +29,7 @@ Object.assign(replServer.context, {
   fetchGitHubData,
   fetchClosedIssues,
   fetchMergedPRs,
+  fetchReviewedPRs,
   callOpenAI,
   callAnthropic,
   callLlm,
@@ -45,6 +46,7 @@ console.log(chalk.gray('- formatDateRangeForGitHub(startDate, endDate)'));
 console.log(chalk.gray('- fetchGitHubData(username, dateRange, includeOrgs?, excludeOrgs?)'));
 console.log(chalk.gray('- fetchClosedIssues(username, dateRange, includeOrgs?, excludeOrgs?)'));
 console.log(chalk.gray('- fetchMergedPRs(username, dateRange, includeOrgs?, excludeOrgs?)'));
+console.log(chalk.gray('- fetchReviewedPRs(username, dateRange, includeOrgs?, excludeOrgs?)'));
 console.log(chalk.gray('- callLlm(prompt, content, apiKey, provider, model, debug)'));
 console.log(chalk.gray('- callOpenAI(prompt, content, apiKey, model, debug)'));
 console.log(chalk.gray('- callAnthropic(prompt, content, apiKey, model, debug)'));

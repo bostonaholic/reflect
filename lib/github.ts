@@ -35,12 +35,43 @@ function getGraphQLClient(spinner: Ora) {
   });
 }
 
+type CommentItem = {
+  author: {
+    login: string | null;
+  };
+  body: string;
+};
+
+type ReviewItem = {
+  state: string,
+  author: {
+    login: string | null;
+  };
+  body: string;
+  comments: {
+    edges: {
+      node: CommentItem[];
+    }[]
+  };
+}
+
 type SearchResultItem = {
+  permalink: string | null;
   title: string;
   body: string;
   closedAt: string;
   repository: {
     nameWithOwner: string;
+  };
+  comments: {
+    edges: {
+      node: CommentItem[];
+    }[]
+  };
+  reviews: {
+    edges: {
+      node: ReviewItem[];
+    }[]
   };
 };
 
@@ -77,6 +108,117 @@ async function fetchAllSearchResults(
   }
 
   return allResults;
+}
+
+export async function fetchReviewedPRs(username: string, dateRange: string, includeOrgs?: string[], excludeOrgs?: string[]): Promise<GitHubPr[]> {
+  const spinner = ora(chalk.cyan('Fetching reviewed pull requests...')).start();
+  const graphqlClient = getGraphQLClient(spinner);
+  try {
+    const [startDate, endDate] = dateRange.split('..');
+    const orgFilter = buildOrgFilter(includeOrgs, excludeOrgs);
+    const query = `
+      query {
+        search(
+          query: "reviewed-by:${username} is:pr is:merged merged:${startDate}..${endDate}${orgFilter} -author:${username}"
+          type: ISSUE
+          first: 100
+        ) {
+          nodes {
+            ... on PullRequest {
+              permalink
+              title
+              closedAt
+              repository {
+                nameWithOwner
+              }
+              comments(first:100) {
+                edges {
+                  node {
+                    ... on IssueComment {
+                      author {
+                        login
+                      }
+                      body
+                    }
+                  }
+                }
+                pageInfo {
+                  hasNextPage
+                  endCursor
+                }
+              }
+              reviews(first:20) {
+                edges {
+                  node {
+                    author {
+                      login
+                    }
+                    body
+                    state
+                    comments(first: 100) {
+                      edges {
+                        node {
+                        author {
+                          login
+                        }
+                        body
+                      }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    `;
+    const prs = await fetchAllSearchResults(graphqlClient, query, spinner);
+    const count = prs.length;
+    spinner.succeed(chalk.green(`Fetched ${count} reviewed pull request${count === 1 ? '' : 's'}`));
+    return prs.map((pr: SearchResultItem) => {
+      const commentEdges = pr.comments.edges;
+      const userComments = commentEdges
+        .filter((edge: any) => edge.node.author?.login === username)
+        .filter((edge: any) => !edge.node.body.startsWith('### Merge activity'))
+        .map((edge: any) => ({
+          author: edge.node.author.login,
+          body: edge.node.body
+        }))
+
+      const reviewEdges = pr.reviews.edges;
+      const userReviews = reviewEdges
+        .filter((edge: any) => edge.node.author?.login === username)
+        .map((edge: any) => ({
+          author: edge.node.author.login,
+          body: edge.node.body,
+          state: edge.node.state,
+          comments: edge.node.comments.edges.filter((edge: any) => edge.node.author?.login === username)
+          .map((edge: any) => ({
+            author: edge.node.author.login,
+            body: edge.node.body
+          }))
+        }));
+
+      return {
+        title: pr.title,
+        permalink: pr.permalink,
+        body: pr.body || '',
+        closedAt: pr.closedAt,
+        repository: pr.repository.nameWithOwner,
+        type: 'pr' as const,
+        comments: userComments,
+        reviews: userReviews,
+      };
+    });
+  } catch (error) {
+    spinner.fail(chalk.red('Failed to PR reviews'));
+    handleGitHubError(error);
+  }
 }
 
 export async function fetchMergedPRs(username: string, dateRange: string, includeOrgs?: string[], excludeOrgs?: string[]): Promise<GitHubPr[]> {
@@ -118,10 +260,13 @@ export async function fetchMergedPRs(username: string, dateRange: string, includ
 
     return prs.map((pr: SearchResultItem) => ({
       title: pr.title,
+      permalink: null,
       body: pr.body || '',
       closedAt: pr.closedAt,
       repository: pr.repository.nameWithOwner,
-      type: 'pr' as const
+      type: 'pr' as const,
+      reviews: [],
+      comments: [],
     }));
   } catch (error) {
     spinner.fail(chalk.red('Failed to fetch PRs'));
@@ -171,7 +316,9 @@ export async function fetchClosedIssues(username: string, dateRange: string, inc
       body: issue.body || '',
       closedAt: issue.closedAt,
       repository: issue.repository.nameWithOwner,
-      type: 'issue' as const
+      type: 'issue' as const,
+      comments: [],
+      permalink: null,
     }));
   } catch (error) {
     spinner.fail(chalk.red('Failed to fetch issues'));

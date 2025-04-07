@@ -3,6 +3,7 @@ import { LlmOptions } from "./types.js";
 import chalk from 'chalk';
 import ora from "ora";
 import { generateContributionsDocument } from "./contributions-generator.js";
+import { generateReviewCommentsDocument } from "./review-comments-generator.js";
 import { generateContributionsSummary } from "./contributions-summarizer.js";
 import { generateBragDocument } from "./brag-generator.js";
 
@@ -12,6 +13,16 @@ export async function generateAndWriteContributions(prs: any[], issues: any[]): 
   const result = await writeFileSafely("contributions.md", markdownContent);
   if (result.didWrite) {
     console.log(chalk.green('✓ Markdown file generated: output/contributions.md'));
+  }
+  return result.content;
+}
+
+export async function generateAndWriteReviewContributions(reviews: any[]): Promise<string> {
+  console.log(chalk.cyan('Generating review contributions markdown content...'));
+  let markdownContent = await generateReviewCommentsDocument([...reviews]);
+  const result = await writeFileSafely("review_contributions.md", markdownContent);
+  if (result.didWrite) {
+    console.log(chalk.green('✓ Review contributions markdown file generated: output/review_contributions.md'));
   }
   return result.content;
 }
