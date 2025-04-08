@@ -5,7 +5,7 @@
     "npm": ">=10.9.0"
   },
   "devDependencies": {
-    "@types/node": "22.13.16",
+    "@types/node": "22.14.0",
     "@vitest/coverage-v8": "3.1.1",
     "fast-check": "4.1.0",
     "husky": "9.1.7",
