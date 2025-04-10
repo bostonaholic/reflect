@@ -128,7 +128,9 @@ export async function fetchReviewedPRs(username: string, dateRange: string, incl
             ... on PullRequest {
               permalink
               title
+              body
               closedAt
+              url
               repository {
                 nameWithOwner
               }
@@ -214,6 +216,7 @@ export async function fetchReviewedPRs(username: string, dateRange: string, incl
         type: 'pr' as const,
         comments: userComments,
         reviews: userReviews,
+        url: pr.url,
       };
     });
   } catch (error) {
