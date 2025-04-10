@@ -1,4 +1,4 @@
-import { fetchMergedPRs, fetchClosedIssues } from "./github.js";
+import { fetchMergedPRs, fetchClosedIssues, fetchReviewedPRs } from "./github.js";
 
 export function buildOrgFilter(includeOrgs?: string[], excludeOrgs?: string[]): string {
   if (includeOrgs?.length) {
@@ -15,10 +15,11 @@ export async function fetchGitHubData(
   dateRange: string,
   includeOrgs?: string[],
   excludeOrgs?: string[]
-): Promise<{ prs: any[], issues: any[] }> {
-  const [prs, issues] = await Promise.all([
+): Promise<{ prs: any[], issues: any[], reviews: any[] }> {
+  const [prs, issues, reviews] = await Promise.all([
     fetchMergedPRs(username, dateRange, includeOrgs, excludeOrgs),
-    fetchClosedIssues(username, dateRange, includeOrgs, excludeOrgs)
+    fetchClosedIssues(username, dateRange, includeOrgs, excludeOrgs),
+    fetchReviewedPRs(username, dateRange, includeOrgs, excludeOrgs)
   ]);
-  return { prs, issues };
+  return { prs, issues, reviews };
 }

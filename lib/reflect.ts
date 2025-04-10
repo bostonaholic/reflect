@@ -1,6 +1,6 @@
 import { calculateDateRange, formatDateRangeForGitHub } from "./date-utils.js";
 import { fetchGitHubData } from "./github-utils.js";
-import { generateAndWriteContributions, handleBragGeneration } from "./document-utils.js";
+import { generateAndWriteContributions, generateAndWriteReviewContributions, handleBragGeneration } from "./document-utils.js";
 import { CliArgs } from "./cli.js";
 import { setDebug } from "./debug-utils.js";
 
@@ -21,7 +21,9 @@ export async function reflect(args: CliArgs): Promise<void> {
     const { startDate, endDate } = calculateDateRange(lookback);
     const dateRange = formatDateRangeForGitHub(startDate, endDate);
 
-    const { prs, issues } = await fetchGitHubData(username, dateRange, includeOrgs, excludeOrgs);
+    const { prs, issues, reviews } = await fetchGitHubData(username, dateRange, includeOrgs, excludeOrgs);
+
+    const reviewContent = await generateAndWriteReviewContributions(reviews);
 
     const contributions = await generateAndWriteContributions(prs, issues);
 

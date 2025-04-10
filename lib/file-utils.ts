@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import * as readline from 'readline';
 
 const OUTPUT_DIR = "output";
-const ALLOWED_FILES = ["contributions.md", "summarized_contributions.md", "brag_document.md"];
+const ALLOWED_FILES = ["contributions.md", "review_contributions.md",  "summarized_contributions.md", "brag_document.md"];
 
 export function sanitizeFilename(filename: string): string {
   // Remove any path traversal attempts and ensure the filename is in the allowed list
