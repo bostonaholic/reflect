@@ -13,6 +13,7 @@ export interface GitHubReview {
   comments: GitHubComment[];
 }
 export interface GitHubContribution {
+  url: string;
   title: string;
   permalink: string | null;
   body: string;

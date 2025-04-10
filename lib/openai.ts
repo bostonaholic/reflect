@@ -2,8 +2,9 @@ import chalk from 'chalk';
 import ora from 'ora';
 import OpenAI from 'openai';
 import { LlmOptions } from './types.js';
+import { isDebug } from './debug-utils.js';
 
-export async function callOpenAI(prompt: string, content: string, apiKey: string, llmOptions: LlmOptions, debug: boolean = false): Promise<string> {
+export async function callOpenAI(systemMessage: string, userMessage: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
   const spinner = ora(chalk.cyan('Making OpenAI API request...')).start();
 
   try {
@@ -12,34 +13,30 @@ export async function callOpenAI(prompt: string, content: string, apiKey: string
       apiKey: apiKey
     });
 
-    const completion = await openai.chat.completions.create({
-      model: llmOptions.model || 'gpt-4o-mini',
-      messages: [
-        {
-          role: 'system',
-          content: prompt
-        },
-        {
-          role: 'user',
-          content: content
-        }
-      ],
+    const response = await openai.responses.create({
+      model: llmOptions.model || 'gpt-4o',
       temperature: 0.7,
-      max_tokens: 1000
+      instructions: systemMessage,
+      input: userMessage,
     });
+
+    if (response.error) {
+      throw new Error(`OpenAI API error: ${response.error.message || 'Unknown error'}`);
+    }
 
     spinner.succeed(chalk.green('OpenAI API request completed'));
 
-    if (debug) {
+    if (isDebug()) {
       console.log(chalk.cyan('\n[DEBUG] LLM Information:'));
-      console.log(chalk.yellow('[DEBUG] Prompt Tokens:'), chalk.white(completion.usage?.prompt_tokens));
-      console.log(chalk.yellow('[DEBUG] Completion Tokens:'), chalk.white(completion.usage?.completion_tokens));
-      console.log(chalk.yellow('[DEBUG] Total Tokens:'), chalk.white(completion.usage?.total_tokens));
-      console.log(chalk.yellow('[DEBUG] Model:'), chalk.white(completion.model));
-      console.log(chalk.yellow('[DEBUG] Finish Reason:'), chalk.white(completion.choices[0].finish_reason));
+      console.log(chalk.yellow('[DEBUG] Input Tokens:'), chalk.white(response.usage?.input_tokens));
+      console.log(chalk.yellow('[DEBUG] Output Tokens:'), chalk.white(response.usage?.output_tokens));
+      console.log(chalk.yellow('[DEBUG] Total Tokens:'), chalk.white(response.usage?.total_tokens));
+      console.log(chalk.yellow('[DEBUG] Cached Input Tokens:'), chalk.white(response.usage?.input_tokens_details?.cached_tokens));
+      console.log(chalk.yellow('[DEBUG] Model:'), chalk.white(response.model));
+      console.log(chalk.yellow('[DEBUG] Status:'), chalk.white(response.status));
     }
 
-    return completion.choices[0].message.content || '';
+    return response.output_text || 'Empty response from OpenAI';
   } catch (error) {
     spinner.fail(chalk.red('OpenAI API request failed'));
     if (error instanceof Error) {

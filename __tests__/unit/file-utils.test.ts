@@ -32,7 +32,7 @@ describe('sanitizeFilename', () => {
   it('should reject path traversal attempts', () => {
     fc.assert(
       fc.property(
-        fc.string().filter(s => s.includes('..')),
+        fc.string({ minLength: 2 }).map(s => s + '..' + s),
         (filename: string) => {
           expect(() => sanitizeFilename(filename)).toThrow('Invalid output filename');
         }

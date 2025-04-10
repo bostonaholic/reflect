@@ -28,7 +28,7 @@ cp .env{.example,}
 
 3. Run the tool:
 ```bash
-./script/run --username <github-username> --lookback <months-to-look-back> --brag
+./reflect --username <github-username> --lookback <months-to-look-back> --brag
 ```
 
 This will generate three markdown files in the `output` directory:
@@ -50,12 +50,12 @@ This will generate three markdown files in the `output` directory:
 
 Run the tool:
 ```bash
-./script/run --username <github-username> --lookback <months-to-look-back> [--brag]
+./reflect --username <github-username> --lookback <months-to-look-back> [--brag]
 ```
 
 Example:
 ```bash
-./script/run --username bostonaholic --lookback 6 --brag
+./reflect --username bostonaholic --lookback 6 --brag
 ```
 
 ### Arguments 📋
@@ -66,7 +66,7 @@ Example:
 
 **Optional:**
 - `-p, --provider <provider>`: LLM provider to use (e.g., openai, anthropic), defaults to openai
-- `-m, --model <model>`: OpenAI model to use (e.g., gpt-4, gpt-3.5-turbo), defaults to gpt-4o-mini
+- `-m, --model <model>`: OpenAI model to use (e.g., gpt-4, gpt-3.5-turbo), defaults to gpt-4o
 - `-b, --brag`: Optional flag to generate a summary and brag document
 - `-i, --include-orgs <orgs...>`: Only include contributions from these organizations (mutually exclusive with --exclude-orgs)
 - `-e, --exclude-orgs <orgs...>`: Exclude contributions from these organizations (mutually exclusive with --include-orgs)
@@ -75,27 +75,27 @@ Example:
 
 Basic usage:
 ```bash
-./script/run --username bostonaholic --lookback 6 --brag
+./reflect --username bostonaholic --lookback 6 --brag
 ```
 
 Choose a model:
 ```bash
-./script/run --username bostonaholic --lookback 6 --model gpt-3-5-turbo --brag
+./reflect --username bostonaholic --lookback 6 --model gpt-3-5-turbo --brag
 ```
 
 Choose an LLM provider and model
 ```bash
-./script/run --username bostonaholic --lookback 6 --provider anthropic --model claude-3-7-sonnet-20250219 --brag
+./reflect --username bostonaholic --lookback 6 --provider anthropic --model claude-3-7-sonnet-20250219 --brag
 ```
 
 Filter by specific organizations:
 ```bash
-./script/run --username bostonaholic --lookback 6 --include-orgs shopify github
+./reflect --username bostonaholic --lookback 6 --include-orgs shopify github
 ```
 
 Exclude specific organizations:
 ```bash
-./script/run --username bostonaholic --lookback 6 --exclude-orgs secret archived
+./reflect --username bostonaholic --lookback 6 --exclude-orgs secret archived
 ```
 
 ### Environment Variables 🔐

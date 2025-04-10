@@ -2,6 +2,7 @@ import { calculateDateRange, formatDateRangeForGitHub } from "./date-utils.js";
 import { fetchGitHubData } from "./github-utils.js";
 import { generateAndWriteContributions, generateAndWriteReviewContributions, handleBragGeneration } from "./document-utils.js";
 import { CliArgs } from "./cli.js";
+import { setDebug } from "./debug-utils.js";
 
 function getApiKeyFromEnv(provider: string): string | undefined {
     if (provider === 'openai') {
@@ -14,6 +15,9 @@ function getApiKeyFromEnv(provider: string): string | undefined {
 export async function reflect(args: CliArgs): Promise<void> {
     const { username, lookback, generateBrag, debug, includeOrgs, excludeOrgs, llmOptions } = args;
 
+    // TODO: Remove after `--debug` deprecation period
+    setDebug(debug);
+
     const { startDate, endDate } = calculateDateRange(lookback);
     const dateRange = formatDateRangeForGitHub(startDate, endDate);
 
@@ -21,13 +25,13 @@ export async function reflect(args: CliArgs): Promise<void> {
 
     const reviewContent = await generateAndWriteReviewContributions(reviews);
 
-    const markdownContent = await generateAndWriteContributions(prs, issues);
+    const contributions = await generateAndWriteContributions(prs, issues);
 
     if (generateBrag) {
         const apiKey = getApiKeyFromEnv(llmOptions.provider);
         if (!apiKey) {
             throw new Error('LLM API key environment variable is required for brag document generation');
         }
-        await handleBragGeneration(markdownContent, apiKey, startDate, endDate, llmOptions, debug);
+        await handleBragGeneration(contributions, apiKey, startDate, endDate, llmOptions);
     }
 } 

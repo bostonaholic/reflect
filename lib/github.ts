@@ -60,6 +60,7 @@ type SearchResultItem = {
   title: string;
   body: string;
   closedAt: string;
+  url: string;
   repository: {
     nameWithOwner: string;
   };
@@ -241,6 +242,7 @@ export async function fetchMergedPRs(username: string, dateRange: string, includ
               title
               body
               closedAt
+              url
               repository {
                 nameWithOwner
               }
@@ -263,6 +265,7 @@ export async function fetchMergedPRs(username: string, dateRange: string, includ
       permalink: null,
       body: pr.body || '',
       closedAt: pr.closedAt,
+      url: pr.url,
       repository: pr.repository.nameWithOwner,
       type: 'pr' as const,
       reviews: [],
@@ -294,6 +297,7 @@ export async function fetchClosedIssues(username: string, dateRange: string, inc
               title
               body
               closedAt
+              url
               repository {
                 nameWithOwner
               }
@@ -315,6 +319,7 @@ export async function fetchClosedIssues(username: string, dateRange: string, inc
       title: issue.title,
       body: issue.body || '',
       closedAt: issue.closedAt,
+      url: issue.url,
       repository: issue.repository.nameWithOwner,
       type: 'issue' as const,
       comments: [],
