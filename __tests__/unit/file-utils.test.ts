@@ -1,14 +1,12 @@
-import { sanitizeFilename } from '../../lib/file-utils.js';
+import { ALLOWED_FILES, sanitizeFilename } from '../../lib/file-utils.js';
 import * as fc from 'fast-check';
 import { describe, it, expect } from 'vitest';
 
 describe('sanitizeFilename', () => {
-  const validFilenames = ['contributions.md', 'summarized_contributions.md', 'brag_document.md'];
-
   it('should allow valid filenames', () => {
     fc.assert(
       fc.property(
-        fc.constantFrom(...validFilenames),
+        fc.constantFrom(...ALLOWED_FILES),
         (filename: string) => {
           expect(sanitizeFilename(filename)).toBe(filename);
         }
@@ -20,7 +18,7 @@ describe('sanitizeFilename', () => {
   it('should throw error for invalid filenames', () => {
     fc.assert(
       fc.property(
-        fc.string().filter(s => !validFilenames.includes(s)),
+        fc.string().filter(s => !ALLOWED_FILES.includes(s)),
         (filename: string) => {
           expect(() => sanitizeFilename(filename)).toThrow('Invalid output filename');
         }
