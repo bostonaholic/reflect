@@ -5,8 +5,9 @@ import { generateContributionsDocument } from "./contributions-generator.js";
 import { generateReviewCommentsDocument } from "./review-comments-generator.js";
 import { generateContributionsSummary } from "./contributions-summarizer.js";
 import { generateBragDocument } from "./brag-generator.js";
+import { GitHubPr, GitHubIssue } from "./types.js";
 
-export async function generateAndWriteContributions(prs: any[], issues: any[]): Promise<string> {
+export async function generateAndWriteContributions(prs: GitHubPr[], issues: GitHubIssue[]): Promise<string> {
   console.log(chalk.cyan('Generating markdown content...'));
   let contributions = await generateContributionsDocument([...prs, ...issues]);
   const result = await writeFileSafely("contributions.md", contributions);
@@ -16,7 +17,7 @@ export async function generateAndWriteContributions(prs: any[], issues: any[]): 
   return result.content;
 }
 
-export async function generateAndWriteReviewContributions(reviews: any[]): Promise<string> {
+export async function generateAndWriteReviewContributions(reviews: GitHubPr[]): Promise<string> {
   console.log(chalk.cyan('Generating review contributions markdown content...'));
   let markdownContent = await generateReviewCommentsDocument([...reviews]);
   const result = await writeFileSafely("review_contributions.md", markdownContent);
