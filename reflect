@@ -1,6 +1,9 @@
 #!/bin/bash
 
 set -e
+if [ "${DEBUG:-}" = "1" ]; then
+  set -x
+fi
 
 # ensure everything in the app is up to date.
 script/update

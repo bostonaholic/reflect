@@ -1,6 +1,9 @@
 #!/bin/bash
 
 set -e
+if [ "${DEBUG:-}" = "1" ]; then
+  set -x
+fi
 
 # Ensure we're in the project root directory
 cd "$(dirname "$0")/.."
