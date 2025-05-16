@@ -8,7 +8,7 @@ import { generateBragDocument } from "./brag-generator.js";
 import { GitHubPr, GitHubIssue } from "./types.js";
 
 export async function generateAndWriteContributions(prs: GitHubPr[], issues: GitHubIssue[]): Promise<string> {
-  console.log(chalk.cyan('Generating markdown content...'));
+  console.log(chalk.cyan('ℹ Generating markdown content...'));
   let contributions = await generateContributionsDocument([...prs, ...issues]);
   const result = await writeFileSafely("contributions.md", contributions);
   if (result.didWrite) {
@@ -18,7 +18,7 @@ export async function generateAndWriteContributions(prs: GitHubPr[], issues: Git
 }
 
 export async function generateAndWriteReviewContributions(reviews: GitHubPr[]): Promise<string> {
-  console.log(chalk.cyan('Generating review contributions markdown content...'));
+  console.log(chalk.cyan('ℹ Generating review contributions markdown content...'));
   let markdownContent = await generateReviewCommentsDocument([...reviews]);
   const result = await writeFileSafely("review_contributions.md", markdownContent);
   if (result.didWrite) {
@@ -28,7 +28,7 @@ export async function generateAndWriteReviewContributions(reviews: GitHubPr[]): 
 }
 
 export async function generateAndWriteSummary(contributions: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
-  console.log(chalk.cyan('Generating summary document...'));
+  console.log(chalk.cyan('ℹ Generating summary document...'));
   let summary = await generateContributionsSummary(contributions, apiKey, llmOptions);
   const result = await writeFileSafely("summarized_contributions.md", summary);
   if (result.didWrite) {
@@ -38,7 +38,7 @@ export async function generateAndWriteSummary(contributions: string, apiKey: str
 }
 
 export async function generateAndWriteBrag(summary: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions): Promise<string> {
-  console.log(chalk.cyan('Generating brag document...'));
+  console.log(chalk.cyan('ℹ Generating brag document...'));
   let brag = await generateBragDocument(summary, apiKey, startDate, endDate, llmOptions);
   const result = await writeFileSafely("brag_document.md", brag);
   if (result.didWrite) {
