@@ -9,6 +9,11 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      vitest-suite:
+        patterns:
+          - "vitest"
+          - "@vitest/coverage-v8"
 
   - package-ecosystem: "github-actions"
     directory: "/"
