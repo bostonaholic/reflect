@@ -61,17 +61,17 @@ Example:
 ### Arguments 📋
 
 **Required:**
-- `-u, --username <username>`: Your GitHub username to fetch activity for
-- `-l, --lookback <number>`: Number of months to look back for activity (must be a positive number)
+- `--username <username>`: Your GitHub username to fetch activity for
+- `--lookback <number>`: Number of months to look back for activity (must be a positive number)
 
 **Optional:**
-- `-p, --provider <provider>`: LLM provider to use (e.g., openai, anthropic), defaults to openai
-- `-m, --model <model>`: OpenAI model to use (e.g., gpt-4, gpt-3.5-turbo), defaults to gpt-4o
-- `-b, --brag`: Optional flag to generate a summary and brag document
-- `-i, --include-orgs <orgs...>`: Only include contributions from these organizations (mutually exclusive with --exclude-orgs)
-- `-e, --exclude-orgs <orgs...>`: Exclude contributions from these organizations (mutually exclusive with --include-orgs)
-- `-r, --include-repos <repos...>`: Only include contributions from these repositories (mutually exclusive with --exclude-repos)
-- `-x, --exclude-repos <repos...>`: Exclude contributions from these repositories (mutually exclusive with --include-repos)
+- `--provider <provider>`: LLM provider to use (e.g., openai, anthropic), defaults to openai
+- `--model <model>`: OpenAI model to use (e.g., gpt-4, gpt-3.5-turbo), defaults to gpt-4o
+- `--brag`: Optional flag to generate a summary and brag document
+- `--include-orgs <orgs...>`: Only include contributions from these organizations (mutually exclusive with --exclude-orgs)
+- `--exclude-orgs <orgs...>`: Exclude contributions from these organizations (mutually exclusive with --include-orgs)
+- `--include-repos <repos...>`: Only include contributions from these repositories (mutually exclusive with --exclude-repos)
+- `--exclude-repos <repos...>`: Exclude contributions from these repositories (mutually exclusive with --include-repos)
 
 ### Examples 🚀
 
