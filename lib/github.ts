@@ -201,10 +201,10 @@ export async function fetchReviewedPRs(username: string, dateRange: string, incl
           body: edge.node.body,
           state: edge.node.state,
           comments: edge.node.comments.edges.filter((edge: any) => edge.node.author?.login === username)
-          .map((edge: any) => ({
-            author: edge.node.author.login,
-            body: edge.node.body
-          }))
+            .map((edge: any) => ({
+              author: edge.node.author.login,
+              body: edge.node.body
+            }))
         }));
 
       return {
