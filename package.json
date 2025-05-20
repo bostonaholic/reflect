@@ -1,4 +1,6 @@
 {
+  "name": "reflect",
+  "description": "An AI tool to generate your brag document",
   "type": "module",
   "engines": {
     "node": ">=22.15.0",
