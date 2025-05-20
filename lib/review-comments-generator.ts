@@ -25,15 +25,15 @@ export async function generateReviewCommentsDocument(items: GitHubPr[]): Promise
       markdownContent += `Repository: ${item.repository}\n`;
       markdownContent += `Comments:\n`;
       item.comments.forEach(comment => {
-          markdownContent += ` - ${comment.body}\n`;
-        });
+        markdownContent += ` - ${comment.body}\n`;
+      });
       markdownContent += `Reviews:\n`;
       item.reviews.forEach(review => {
         markdownContent += ` - ${review.state}: ${review.body}\n`;
         review.comments.forEach(comment => {
           markdownContent += ` - ${comment.body}\n`;
         });
-     });
+      });
       markdownContent += "---\n\n";
     });
 
