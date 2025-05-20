@@ -221,7 +221,7 @@ export async function fetchReviewedPRs(username: string, dateRange: string, incl
     });
   } catch (error) {
     spinner.fail(chalk.red('Failed to fetch PR reviews'));
-    handleGitHubError(error);
+    return handleGitHubError(error);
   }
 }
 
@@ -276,7 +276,7 @@ export async function fetchMergedPRs(username: string, dateRange: string, includ
     }));
   } catch (error) {
     spinner.fail(chalk.red('Failed to fetch PRs'));
-    handleGitHubError(error);
+    return handleGitHubError(error);
   }
 }
 
@@ -330,6 +330,6 @@ export async function fetchClosedIssues(username: string, dateRange: string, inc
     }));
   } catch (error) {
     spinner.fail(chalk.red('Failed to fetch issues'));
-    handleGitHubError(error);
+    return handleGitHubError(error);
   }
 }
