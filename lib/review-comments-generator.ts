@@ -1,5 +1,4 @@
- import { a } from "vitest/dist/chunks/suite.d.FvehnV49.js";
-import { GitHubPr, GitHubIssue } from "./types.js";
+import { GitHubPr } from "./types.js";
 
 export async function generateReviewCommentsDocument(items: GitHubPr[]): Promise<string> {
   const repos = new Set(items.map(item => item.repository));
