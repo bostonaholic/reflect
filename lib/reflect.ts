@@ -13,7 +13,7 @@ function getApiKeyFromEnv(provider: string): string | undefined {
 }
 
 export async function reflect(args: CliArgs): Promise<void> {
-    const { username, lookback, generateBrag, debug, includeOrgs, excludeOrgs, llmOptions } = args;
+    const { username, lookback, generateBrag, debug, includeOrgs, excludeOrgs, includeRepos, excludeRepos, llmOptions } = args;
 
     // TODO: Remove after `--debug` deprecation period
     setDebug(debug);
@@ -21,7 +21,14 @@ export async function reflect(args: CliArgs): Promise<void> {
     const { startDate, endDate } = calculateDateRange(lookback);
     const dateRange = formatDateRangeForGitHub(startDate, endDate);
 
-    const { prs, issues, reviews } = await fetchGitHubData(username, dateRange, includeOrgs, excludeOrgs);
+    const { prs, issues, reviews } = await fetchGitHubData(
+        username,
+        dateRange,
+        includeOrgs,
+        excludeOrgs,
+        includeRepos,
+        excludeRepos
+    );
 
     const reviewContent = await generateAndWriteReviewContributions(reviews);
 

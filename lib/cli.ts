@@ -27,6 +27,8 @@ export interface CliArgs {
   debug?: boolean;
   includeOrgs?: string[];
   excludeOrgs?: string[];
+  includeRepos?: string[];
+  excludeRepos?: string[];
   llmOptions: LlmOptions;
 }
 
@@ -85,6 +87,46 @@ function validateOrgFilters(includeOrgs?: string[], excludeOrgs?: string[]): voi
     process.exit(1);
   }
 }
+const REPO_NAME_REGEX = /^[a-zA-Z0-9_.-]+$/;
+
+export function isValidRepo(repo: string): boolean {
+  const parts = repo.split('/');
+  if (parts.length !== 2) {
+    return false;
+  }
+  const [owner, name] = parts;
+  return GITHUB_USERNAME_REGEX.test(owner) && REPO_NAME_REGEX.test(name);
+}
+
+function validateRepoFilters(includeRepos?: string[], excludeRepos?: string[]): void {
+  if (includeRepos?.length && excludeRepos?.length) {
+    console.error(chalk.red('✖ Error: Cannot use both --include-repos and --exclude-repos simultaneously'));
+    process.exit(1);
+  }
+
+  const invalidRepos = new Set<string>();
+
+  if (includeRepos?.length) {
+    for (const repo of includeRepos) {
+      if (!isValidRepo(repo)) {
+        invalidRepos.add(repo);
+      }
+    }
+  }
+
+  if (excludeRepos?.length) {
+    for (const repo of excludeRepos) {
+      if (!isValidRepo(repo)) {
+        invalidRepos.add(repo);
+      }
+    }
+  }
+
+  if (invalidRepos.size > 0) {
+    console.error(chalk.red(`✖ Error: Invalid repository names: ${Array.from(invalidRepos).join(', ')}`));
+    process.exit(1);
+  }
+}
 
 function validateProvider(provider: LlmProvider): void {
   if (!VALID_PROVIDERS.includes(provider)) {
@@ -115,11 +157,15 @@ export function getCommandLineArgs(): CliArgs {
     .option('-d, --debug', 'Enable debug mode for detailed OpenAI API information')
     .option('-i, --include-orgs <orgs...>', 'Only include contributions to these organizations')
     .option('-e, --exclude-orgs <orgs...>', 'Exclude contributions to these organizations')
+    .option('-r, --include-repos <repos...>', 'Only include contributions to these repositories')
+    .option('-x, --exclude-repos <repos...>', 'Exclude contributions to these repositories')
     .addHelpText('after', `
         Note: Set OPENAI_API_KEY in your .env file for brag document generation
         Example: reflect --username bostonaholic --lookback 6 --brag
         Example with org filters: reflect --username bostonaholic --lookback 6 --include-orgs "Shopify"
         Example with org filters: reflect --username bostonaholic --lookback 6 --exclude-orgs "secret"
+        Example with repo filters: reflect --username bostonaholic --lookback 6 --include-repos "owner1/repo1"
+        Example with repo filters: reflect --username bostonaholic --lookback 6 --exclude-repos "owner1/repo1"
       `);
 
   try {
@@ -133,6 +179,7 @@ export function getCommandLineArgs(): CliArgs {
     validateUsername(options.username);
     validateMonths(options.lookback);
     validateOrgFilters(options.includeOrgs, options.excludeOrgs);
+    validateRepoFilters(options.includeRepos, options.excludeRepos);
     validateProvider(options.provider);
 
     return {
@@ -142,6 +189,8 @@ export function getCommandLineArgs(): CliArgs {
       debug: options.debug,
       includeOrgs: options.includeOrgs,
       excludeOrgs: options.excludeOrgs,
+      includeRepos: options.includeRepos,
+      excludeRepos: options.excludeRepos,
       llmOptions: {
         provider: options.provider || 'openai',
         model: options.model

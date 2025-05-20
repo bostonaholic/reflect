@@ -70,6 +70,8 @@ Example:
 - `-b, --brag`: Optional flag to generate a summary and brag document
 - `-i, --include-orgs <orgs...>`: Only include contributions from these organizations (mutually exclusive with --exclude-orgs)
 - `-e, --exclude-orgs <orgs...>`: Exclude contributions from these organizations (mutually exclusive with --include-orgs)
+- `-r, --include-repos <repos...>`: Only include contributions from these repositories (mutually exclusive with --exclude-repos)
+- `-x, --exclude-repos <repos...>`: Exclude contributions from these repositories (mutually exclusive with --include-repos)
 
 ### Examples 🚀
 
@@ -96,6 +98,16 @@ Filter by specific organizations:
 Exclude specific organizations:
 ```bash
 ./reflect --username bostonaholic --lookback 6 --exclude-orgs secret archived
+```
+
+Filter by specific repositories:
+```bash
+./reflect --username bostonaholic --lookback 6 --include-repos bostonaholic/reflect bostonaholic/dotfiles
+```
+
+Exclude specific repositories:
+```bash
+./reflect --username bostonaholic --lookback 6 --exclude-repos bostonaholic/secret bostonaholic/archived
 ```
 
 ### Environment Variables 🔐

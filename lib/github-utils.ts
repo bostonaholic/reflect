@@ -11,16 +11,28 @@ export function buildOrgFilter(includeOrgs?: string[], excludeOrgs?: string[]): 
   return '';
 }
 
+export function buildRepoFilter(includeRepos?: string[], excludeRepos?: string[]): string {
+  if (includeRepos?.length) {
+    return ` repo:${includeRepos.join(' repo:')}`;
+  }
+  if (excludeRepos?.length) {
+    return ` -repo:${excludeRepos.join(' -repo:')}`;
+  }
+  return '';
+}
+
 export async function fetchGitHubData(
   username: string,
   dateRange: string,
   includeOrgs?: string[],
-  excludeOrgs?: string[]
-): Promise<{ prs: GitHubPr[], issues: GitHubIssue[], reviews: GitHubPr[] }> {
+  excludeOrgs?: string[],
+  includeRepos?: string[],
+  excludeRepos?: string[]
+): Promise<{ prs: GitHubPr[]; issues: GitHubIssue[]; reviews: GitHubPr[] }> {
   const [prs, issues, reviews] = await Promise.all([
-    fetchMergedPRs(username, dateRange, includeOrgs, excludeOrgs),
-    fetchClosedIssues(username, dateRange, includeOrgs, excludeOrgs),
-    fetchReviewedPRs(username, dateRange, includeOrgs, excludeOrgs)
+    fetchMergedPRs(username, dateRange, includeOrgs, excludeOrgs, includeRepos, excludeRepos),
+    fetchClosedIssues(username, dateRange, includeOrgs, excludeOrgs, includeRepos, excludeRepos),
+    fetchReviewedPRs(username, dateRange, includeOrgs, excludeOrgs, includeRepos, excludeRepos)
   ]);
   return { prs, issues, reviews };
 }

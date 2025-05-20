@@ -1,4 +1,4 @@
-import { isValidGitHubUsername, isValidMonths } from '../../lib/cli.js';
+import { isValidGitHubUsername, isValidMonths, isValidRepo } from '../../lib/cli.js';
 import * as fc from 'fast-check';
 import { describe, it, expect } from 'vitest';
 
@@ -93,6 +93,35 @@ describe('CLI Validation Functions', () => {
           fc.integer({ min: 37 }),
           (months: number) => {
             expect(isValidMonths(months)).toBe(false);
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+  });
+
+  describe('isValidRepo', () => {
+    it('should accept valid owner/repo strings', () => {
+      fc.assert(
+        fc.property(
+          fc.string({ minLength: 1 }).filter(s => /^[a-zA-Z0-9_-]+$/.test(s)),
+          fc.string({ minLength: 1 }).filter(s => /^[a-zA-Z0-9_.-]+$/.test(s)),
+          (owner, name) => {
+            expect(isValidRepo(`${owner}/${name}`)).toBe(true);
+          }
+        ),
+        { numRuns: 100 }
+      );
+    });
+
+    it('should reject invalid repo strings', () => {
+      fc.assert(
+        fc.property(
+          fc.string(),
+          (repo) => {
+            if (!/^[a-zA-Z0-9_-]+\/[a-zA-Z0-9_.-]+$/.test(repo)) {
+              expect(isValidRepo(repo)).toBe(false);
+            }
           }
         ),
         { numRuns: 100 }
