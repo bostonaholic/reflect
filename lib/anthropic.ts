@@ -15,11 +15,8 @@ export async function callAnthropic(systemMessage: string, userMessage: string, 
 
     const message = await anthropic.messages.create({
       model: llmOptions.model || 'claude-3-7-sonnet-20250219',
+      system: systemMessage,
       messages: [
-        {
-          role: 'assistant',
-          content: systemMessage
-        },
         {
           role: 'user',
           content: userMessage
