@@ -220,7 +220,7 @@ export async function fetchReviewedPRs(username: string, dateRange: string, incl
       };
     });
   } catch (error) {
-    spinner.fail(chalk.red('Failed to PR reviews'));
+    spinner.fail(chalk.red('Failed to fetch PR reviews'));
     handleGitHubError(error);
   }
 }
