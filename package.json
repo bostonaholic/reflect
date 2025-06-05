@@ -3,7 +3,7 @@
   "description": "An AI tool to generate your brag document",
   "type": "module",
   "engines": {
-    "node": ">=22.15.0",
+    "node": ">=22.15.1",
     "npm": ">=10.9.0"
   },
   "devDependencies": {
