@@ -17,7 +17,7 @@
     "vitest": "3.1.4"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "0.51.0",
+    "@anthropic-ai/sdk": "0.54.0",
     "@octokit/graphql": "8.2.2",
     "chalk": "5.4.1",
     "commander": "14.0.0",
