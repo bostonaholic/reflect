@@ -66,7 +66,7 @@ Example:
 
 **Optional:**
 - `--provider <provider>`: LLM provider to use (e.g., openai, anthropic), defaults to openai
-- `--model <model>`: OpenAI model to use (e.g., gpt-4, gpt-3.5-turbo), defaults to gpt-4o
+- `--model <model>`: LLM model to use. For OpenAI (e.g., gpt-4, gpt-3.5-turbo), defaults to gpt-4o. For Anthropic (e.g., claude-3-7-sonnet-20250219), defaults to claude-3-7-sonnet-20250219
 - `--brag`: Optional flag to generate a summary and brag document
 - `--include-orgs <orgs...>`: Only include contributions from these organizations (mutually exclusive with --exclude-orgs)
 - `--exclude-orgs <orgs...>`: Exclude contributions from these organizations (mutually exclusive with --include-orgs)
