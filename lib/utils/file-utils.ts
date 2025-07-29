@@ -28,14 +28,14 @@ export async function checkFileExists(filePath: string): Promise<boolean> {
   }
 }
 
-export async function promptForOverwrite(filename: string): Promise<boolean> {
+export async function promptForOverwrite(filePath: string): Promise<boolean> {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
 
   const answer = await new Promise<string>((resolve) => {
-    rl.question(chalk.yellow(`! File ${filename} already exists. Overwrite? (y/N) `), resolve);
+    rl.question(chalk.yellow(`! File ${filePath} already exists. Overwrite? (y/N) `), resolve);
   });
   rl.close();
 
@@ -50,9 +50,10 @@ export async function writeFileSafely(filename: string, content: string): Promis
 
   const fileExists = await checkFileExists(outputPath);
   if (fileExists) {
-    const shouldOverwrite = await promptForOverwrite(safeFilename);
+    const relativePath = path.join(OUTPUT_DIR, safeFilename);
+    const shouldOverwrite = await promptForOverwrite(relativePath);
     if (!shouldOverwrite) {
-      console.log(chalk.yellow(`! Using existing contents of ${safeFilename}`));
+      console.log(chalk.yellow(`! Using existing contents of ${relativePath}`));
       return { content: await fs.readFile(outputPath, 'utf-8'), didWrite: false };
     }
   }
