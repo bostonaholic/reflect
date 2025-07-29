@@ -1,4 +1,4 @@
-import { GitHubPr, GitHubIssue } from "./types.js";
+import { GitHubPr, GitHubIssue } from "../core/types.js";
 
 export async function generateContributionsDocument(items: (GitHubPr | GitHubIssue)[]): Promise<string> {
   const repos = new Set(items.map(item => item.repository));

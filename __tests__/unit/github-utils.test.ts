@@ -1,4 +1,4 @@
-import { buildOrgFilter, buildRepoFilter } from '../../lib/github-utils.js';
+import { buildOrgFilter, buildRepoFilter } from '../../lib/integrations/github/github-utils.js';
 import * as fc from 'fast-check';
 import { describe, it, expect } from 'vitest';
 

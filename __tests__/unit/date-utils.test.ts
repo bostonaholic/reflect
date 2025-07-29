@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { calculateDateRange, formatDateRangeForGitHub, formatDateForDisplay } from '../../lib/date-utils.js';
+import { calculateDateRange, formatDateRangeForGitHub, formatDateForDisplay } from '../../lib/utils/date-utils.js';
 import * as fc from 'fast-check';
 
 describe('calculateDateRange', () => {

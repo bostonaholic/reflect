@@ -1,11 +1,11 @@
-import { writeFileSafely } from "./file-utils.js";
-import { LlmOptions } from "./types.js";
+import { writeFileSafely } from "../utils/file-utils.js";
+import { LlmOptions } from "../core/types.js";
 import chalk from 'chalk';
 import { generateContributionsDocument } from "./contributions-generator.js";
 import { generateReviewCommentsDocument } from "./review-comments-generator.js";
 import { generateContributionsSummary } from "./contributions-summarizer.js";
 import { generateBragDocument } from "./brag-generator.js";
-import { GitHubPr, GitHubIssue } from "./types.js";
+import { GitHubPr, GitHubIssue } from "../core/types.js";
 
 export async function generateAndWriteContributions(prs: GitHubPr[], issues: GitHubIssue[]): Promise<string> {
   console.log(chalk.cyan('ℹ Generating markdown content...'));

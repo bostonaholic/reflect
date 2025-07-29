@@ -1,5 +1,5 @@
 import { fetchMergedPRs, fetchClosedIssues, fetchReviewedPRs } from "./github.js";
-import { GitHubPr, GitHubIssue } from "./types.js";
+import { GitHubPr, GitHubIssue } from "../../core/types.js";
 
 export function buildOrgFilter(includeOrgs?: string[], excludeOrgs?: string[]): string {
   if (includeOrgs?.length) {

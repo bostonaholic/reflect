@@ -1,4 +1,4 @@
-import { ALLOWED_FILES, sanitizeFilename } from '../../lib/file-utils.js';
+import { ALLOWED_FILES, sanitizeFilename } from '../../lib/utils/file-utils.js';
 import * as fc from 'fast-check';
 import { describe, it, expect } from 'vitest';
 

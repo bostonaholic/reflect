@@ -1,4 +1,4 @@
-import { GitHubPr } from "./types.js";
+import { GitHubPr } from "../core/types.js";
 
 export async function generateReviewCommentsDocument(items: GitHubPr[]): Promise<string> {
   const repos = new Set(items.map(item => item.repository));

@@ -1,8 +1,8 @@
 import chalk from 'chalk';
 import ora from 'ora';
 import Anthropic from '@anthropic-ai/sdk';
-import { LlmOptions } from './types.js';
-import { isDebug } from './debug-utils.js';
+import { LlmOptions } from '../../core/types.js';
+import { isDebug } from '../../utils/debug-utils.js';
 
 export async function callAnthropic(systemMessage: string, userMessage: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
   const spinner = ora(chalk.cyan('Making Anthropic API request...')).start();

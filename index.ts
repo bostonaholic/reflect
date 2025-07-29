@@ -1,5 +1,5 @@
-import { getCommandLineArgs } from "./lib/cli.js";
-import { reflect } from "./lib/reflect.js";
+import { getCommandLineArgs } from "./lib/core/cli.js";
+import { reflect } from "./lib/core/reflect.js";
 import chalk from 'chalk';
 
 async function main(): Promise<void> {

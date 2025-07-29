@@ -3,7 +3,7 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import { LlmOptions, LlmProvider } from './types.js';
 import ora from 'ora';
-import { VALID_PROVIDERS } from './llm.js';
+import { VALID_PROVIDERS } from '../integrations/llm/llm.js';
 
 let envLoaded = false;
 

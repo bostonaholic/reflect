@@ -1,8 +1,8 @@
-import { calculateDateRange, formatDateRangeForGitHub } from "./date-utils.js";
-import { fetchGitHubData } from "./github-utils.js";
-import { generateAndWriteContributions, generateAndWriteReviewContributions, handleBragGeneration } from "./document-utils.js";
+import { calculateDateRange, formatDateRangeForGitHub } from "../utils/date-utils.js";
+import { fetchGitHubData } from "../integrations/github/github-utils.js";
+import { generateAndWriteContributions, generateAndWriteReviewContributions, handleBragGeneration } from "../generators/document-utils.js";
 import { CliArgs } from "./cli.js";
-import { setDebug } from "./debug-utils.js";
+import { setDebug } from "../utils/debug-utils.js";
 
 function getApiKeyFromEnv(provider: string): string | undefined {
     if (provider === 'openai') {

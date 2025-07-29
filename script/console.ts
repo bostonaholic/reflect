@@ -1,14 +1,14 @@
 import * as repl from 'repl';
 import chalk from 'chalk';
-import { callAnthropic } from '../lib/anthropic.js';
-import { callOpenAI } from '../lib/openai.js';
-import { readPrompt } from '../lib/prompt-utils.js';
-import { fetchGitHubData } from '../lib/github-utils.js';
-import { generateContributionsDocument } from '../lib/contributions-generator.js';
-import { generateReviewCommentsDocument } from '../lib/review-comments-generator.js';
-import { generateContributionsSummary } from '../lib/contributions-summarizer.js';
-import { generateBragDocument } from '../lib/brag-generator.js';
-import { fetchReviewedPRs, fetchClosedIssues, fetchMergedPRs } from '../lib/github.js';
+import { callAnthropic } from '../lib/integrations/llm/anthropic.js';
+import { callOpenAI } from '../lib/integrations/llm/openai.js';
+import { readPrompt } from '../lib/prompts/prompt-utils.js';
+import { fetchGitHubData } from '../lib/integrations/github/github-utils.js';
+import { generateContributionsDocument } from '../lib/generators/contributions-generator.js';
+import { generateReviewCommentsDocument } from '../lib/generators/review-comments-generator.js';
+import { generateContributionsSummary } from '../lib/generators/contributions-summarizer.js';
+import { generateBragDocument } from '../lib/generators/brag-generator.js';
+import { fetchReviewedPRs, fetchClosedIssues, fetchMergedPRs } from '../lib/integrations/github/github.js';
 
 // Create a REPL server
 const replServer = repl.start({

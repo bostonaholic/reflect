@@ -1,4 +1,4 @@
-import { isValidGitHubUsername, isValidMonths, isValidRepo } from '../../lib/cli.js';
+import { isValidGitHubUsername, isValidMonths, isValidRepo } from '../../lib/core/cli.js';
 import * as fc from 'fast-check';
 import { describe, it, expect } from 'vitest';
 

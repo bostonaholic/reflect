@@ -1,4 +1,4 @@
-import { VALID_PROVIDERS } from './llm.js';
+import { VALID_PROVIDERS } from '../integrations/llm/llm.js';
 
 
 export interface GitHubComment {

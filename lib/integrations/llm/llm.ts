@@ -1,6 +1,6 @@
 import { callOpenAI } from './openai.js';
 import { callAnthropic } from './anthropic.js';
-import { LlmOptions, LlmProvider } from './types.js';
+import { LlmOptions, LlmProvider } from '../../core/types.js';
 
 export const VALID_PROVIDERS = ['openai', 'anthropic'] as const;
 
