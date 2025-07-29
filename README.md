@@ -16,22 +16,26 @@
 
 ### Usage 💻
 
-1. Set up your environment variables:
+Set up your environment variables:
+
 ```bash
 cp .env{.example,}
 ```
 
-2. Run the setup script to configure your environment:
+Run the setup script to configure your environment:
+
 ```bash
 ./script/setup
 ```
 
-3. Run the tool:
+Run the tool:
+
 ```bash
 ./reflect --username <github-username> --lookback <months-to-look-back> --brag
 ```
 
 This will generate three markdown files in the `output` directory:
+
 - A detailed list of your GitHub contributions
 - A summarized version of your contributions
 - A professional brag document highlighting your achievements
@@ -49,11 +53,13 @@ This will generate three markdown files in the `output` directory:
 ## Usage 🛠️
 
 Run the tool:
+
 ```bash
 ./reflect --username <github-username> --lookback <months-to-look-back> [--brag]
 ```
 
 Example:
+
 ```bash
 ./reflect --username bostonaholic --lookback 6 --brag
 ```
@@ -61,10 +67,12 @@ Example:
 ### Arguments 📋
 
 **Required:**
+
 - `--username <username>`: Your GitHub username to fetch activity for
 - `--lookback <number>`: Number of months to look back for activity (must be a positive number)
 
 **Optional:**
+
 - `--provider <provider>`: LLM provider to use (e.g., openai, anthropic), defaults to openai
 - `--model <model>`: LLM model to use. For OpenAI (e.g., gpt-4, gpt-3.5-turbo), defaults to gpt-4o. For Anthropic (e.g., claude-3-7-sonnet-20250219), defaults to claude-3-7-sonnet-20250219
 - `--brag`: Optional flag to generate a summary and brag document
@@ -76,36 +84,43 @@ Example:
 ### Examples 🚀
 
 Basic usage:
+
 ```bash
 ./reflect --username bostonaholic --lookback 6 --brag
 ```
 
 Choose a model:
+
 ```bash
 ./reflect --username bostonaholic --lookback 6 --model gpt-3-5-turbo --brag
 ```
 
 Choose an LLM provider and model
+
 ```bash
 ./reflect --username bostonaholic --lookback 6 --provider anthropic --model claude-3-7-sonnet-20250219 --brag
 ```
 
 Filter by specific organizations:
+
 ```bash
 ./reflect --username bostonaholic --lookback 6 --include-orgs shopify github
 ```
 
 Exclude specific organizations:
+
 ```bash
 ./reflect --username bostonaholic --lookback 6 --exclude-orgs secret archived
 ```
 
 Filter by specific repositories:
+
 ```bash
 ./reflect --username bostonaholic --lookback 6 --include-repos bostonaholic/reflect bostonaholic/dotfiles
 ```
 
 Exclude specific repositories:
+
 ```bash
 ./reflect --username bostonaholic --lookback 6 --exclude-repos bostonaholic/secret bostonaholic/archived
 ```
@@ -113,9 +128,11 @@ Exclude specific repositories:
 ### Environment Variables 🔐
 
 Required environment variables:
+
 - `GITHUB_TOKEN`: Your GitHub Personal Access Token (required)
 
 To create a GitHub Personal Access Token:
+
 1. Go to GitHub Settings > Developer Settings > Personal Access Tokens > Tokens (classic)
 2. Generate a new token with the following scopes:
    - `repo` (Full control of private repositories)
@@ -123,10 +140,12 @@ To create a GitHub Personal Access Token:
 3. Copy the token and add it to your `.env` file
 
 Required for making LLM calls (one of):
+
 - `OPENAI_API_KEY`
 - `ANTHROPIC_API_KEY`
 
 Optional for using a different provider-compatible endpoint:
+
 - `OPENAI_BASE_URL`
 - `ANTHROPIC_BASE_URL`
 
@@ -144,7 +163,9 @@ Optional for using a different provider-compatible endpoint:
 The script will generate one or more markdown files in the `output` directory:
 
 ### output/contributions.md 📊
+
 Contains:
+
 - A chronological list of your merged pull requests and closed issues
 - Each item includes:
   - Title
@@ -154,7 +175,9 @@ Contains:
 - Activity for the specified time period
 
 ### output/summarized_contributions.md (with --brag flag) 📝
+
 Contains:
+
 - A technical summary of your contributions
 - Groups similar contributions together
 - Highlights key technical changes and improvements
@@ -162,7 +185,9 @@ Contains:
 - Notes significant architectural changes
 
 ### output/brag_document.md (with --brag flag) 🎯
+
 Contains:
+
 - A professional brag document highlighting your achievements
 - Focuses on business impact and value
 - Emphasizes collaboration and leadership
@@ -173,32 +198,36 @@ Note: The `output` directory and all generated files are automatically git-ignor
 
 ## Troubleshooting 🔍
 
-1. If you get TypeScript errors, ensure you're using Node.js v22 or higher:
+If you get TypeScript errors, ensure you're using Node.js v22 or higher:
 
 ```bash
 node --version
 ```
 
-2. If you get GitHub API errors:
-   - Verify your GitHub Personal Access Token (PAT) is correctly set in your `.env` file
-   - Check that your PAT has the required scopes (`repo` and `read:org`)
-   - Ensure your PAT hasn't expired (they can be set to expire after a certain time)
-   - Verify you have access to the repositories you're trying to fetch data from
+If you get GitHub API errors:
 
-3. If the script runs but generates an empty file:
-   - Check that you have activity in the specified time period
-   - Verify your GitHub username is correct
-   - Ensure you have the necessary permissions to access the repositories
+- Verify your GitHub Personal Access Token (PAT) is correctly set in your `.env` file
+- Check that your PAT has the required scopes (`repo` and `read:org`)
+- Ensure your PAT hasn't expired (they can be set to expire after a certain time)
+- Verify you have access to the repositories you're trying to fetch data from
 
-4. If you get an error about the OpenAI API key:
-   - Make sure you've set it in your `.env` file
-   - Check that the API key is valid and has sufficient credits
-   - Verify the .env file is in the correct location
+If the script runs but generates an empty file:
 
-5. If you get environment variable errors:
-   - Ensure your `.env` file exists and is properly formatted
-   - Check that there are no spaces around the `=` sign in your `.env` file
-   - Verify the `.env` file is in the root directory of the project
+- Check that you have activity in the specified time period
+- Verify your GitHub username is correct
+- Ensure you have the necessary permissions to access the repositories
+
+If you get an error about the OpenAI API key:
+
+- Make sure you've set it in your `.env` file
+- Check that the API key is valid and has sufficient credits
+- Verify the .env file is in the correct location
+
+If you get environment variable errors:
+
+- Ensure your `.env` file exists and is properly formatted
+- Check that there are no spaces around the `=` sign in your `.env` file
+- Verify the `.env` file is in the root directory of the project
 
 ## Links 🔗
 
