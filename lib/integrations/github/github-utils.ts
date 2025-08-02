@@ -3,20 +3,34 @@ import { GitHubPr, GitHubIssue } from "../../core/types.js";
 
 export function buildOrgFilter(includeOrgs?: string[], excludeOrgs?: string[]): string {
   if (includeOrgs?.length) {
-    return ` org:${includeOrgs.join(' org:')}`;
+    const nonEmptyOrgs = includeOrgs.map(org => org.trim()).filter(org => org.length > 0);
+    if (nonEmptyOrgs.length === 0) return '';
+    if (nonEmptyOrgs.length === 1) {
+      return ` org:${nonEmptyOrgs[0]}`;
+    }
+    return ` (${nonEmptyOrgs.map(org => `org:${org}`).join(' OR ')})`;
   }
   if (excludeOrgs?.length) {
-    return ` -org:${excludeOrgs.join(' -org:')}`;
+    const nonEmptyOrgs = excludeOrgs.map(org => org.trim()).filter(org => org.length > 0);
+    if (nonEmptyOrgs.length === 0) return '';
+    return ` ${nonEmptyOrgs.map(org => `-org:${org}`).join(' ')}`;
   }
   return '';
 }
 
 export function buildRepoFilter(includeRepos?: string[], excludeRepos?: string[]): string {
   if (includeRepos?.length) {
-    return ` repo:${includeRepos.join(' repo:')}`;
+    const nonEmptyRepos = includeRepos.map(repo => repo.trim()).filter(repo => repo.length > 0);
+    if (nonEmptyRepos.length === 0) return '';
+    if (nonEmptyRepos.length === 1) {
+      return ` repo:${nonEmptyRepos[0]}`;
+    }
+    return ` (${nonEmptyRepos.map(repo => `repo:${repo}`).join(' OR ')})`;
   }
   if (excludeRepos?.length) {
-    return ` -repo:${excludeRepos.join(' -repo:')}`;
+    const nonEmptyRepos = excludeRepos.map(repo => repo.trim()).filter(repo => repo.length > 0);
+    if (nonEmptyRepos.length === 0) return '';
+    return ` ${nonEmptyRepos.map(repo => `-repo:${repo}`).join(' ')}`;
   }
   return '';
 }
