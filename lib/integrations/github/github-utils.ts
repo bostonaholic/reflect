@@ -1,38 +1,33 @@
 import { fetchMergedPRs, fetchClosedIssues, fetchReviewedPRs } from "./github.js";
 import { GitHubPr, GitHubIssue } from "../../core/types.js";
 
-export function buildOrgFilter(includeOrgs?: string[], excludeOrgs?: string[]): string {
-  if (includeOrgs?.length) {
-    const nonEmptyOrgs = includeOrgs.map(org => org.trim()).filter(org => org.length > 0);
-    if (nonEmptyOrgs.length === 0) return '';
-    if (nonEmptyOrgs.length === 1) {
-      return ` org:${nonEmptyOrgs[0]}`;
+function buildFilter(
+  prefix: string,
+  includeItems?: string[],
+  excludeItems?: string[]
+): string {
+  if (includeItems?.length) {
+    const validItems = includeItems.map(item => item.trim()).filter(item => item.length > 0);
+    if (validItems.length === 0) return '';
+    if (validItems.length === 1) {
+      return ` ${prefix}:${validItems[0]}`;
     }
-    return ` (${nonEmptyOrgs.map(org => `org:${org}`).join(' OR ')})`;
+    return ` (${validItems.map(item => `${prefix}:${item}`).join(' OR ')})`;
   }
-  if (excludeOrgs?.length) {
-    const nonEmptyOrgs = excludeOrgs.map(org => org.trim()).filter(org => org.length > 0);
-    if (nonEmptyOrgs.length === 0) return '';
-    return ` ${nonEmptyOrgs.map(org => `-org:${org}`).join(' ')}`;
+  if (excludeItems?.length) {
+    const validItems = excludeItems.map(item => item.trim()).filter(item => item.length > 0);
+    if (validItems.length === 0) return '';
+    return ` ${validItems.map(item => `-${prefix}:${item}`).join(' ')}`;
   }
   return '';
 }
 
+export function buildOrgFilter(includeOrgs?: string[], excludeOrgs?: string[]): string {
+  return buildFilter('org', includeOrgs, excludeOrgs);
+}
+
 export function buildRepoFilter(includeRepos?: string[], excludeRepos?: string[]): string {
-  if (includeRepos?.length) {
-    const nonEmptyRepos = includeRepos.map(repo => repo.trim()).filter(repo => repo.length > 0);
-    if (nonEmptyRepos.length === 0) return '';
-    if (nonEmptyRepos.length === 1) {
-      return ` repo:${nonEmptyRepos[0]}`;
-    }
-    return ` (${nonEmptyRepos.map(repo => `repo:${repo}`).join(' OR ')})`;
-  }
-  if (excludeRepos?.length) {
-    const nonEmptyRepos = excludeRepos.map(repo => repo.trim()).filter(repo => repo.length > 0);
-    if (nonEmptyRepos.length === 0) return '';
-    return ` ${nonEmptyRepos.map(repo => `-repo:${repo}`).join(' ')}`;
-  }
-  return '';
+  return buildFilter('repo', includeRepos, excludeRepos);
 }
 
 export async function fetchGitHubData(
