@@ -4,6 +4,12 @@ import chalk from 'chalk';
 import { LlmOptions, LlmProvider } from './types.js';
 import ora from 'ora';
 import { VALID_PROVIDERS } from '../integrations/llm/llm.js';
+import {
+  isValidDateFormat,
+  parseDate,
+  isStartBeforeEnd,
+  isDateRangeWithinLimit
+} from '../utils/date-utils.js';
 
 let envLoaded = false;
 
@@ -22,7 +28,9 @@ function loadEnv() {
 
 export interface CliArgs {
   username: string;
-  lookback: number;
+  lookback?: number;
+  startDate?: string;
+  endDate?: string;
   generateBrag: boolean;
   debug?: boolean;
   includeOrgs?: string[];
@@ -136,6 +144,54 @@ function validateProvider(provider: LlmProvider): void {
   }
 }
 
+export function validateDateMode(lookback?: number, startDate?: string, endDate?: string): void {
+  const hasLookback = lookback !== undefined;
+  const hasStartDate = startDate !== undefined;
+  const hasEndDate = endDate !== undefined;
+
+  if (hasLookback && (hasStartDate || hasEndDate)) {
+    console.error(chalk.red('✖ Error: Cannot use --lookback with --start-date or --end-date'));
+    process.exit(1);
+  }
+
+  if ((hasStartDate && !hasEndDate) || (!hasStartDate && hasEndDate)) {
+    console.error(chalk.red('✖ Error: Both --start-date and --end-date are required when using date range'));
+    process.exit(1);
+  }
+
+  if (!hasLookback && !hasStartDate && !hasEndDate) {
+    console.error(chalk.red('✖ Error: Must specify either --lookback or both --start-date and --end-date'));
+    process.exit(1);
+  }
+}
+
+const MAX_DATE_RANGE_MONTHS = 36;
+
+export function validateDateInputs(startDate: string, endDate: string): void {
+  if (!isValidDateFormat(startDate)) {
+    console.error(chalk.red('✖ Error: Invalid start date format. Use YYYY-MM-DD'));
+    process.exit(1);
+  }
+
+  if (!isValidDateFormat(endDate)) {
+    console.error(chalk.red('✖ Error: Invalid end date format. Use YYYY-MM-DD'));
+    process.exit(1);
+  }
+
+  const parsedStart = parseDate(startDate);
+  const parsedEnd = parseDate(endDate);
+
+  if (!isStartBeforeEnd(parsedStart, parsedEnd)) {
+    console.error(chalk.red('✖ Error: Start date must be before or equal to end date'));
+    process.exit(1);
+  }
+
+  if (!isDateRangeWithinLimit(parsedStart, parsedEnd, MAX_DATE_RANGE_MONTHS)) {
+    console.error(chalk.red(`✖ Error: Date range cannot exceed ${MAX_DATE_RANGE_MONTHS} months`));
+    process.exit(1);
+  }
+}
+
 function warnDebugDeprecation(): void {
   console.warn(chalk.yellow('! Warning: --debug is deprecated. Use DEBUG=1 in your environment instead.'));
 }
@@ -150,7 +206,9 @@ export function getCommandLineArgs(): CliArgs {
     .description('Generate GitHub activity reports and brag documents')
     .version('0.1.0')
     .requiredOption('--username <username>', 'GitHub username to analyze')
-    .requiredOption('--lookback <number>', 'Number of months to look back', parseInt)
+    .option('--lookback <number>', 'Number of months to look back', parseInt)
+    .option('--start-date <date>', 'Start date (YYYY-MM-DD)')
+    .option('--end-date <date>', 'End date (YYYY-MM-DD)')
     .option('--provider <provider>', 'LLM provider to use (e.g., openai, anthropic)', 'openai')
     .option('--model <model>', 'LLM model to use (defaults to gpt-4.1 for openai, claude-sonnet-4-6 for anthropic)')
     .option('--brag', 'Generate a brag document')
@@ -161,11 +219,18 @@ export function getCommandLineArgs(): CliArgs {
     .option('--exclude-repos <repos...>', 'Exclude contributions to these repositories')
     .addHelpText('after', `
         Note: Set OPENAI_API_KEY in your .env file for brag document generation
-        Example: reflect --username bostonaholic --lookback 6 --brag
-        Example with org filters: reflect --username bostonaholic --lookback 6 --include-orgs "Shopify"
-        Example with org filters: reflect --username bostonaholic --lookback 6 --exclude-orgs "secret"
-        Example with repo filters: reflect --username bostonaholic --lookback 6 --include-repos "owner1/repo1"
-        Example with repo filters: reflect --username bostonaholic --lookback 6 --exclude-repos "owner1/repo1"
+
+        Date range options (mutually exclusive):
+          --lookback <months>                  Look back N months from today
+          --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>   Specify exact date range
+
+        Examples:
+          reflect --username bostonaholic --lookback 6 --brag
+          reflect --username bostonaholic --start-date 2025-01-01 --end-date 2025-06-30
+          reflect --username bostonaholic --lookback 6 --include-orgs "Shopify"
+          reflect --username bostonaholic --lookback 6 --exclude-orgs "secret"
+          reflect --username bostonaholic --lookback 6 --include-repos "owner1/repo1"
+          reflect --username bostonaholic --lookback 6 --exclude-repos "owner1/repo1"
       `);
 
   try {
@@ -177,7 +242,13 @@ export function getCommandLineArgs(): CliArgs {
     }
 
     validateUsername(options.username);
-    validateMonths(options.lookback);
+    validateDateMode(options.lookback, options.startDate, options.endDate);
+    if (options.lookback !== undefined) {
+      validateMonths(options.lookback);
+    }
+    if (options.startDate && options.endDate) {
+      validateDateInputs(options.startDate, options.endDate);
+    }
     validateOrgFilters(options.includeOrgs, options.excludeOrgs);
     validateRepoFilters(options.includeRepos, options.excludeRepos);
     validateProvider(options.provider);
@@ -185,6 +256,8 @@ export function getCommandLineArgs(): CliArgs {
     return {
       username: options.username,
       lookback: options.lookback,
+      startDate: options.startDate,
+      endDate: options.endDate,
       generateBrag: options.brag || false,
       debug: options.debug,
       includeOrgs: options.includeOrgs,
