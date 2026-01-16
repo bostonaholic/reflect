@@ -1,4 +1,4 @@
-import { calculateDateRange, formatDateRangeForGitHub } from "../utils/date-utils.js";
+import { calculateDateRange, formatDateRangeForGitHub, parseDate } from "../utils/date-utils.js";
 import { fetchGitHubData } from "../integrations/github/github-utils.js";
 import { generateAndWriteContributions, generateAndWriteReviewContributions, handleBragGeneration } from "../generators/document-utils.js";
 import { promptForLocalFile } from "../utils/file-utils.js";
@@ -14,12 +14,37 @@ function getApiKeyFromEnv(provider: string): string | undefined {
 }
 
 export async function reflect(args: CliArgs): Promise<void> {
-    const { username, lookback, generateBrag, debug, includeOrgs, excludeOrgs, includeRepos, excludeRepos, llmOptions } = args;
+    const {
+        username,
+        lookback,
+        startDate: startDateArg,
+        endDate: endDateArg,
+        generateBrag,
+        debug,
+        includeOrgs,
+        excludeOrgs,
+        includeRepos,
+        excludeRepos,
+        llmOptions
+    } = args;
 
     // TODO: Remove after `--debug` deprecation period
     setDebug(debug);
 
-    const { startDate, endDate } = calculateDateRange(lookback);
+    let startDate: Date;
+    let endDate: Date;
+
+    if (lookback !== undefined) {
+        const dateRange = calculateDateRange(lookback);
+        startDate = dateRange.startDate;
+        endDate = dateRange.endDate;
+    } else {
+        if (!startDateArg || !endDateArg) {
+            throw new Error('Start date and end date are required when lookback is not specified');
+        }
+        startDate = parseDate(startDateArg);
+        endDate = parseDate(endDateArg);
+    }
 
     const localContributions = await promptForLocalFile('contributions.md');
     const localReviewContributions = await promptForLocalFile('review_contributions.md');
