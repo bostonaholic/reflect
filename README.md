@@ -34,9 +34,10 @@ Run the tool:
 ./reflect --username <github-username> --lookback <months-to-look-back> --brag
 ```
 
-This will generate three markdown files in the `output` directory:
+This will generate four markdown files in the `output` directory:
 
 - A detailed list of your GitHub contributions
+- A report of your PR review contributions
 - A summarized version of your contributions
 - A professional brag document highlighting your achievements
 
