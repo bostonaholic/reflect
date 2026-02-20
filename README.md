@@ -229,6 +229,41 @@ If you get environment variable errors:
 - Check that there are no spaces around the `=` sign in your `.env` file
 - Verify the `.env` file is in the root directory of the project
 
+## Claude Code Integration 🤖
+
+This repository includes a
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code)
+plugin that provides an interactive skill for working
+with Reflect. The skill helps with setup, running the
+CLI, and troubleshooting common issues.
+
+### Installing the Plugin
+
+Add the plugin from the repository:
+
+```bash
+claude plugin add /path/to/reflect
+```
+
+Or, if already working inside the Reflect repository,
+Claude Code automatically discovers the plugin from
+the `.claude-plugin/` directory.
+
+### What the Skill Provides
+
+Once installed, the `reflect` skill activates
+automatically when asking Claude Code about:
+
+- Setting up Reflect for the first time
+- Running the CLI with flags and filters
+- Choosing between OpenAI and Anthropic providers
+- Understanding output files
+- Troubleshooting errors
+
+No slash commands or special syntax needed -- just
+ask naturally (e.g., "how do I generate a brag
+document?" or "reflect is giving me an auth error").
+
 ## Links 🔗
 
 - 🗞️ [Hacker News](https://news.ycombinator.com/item?id=43519484)
