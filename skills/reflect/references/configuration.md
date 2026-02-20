@@ -175,7 +175,12 @@ a descriptive error message.
 The same pattern applies to organization names
 provided via `--include-orgs` and `--exclude-orgs`.
 
-### Lookback Period
+### Date Range Modes
+
+The CLI requires exactly one of the following
+date range modes. Using more than one is an error.
+
+#### Lookback Period
 
 - **Flag:** `--lookback`
 - **Type:** Positive integer
@@ -183,6 +188,25 @@ provided via `--include-orgs` and `--exclude-orgs`.
 - **Validation:** The value must be greater than 0
   and must not exceed 36. Non-numeric values are
   rejected by the argument parser.
+
+#### Since Date
+
+- **Flag:** `--since`
+- **Format:** `YYYY-MM-DD`
+- **Validation:** Must be a valid calendar date in
+  `YYYY-MM-DD` format. The date must be in the past
+  (before or equal to today). The date must be
+  within 36 months of the current date. When used,
+  the tool fetches all activity from this date up
+  to the current date.
+
+#### Explicit Date Range
+
+- **Flags:** `--start-date` and `--end-date`
+- **Format:** `YYYY-MM-DD` for both
+- **Validation:** Both flags must be provided
+  together. Start date must be before or equal to
+  end date. The range cannot exceed 36 months.
 
 ### Repository Format
 
@@ -195,6 +219,13 @@ provided via `--include-orgs` and `--exclude-orgs`.
   `/` separating the owner and repository name. Both
   parts are validated independently against their
   respective patterns.
+
+### Date Mode Mutual Exclusivity
+
+- **`--lookback`**, **`--since`**, and
+  **`--start-date`/`--end-date`** are mutually
+  exclusive. Providing more than one mode causes an
+  immediate exit with an error.
 
 ### Filter Mutual Exclusivity
 

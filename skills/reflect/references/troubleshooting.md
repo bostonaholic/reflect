@@ -200,6 +200,51 @@ positive integer in the range 1 to 36 inclusive.
 2. Ensure the value is a whole number (e.g., `6`, not
    `6.5`).
 
+### Invalid Since Date
+
+**Problem:** The CLI exits with one of:
+
+```text
+Error: Invalid since date format. Use YYYY-MM-DD
+```
+
+```text
+Error: Since date must be in the past
+```
+
+```text
+Error: Since date cannot be more than 36 months ago
+```
+
+**Cause:** The `--since` value is not a valid
+`YYYY-MM-DD` date, is in the future, or is more
+than 36 months before today.
+
+**Fix:**
+
+1. Use `YYYY-MM-DD` format (e.g., `2025-01-01`).
+2. Ensure the date is in the past.
+3. Ensure the date is within the last 36 months.
+
+### Conflicting Date Modes
+
+**Problem:** The CLI exits with:
+
+```text
+Error: Cannot combine --lookback, --since, and
+--start-date/--end-date
+```
+
+**Cause:** More than one date range mode was
+specified. The `--lookback`, `--since`, and
+`--start-date`/`--end-date` flags are mutually
+exclusive.
+
+**Fix:**
+
+1. Choose exactly one date range mode.
+2. Remove any extra date flags from the command.
+
 ### Using Both --include-orgs and --exclude-orgs
 
 **Problem:** The CLI exits with:

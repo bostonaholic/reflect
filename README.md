@@ -80,7 +80,12 @@ Example:
 **Required:**
 
 - `--username <username>`: Your GitHub username to fetch activity for
-- `--lookback <number>`: Number of months to look back for activity (must be a positive number)
+
+**Date range (one required, mutually exclusive):**
+
+- `--lookback <number>`: Number of months to look back for activity (1-36)
+- `--since <date>`: Start date in YYYY-MM-DD format; fetches activity from this date to today
+- `--start-date <date>` + `--end-date <date>`: Specify an exact date range (both required)
 
 **Optional:**
 
@@ -98,6 +103,12 @@ Basic usage:
 
 ```bash
 ./reflect --username bostonaholic --lookback 6 --brag
+```
+
+Fetch activity since a specific date:
+
+```bash
+./reflect --username bostonaholic --since 2025-01-01 --brag
 ```
 
 Choose a model:

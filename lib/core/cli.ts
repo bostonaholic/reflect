@@ -29,6 +29,7 @@ function loadEnv() {
 export interface CliArgs {
   username: string;
   lookback?: number;
+  since?: string;
   startDate?: string;
   endDate?: string;
   generateBrag: boolean;
@@ -144,13 +145,16 @@ function validateProvider(provider: LlmProvider): void {
   }
 }
 
-export function validateDateMode(lookback?: number, startDate?: string, endDate?: string): void {
+export function validateDateMode(lookback?: number, since?: string, startDate?: string, endDate?: string): void {
   const hasLookback = lookback !== undefined;
+  const hasSince = since !== undefined;
   const hasStartDate = startDate !== undefined;
   const hasEndDate = endDate !== undefined;
 
-  if (hasLookback && (hasStartDate || hasEndDate)) {
-    console.error(chalk.red('✖ Error: Cannot use --lookback with --start-date or --end-date'));
+  const modeCount = [hasLookback, hasSince, hasStartDate || hasEndDate].filter(Boolean).length;
+
+  if (modeCount > 1) {
+    console.error(chalk.red('✖ Error: Cannot combine --lookback, --since, and --start-date/--end-date'));
     process.exit(1);
   }
 
@@ -159,13 +163,33 @@ export function validateDateMode(lookback?: number, startDate?: string, endDate?
     process.exit(1);
   }
 
-  if (!hasLookback && !hasStartDate && !hasEndDate) {
-    console.error(chalk.red('✖ Error: Must specify either --lookback or both --start-date and --end-date'));
+  if (!hasLookback && !hasSince && !hasStartDate && !hasEndDate) {
+    console.error(chalk.red('✖ Error: Must specify either --lookback, --since, or both --start-date and --end-date'));
     process.exit(1);
   }
 }
 
 const MAX_DATE_RANGE_MONTHS = 36;
+
+export function validateSinceDate(since: string): void {
+  if (!isValidDateFormat(since)) {
+    console.error(chalk.red('✖ Error: Invalid since date format. Use YYYY-MM-DD'));
+    process.exit(1);
+  }
+
+  const parsedSince = parseDate(since);
+  const now = new Date();
+
+  if (!isStartBeforeEnd(parsedSince, now)) {
+    console.error(chalk.red('✖ Error: Since date must be in the past'));
+    process.exit(1);
+  }
+
+  if (!isDateRangeWithinLimit(parsedSince, now, MAX_DATE_RANGE_MONTHS)) {
+    console.error(chalk.red(`✖ Error: Since date cannot be more than ${MAX_DATE_RANGE_MONTHS} months ago`));
+    process.exit(1);
+  }
+}
 
 export function validateDateInputs(startDate: string, endDate: string): void {
   if (!isValidDateFormat(startDate)) {
@@ -207,6 +231,7 @@ export function getCommandLineArgs(): CliArgs {
     .version('0.1.0')
     .requiredOption('--username <username>', 'GitHub username to analyze')
     .option('--lookback <number>', 'Number of months to look back', parseInt)
+    .option('--since <date>', 'Start date (YYYY-MM-DD), fetches activity from this date to today')
     .option('--start-date <date>', 'Start date (YYYY-MM-DD)')
     .option('--end-date <date>', 'End date (YYYY-MM-DD)')
     .option('--provider <provider>', 'LLM provider to use (e.g., openai, anthropic)', 'openai')
@@ -222,10 +247,12 @@ export function getCommandLineArgs(): CliArgs {
 
         Date range options (mutually exclusive):
           --lookback <months>                  Look back N months from today
+          --since <YYYY-MM-DD>                 From this date to today
           --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>   Specify exact date range
 
         Examples:
           reflect --username bostonaholic --lookback 6 --brag
+          reflect --username bostonaholic --since 2025-01-01
           reflect --username bostonaholic --start-date 2025-01-01 --end-date 2025-06-30
           reflect --username bostonaholic --lookback 6 --include-orgs "Shopify"
           reflect --username bostonaholic --lookback 6 --exclude-orgs "secret"
@@ -242,9 +269,12 @@ export function getCommandLineArgs(): CliArgs {
     }
 
     validateUsername(options.username);
-    validateDateMode(options.lookback, options.startDate, options.endDate);
+    validateDateMode(options.lookback, options.since, options.startDate, options.endDate);
     if (options.lookback !== undefined) {
       validateMonths(options.lookback);
+    }
+    if (options.since) {
+      validateSinceDate(options.since);
     }
     if (options.startDate && options.endDate) {
       validateDateInputs(options.startDate, options.endDate);
@@ -256,6 +286,7 @@ export function getCommandLineArgs(): CliArgs {
     return {
       username: options.username,
       lookback: options.lookback,
+      since: options.since,
       startDate: options.startDate,
       endDate: options.endDate,
       generateBrag: options.brag || false,
