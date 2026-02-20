@@ -4,8 +4,10 @@ description: >
   This skill should be used when someone needs to generate a
   brag document from GitHub activity, set up reflect for the
   first time, run reflect to fetch contributions, configure
-  a GitHub token for reflect, troubleshoot reflect not
-  working, or debug brag doc errors.
+  a GitHub token for reflect, filter contributions by
+  organization or repository, choose between OpenAI and
+  Anthropic providers, understand reflect output files,
+  troubleshoot reflect not working, or debug brag doc errors.
 ---
 
 # Reflect
