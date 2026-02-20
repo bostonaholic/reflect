@@ -14,7 +14,7 @@ if [ ! -f .env ]; then
     exit 1
 fi
 
-script/update
+bin/update
 
 # Start the TypeScript console using npm
 echo "Starting Reflect console..."

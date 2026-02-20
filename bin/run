@@ -7,6 +7,6 @@ fi
 
 cd "$(dirname "$0")/.."
 
-echo -e "\033[33m! ./script/run is deprecated. Use './reflect' instead.\033[0m"
+echo -e "\033[33m! ./bin/run is deprecated. Use './reflect' instead.\033[0m"
 
 ./reflect "$@"

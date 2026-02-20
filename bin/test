@@ -10,8 +10,8 @@ cd "$(dirname "$0")/.."
 if [ "$ENV" = "test" ]; then
   # if executed and the environment is already set to `test`, then we want a
   # clean from scratch application. This almost always means a ci environment,
-  # since we set the environment to `test` directly in `script/cibuild`.
-  script/setup
+  # since we set the environment to `test` directly in `bin/cibuild`.
+  bin/setup
 else
   # if the environment isn't set to `test`, set it to `test` and update the
   # application to ensure all dependencies are met as well as any other things
@@ -20,7 +20,7 @@ else
   # own from a `development` environment.
   export ENV="test"
 
-  script/update
+  bin/update
 fi
 
 echo "==> Running tests…"

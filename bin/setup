@@ -7,7 +7,7 @@ fi
 
 cd "$(dirname "$0")/.."
 
-script/bootstrap
+bin/bootstrap
 
 echo "==> Setting up environment variables…"
 

@@ -30,7 +30,7 @@
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage --reporter=junit --outputFile=test-report.junit.xml",
     "typecheck": "tsc --noEmit",
-    "console": "tsx script/console.ts",
+    "console": "tsx bin/console.ts",
     "prepare": "husky"
   }
 }

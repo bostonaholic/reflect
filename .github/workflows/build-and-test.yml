@@ -25,10 +25,10 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      run: ./script/setup
+      run: ./bin/setup
 
     - name: Run tests with coverage
-      run: ./script/cibuild
+      run: ./bin/cibuild
 
     - name: Upload coverage reports
       uses: actions/upload-artifact@v6

@@ -25,7 +25,7 @@ cp .env{.example,}
 Run the setup script to configure your environment:
 
 ```bash
-./script/setup
+./bin/setup
 ```
 
 Run the tool:

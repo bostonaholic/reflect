@@ -6,6 +6,6 @@ if [ "${DEBUG:-}" = "1" ]; then
 fi
 
 # ensure everything in the app is up to date.
-script/update
+bin/update
 
 npx tsx index.ts "$@" 

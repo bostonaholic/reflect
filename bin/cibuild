@@ -12,7 +12,7 @@ export ENV="test"
 echo "Running tests…"
 date "+%H:%M:%S"
 
-script/test --coverage
+bin/test --coverage
 
 echo "Tests completed at…"
 date "+%H:%M:%S"
