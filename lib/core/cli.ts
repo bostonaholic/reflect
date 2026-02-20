@@ -1,4 +1,4 @@
-import { config } from 'dotenv';
+import { config } from '@dotenvx/dotenvx';
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { LlmOptions, LlmProvider } from './types.js';

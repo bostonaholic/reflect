@@ -18,10 +18,10 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.71.0",
+    "@dotenvx/dotenvx": "^1.52.0",
     "@octokit/graphql": "9.0.3",
     "chalk": "5.6.2",
     "commander": "14.0.1",
-    "dotenv": "17.2.2",
     "openai": "6.22.0",
     "ora": "9.1.0"
   },
