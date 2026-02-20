@@ -29,7 +29,10 @@ if [ "$ENV" != "test" ]; then
       exit 1
     fi
     # Use dotenvx to decrypt and export variables for validation
-    eval "$(npx dotenvx get --format shell 2>/dev/null)"
+    if ! eval "$(npx dotenvx get --format shell)"; then
+      echo "Error: Failed to decrypt .env file."
+      exit 1
+    fi
   else
     # Source the plain .env file
     # shellcheck disable=SC1091
