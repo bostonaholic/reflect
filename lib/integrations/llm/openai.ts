@@ -1,47 +1,34 @@
 import chalk from 'chalk';
-import ora from 'ora';
 import OpenAI from 'openai';
 import { LlmOptions } from '../../core/types.js';
 import { isDebug } from '../../utils/debug-utils.js';
 
 export async function callOpenAI(systemMessage: string, userMessage: string, apiKey: string, llmOptions: LlmOptions): Promise<string> {
-  const spinner = ora(chalk.cyan('Making OpenAI API request...')).start();
+  const openai = new OpenAI({
+    baseURL: process.env.OPENAI_BASE_URL || undefined,
+    apiKey: apiKey
+  });
 
-  try {
-    const openai = new OpenAI({
-      baseURL: process.env.OPENAI_BASE_URL || undefined,
-      apiKey: apiKey
-    });
+  const response = await openai.responses.create({
+    model: llmOptions.model || 'gpt-4.1',
+    temperature: 0.7,
+    instructions: systemMessage,
+    input: userMessage,
+  });
 
-    const response = await openai.responses.create({
-      model: llmOptions.model || 'gpt-4.1',
-      temperature: 0.7,
-      instructions: systemMessage,
-      input: userMessage,
-    });
-
-    if (response.error) {
-      throw new Error(`OpenAI API error: ${response.error.message || 'Unknown error'}`);
-    }
-
-    spinner.succeed(chalk.green('OpenAI API request completed'));
-
-    if (isDebug()) {
-      console.log(chalk.cyan('\n[DEBUG] LLM Information:'));
-      console.log(chalk.yellow('[DEBUG] Input Tokens:'), chalk.white(response.usage?.input_tokens));
-      console.log(chalk.yellow('[DEBUG] Output Tokens:'), chalk.white(response.usage?.output_tokens));
-      console.log(chalk.yellow('[DEBUG] Total Tokens:'), chalk.white(response.usage?.total_tokens));
-      console.log(chalk.yellow('[DEBUG] Cached Input Tokens:'), chalk.white(response.usage?.input_tokens_details?.cached_tokens));
-      console.log(chalk.yellow('[DEBUG] Model:'), chalk.white(response.model));
-      console.log(chalk.yellow('[DEBUG] Status:'), chalk.white(response.status));
-    }
-
-    return response.output_text || 'Empty response from OpenAI';
-  } catch (error) {
-    spinner.fail(chalk.red('OpenAI API request failed'));
-    if (error instanceof Error) {
-      console.error(chalk.red('Error message:'), error);
-    }
-    throw error;
+  if (response.error) {
+    throw new Error(`OpenAI API error: ${response.error.message || 'Unknown error'}`);
   }
+
+  if (isDebug()) {
+    console.log(chalk.cyan('\n[DEBUG] LLM Information:'));
+    console.log(chalk.yellow('[DEBUG] Input Tokens:'), chalk.white(response.usage?.input_tokens));
+    console.log(chalk.yellow('[DEBUG] Output Tokens:'), chalk.white(response.usage?.output_tokens));
+    console.log(chalk.yellow('[DEBUG] Total Tokens:'), chalk.white(response.usage?.total_tokens));
+    console.log(chalk.yellow('[DEBUG] Cached Input Tokens:'), chalk.white(response.usage?.input_tokens_details?.cached_tokens));
+    console.log(chalk.yellow('[DEBUG] Model:'), chalk.white(response.model));
+    console.log(chalk.yellow('[DEBUG] Status:'), chalk.white(response.status));
+  }
+
+  return response.output_text || 'Empty response from OpenAI';
 }
