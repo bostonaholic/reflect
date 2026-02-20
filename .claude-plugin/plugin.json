@@ -1,5 +1,11 @@
 {
   "name": "reflect",
   "version": "0.1.0",
-  "description": "Skills for using the Reflect CLI"
+  "description": "Skills for using the Reflect CLI",
+  "author": {
+    "name": "Matthew Boston"
+  },
+  "repository": "https://github.com/bostonaholic/reflect",
+  "license": "MIT",
+  "keywords": ["brag-document", "github", "performance-review"]
 }

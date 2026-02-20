@@ -239,10 +239,11 @@ CLI, and troubleshooting common issues.
 
 ### Installing the Plugin
 
-Add the plugin from the repository:
+Add the marketplace and install the plugin:
 
 ```bash
-claude plugin add /path/to/reflect
+/plugin marketplace add bostonaholic/reflect
+/plugin install reflect@reflect
 ```
 
 Or, if already working inside the Reflect repository,
