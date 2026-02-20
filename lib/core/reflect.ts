@@ -1,6 +1,7 @@
 import { calculateDateRange, formatDateRangeForGitHub } from "../utils/date-utils.js";
 import { fetchGitHubData } from "../integrations/github/github-utils.js";
 import { generateAndWriteContributions, generateAndWriteReviewContributions, handleBragGeneration } from "../generators/document-utils.js";
+import { promptForLocalFile } from "../utils/file-utils.js";
 import { CliArgs } from "./cli.js";
 import { setDebug } from "../utils/debug-utils.js";
 
@@ -19,26 +20,44 @@ export async function reflect(args: CliArgs): Promise<void> {
     setDebug(debug);
 
     const { startDate, endDate } = calculateDateRange(lookback);
-    const dateRange = formatDateRangeForGitHub(startDate, endDate);
 
-    const { prs, issues, reviews } = await fetchGitHubData(
-        username,
-        dateRange,
-        includeOrgs,
-        excludeOrgs,
-        includeRepos,
-        excludeRepos
-    );
+    const localContributions = await promptForLocalFile('contributions.md');
+    const localReviewContributions = await promptForLocalFile('review_contributions.md');
 
-    const reviewContent = await generateAndWriteReviewContributions(reviews);
+    const needsGitHubFetch = localContributions === null || localReviewContributions === null;
 
-    const contributions = await generateAndWriteContributions(prs, issues);
+    let prs: Awaited<ReturnType<typeof fetchGitHubData>>['prs'] = [];
+    let issues: Awaited<ReturnType<typeof fetchGitHubData>>['issues'] = [];
+    let reviews: Awaited<ReturnType<typeof fetchGitHubData>>['reviews'] = [];
+
+    if (needsGitHubFetch) {
+        const dateRange = formatDateRangeForGitHub(startDate, endDate);
+        ({ prs, issues, reviews } = await fetchGitHubData(
+            username,
+            dateRange,
+            includeOrgs,
+            excludeOrgs,
+            includeRepos,
+            excludeRepos
+        ));
+    }
+
+    if (localReviewContributions === null) {
+        await generateAndWriteReviewContributions(reviews, true);
+    }
+
+    let contributions: string;
+    if (localContributions !== null) {
+        contributions = localContributions;
+    } else {
+        contributions = await generateAndWriteContributions(prs, issues, true);
+    }
 
     if (generateBrag) {
         const apiKey = getApiKeyFromEnv(llmOptions.provider);
         if (!apiKey) {
             throw new Error('LLM API key environment variable is required for brag document generation');
         }
-        await handleBragGeneration(contributions, apiKey, startDate, endDate, llmOptions);
+        await handleBragGeneration(contributions, apiKey, startDate, endDate, llmOptions, true);
     }
 } 
