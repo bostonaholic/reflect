@@ -150,6 +150,13 @@ brag documents.
   Override this to use a different model from the
   chosen provider, such as `gpt-4.1-mini` for OpenAI
   or `claude-sonnet-4-5` for Anthropic.
+- **`--debug`** --
+  Enable debug mode for detailed LLM API information.
+  When present, Reflect logs additional diagnostic
+  output including API request and response details
+  such as token usage, model name, and completion
+  status. Deprecated in favor of setting `DEBUG=1`
+  in the environment.
 
 ### Filtering Flags
 
