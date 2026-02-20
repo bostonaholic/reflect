@@ -13,10 +13,17 @@ echo "==> Setting up environment variables…"
 
 # Skip environment setup in test environment
 if [ "$ENV" != "test" ]; then
-  # Check if .env file exists
+  # Check if .env file exists; create from example if missing
   if [ ! -f ".env" ]; then
-    echo "Error: .env file not found. Please copy .env.example to .env and fill in your values."
-    exit 1
+    if [ ! -f ".env.example" ]; then
+      echo "Error: .env.example not found."
+      exit 1
+    fi
+
+    echo "==> No .env file found. Copying from .env.example…"
+    cp .env.example .env
+    echo "Edit .env with your tokens, then re-run bin/setup."
+    exit 0
   fi
 
   # Check if .env is encrypted (contains encrypted: values)
@@ -58,6 +65,17 @@ if [ "$ENV" != "test" ]; then
     printf '%s\n' "${missing_vars[@]}"
     echo "Please set these variables in your .env file."
     exit 1
+  fi
+
+  # Offer to encrypt .env if it is not already encrypted
+  if ! grep -q "encrypted:" .env 2>/dev/null; then
+    printf "Would you like to encrypt your .env file with dotenvx? [y/N] "
+    read -r encrypt_answer
+    if [ "$encrypt_answer" = "y" ] || [ "$encrypt_answer" = "Y" ]; then
+      echo "==> Encrypting .env…"
+      npx dotenvx encrypt
+      echo "==> .env encrypted. Keep .env.keys safe — you need it to decrypt."
+    fi
   fi
 fi
 
