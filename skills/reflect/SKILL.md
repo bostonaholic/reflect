@@ -101,29 +101,54 @@ optional base URL overrides and debug mode, see
 ```bash
 ./reflect --username <github-username> \
   --lookback <months> [options]
+
+./reflect --username <github-username> \
+  --since <YYYY-MM-DD> [options]
+
+./reflect --username <github-username> \
+  --start-date <YYYY-MM-DD> \
+  --end-date <YYYY-MM-DD> [options]
 ```
 
-Reflect requires a GitHub username and a lookback period.
-All other flags are optional. The tool loads environment
-variables from `.env` at startup, fetches GitHub data via
-the GraphQL API, generates the base contribution reports,
-and optionally calls an LLM to produce summarized and
-brag documents.
+Reflect requires a GitHub username and a date range
+specified by one of three mutually exclusive modes.
+All other flags are optional. The tool loads
+environment variables from `.env` at startup,
+fetches GitHub data via the GraphQL API, generates
+the base contribution reports, and optionally calls
+an LLM to produce summarized and brag documents.
 
 ### Required Flags
 
 - **`--username <username>`** --
   GitHub username to analyze. Must contain only
   alphanumeric characters, hyphens, and underscores
-  (pattern: `[a-zA-Z0-9_-]+`). The tool validates this
-  format before making any API calls and exits with an
-  error if the format is invalid.
+  (pattern: `[a-zA-Z0-9_-]+`). The tool validates
+  this format before making any API calls and exits
+  with an error if the format is invalid.
+
+### Date Range Flags (one required)
+
+These three modes are mutually exclusive. Provide
+exactly one:
+
 - **`--lookback <number>`** --
-  Number of months to look back for activity. Must be a
-  positive integer not exceeding 36. The tool calculates
-  a date range from the current date backward by this
-  many months and fetches all qualifying activity within
-  that window.
+  Number of months to look back for activity. Must
+  be a positive integer not exceeding 36. The tool
+  calculates a date range from the current date
+  backward by this many months and fetches all
+  qualifying activity within that window.
+- **`--since <date>`** --
+  Start date in YYYY-MM-DD format. Fetches all
+  activity from this date up to today. The date
+  must be in the past and within 36 months of the
+  current date.
+- **`--start-date <date>`** +
+  **`--end-date <date>`** --
+  Explicit date range in YYYY-MM-DD format. Both
+  flags are required together. Start date must be
+  before or equal to end date, and the range cannot
+  exceed 36 months.
 
 ### Optional Flags
 
@@ -217,6 +242,13 @@ provider and default model (`gpt-4.1`):
 
 ```bash
 ./reflect --username bostonaholic --lookback 6 --brag
+```
+
+Fetch all activity since a specific date:
+
+```bash
+./reflect --username bostonaholic \
+  --since 2025-01-01 --brag
 ```
 
 Use the Anthropic provider with a specific model:
@@ -353,8 +385,9 @@ detailed step-by-step troubleshooting procedures, see
   scopes are incorrect.
 - **Empty output files** -- Confirm the username is
   correct and that merged PRs or closed issues exist
-  within the specified lookback period. Try increasing
-  the `--lookback` value to capture a wider time range.
+  within the specified date range. Try increasing
+  the `--lookback` value or using an earlier
+  `--since` date to capture a wider time range.
 - **LLM API key errors** -- Ensure the correct API key
   variable is set: `OPENAI_API_KEY` for the `openai`
   provider or `ANTHROPIC_API_KEY` for the `anthropic`
@@ -367,6 +400,12 @@ detailed step-by-step troubleshooting procedures, see
 - **"Months must be a positive number and not exceed
   36"** -- Provide a `--lookback` value between 1 and
   36 inclusive. The value must be a positive integer.
+- **"Cannot combine --lookback, --since, and
+  --start-date/--end-date"** -- Use exactly one date
+  range mode. Remove conflicting date flags.
+- **"Since date must be in the past"** -- The
+  `--since` date is in the future. Provide a past
+  date in YYYY-MM-DD format.
 - **"Cannot use both --include-orgs and --exclude-orgs
   simultaneously"** -- Remove one of the conflicting
   flags and re-run the command. The same mutual

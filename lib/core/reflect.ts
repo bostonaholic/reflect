@@ -17,6 +17,7 @@ export async function reflect(args: CliArgs): Promise<void> {
     const {
         username,
         lookback,
+        since: sinceArg,
         startDate: startDateArg,
         endDate: endDateArg,
         generateBrag,
@@ -38,9 +39,12 @@ export async function reflect(args: CliArgs): Promise<void> {
         const dateRange = calculateDateRange(lookback);
         startDate = dateRange.startDate;
         endDate = dateRange.endDate;
+    } else if (sinceArg) {
+        startDate = parseDate(sinceArg);
+        endDate = new Date();
     } else {
         if (!startDateArg || !endDateArg) {
-            throw new Error('Start date and end date are required when lookback is not specified');
+            throw new Error('Start date and end date are required when lookback and since are not specified');
         }
         startDate = parseDate(startDateArg);
         endDate = parseDate(endDateArg);

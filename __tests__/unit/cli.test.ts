@@ -1,4 +1,4 @@
-import { isValidGitHubUsername, isValidMonths, isValidRepo, validateDateMode, validateDateInputs } from '../../lib/core/cli.js';
+import { isValidGitHubUsername, isValidMonths, isValidRepo, validateDateMode, validateSinceDate, validateDateInputs } from '../../lib/core/cli.js';
 import * as fc from 'fast-check';
 import { describe, it, expect, vi, beforeEach, afterEach, type MockInstance } from 'vitest';
 
@@ -158,37 +158,81 @@ describe('CLI Validation Functions', () => {
     const { getMockExit } = mockProcessExit();
 
     it('should pass with lookback only', () => {
-      validateDateMode(6, undefined, undefined);
+      validateDateMode(6, undefined, undefined, undefined);
+      expect(getMockExit()).not.toHaveBeenCalled();
+    });
+
+    it('should pass with since only', () => {
+      validateDateMode(undefined, '2025-01-01', undefined, undefined);
       expect(getMockExit()).not.toHaveBeenCalled();
     });
 
     it('should pass with both start and end dates', () => {
-      validateDateMode(undefined, '2025-01-01', '2025-06-01');
+      validateDateMode(undefined, undefined, '2025-01-01', '2025-06-01');
       expect(getMockExit()).not.toHaveBeenCalled();
     });
 
+    it('should error when lookback used with since', () => {
+      expect(() => validateDateMode(6, '2025-01-01', undefined, undefined)).toThrow(ExitError);
+      expect(getMockExit()).toHaveBeenCalledWith(1);
+    });
+
     it('should error when lookback used with start date', () => {
-      expect(() => validateDateMode(6, '2025-01-01', undefined)).toThrow(ExitError);
+      expect(() => validateDateMode(6, undefined, '2025-01-01', undefined)).toThrow(ExitError);
       expect(getMockExit()).toHaveBeenCalledWith(1);
     });
 
     it('should error when lookback used with end date', () => {
-      expect(() => validateDateMode(6, undefined, '2025-06-01')).toThrow(ExitError);
+      expect(() => validateDateMode(6, undefined, undefined, '2025-06-01')).toThrow(ExitError);
+      expect(getMockExit()).toHaveBeenCalledWith(1);
+    });
+
+    it('should error when since used with start date', () => {
+      expect(() => validateDateMode(undefined, '2025-01-01', '2025-01-01', undefined)).toThrow(ExitError);
+      expect(getMockExit()).toHaveBeenCalledWith(1);
+    });
+
+    it('should error when since used with start and end dates', () => {
+      expect(() => validateDateMode(undefined, '2025-01-01', '2025-01-01', '2025-06-01')).toThrow(ExitError);
       expect(getMockExit()).toHaveBeenCalledWith(1);
     });
 
     it('should error when only start date provided', () => {
-      expect(() => validateDateMode(undefined, '2025-01-01', undefined)).toThrow(ExitError);
+      expect(() => validateDateMode(undefined, undefined, '2025-01-01', undefined)).toThrow(ExitError);
       expect(getMockExit()).toHaveBeenCalledWith(1);
     });
 
     it('should error when only end date provided', () => {
-      expect(() => validateDateMode(undefined, undefined, '2025-06-01')).toThrow(ExitError);
+      expect(() => validateDateMode(undefined, undefined, undefined, '2025-06-01')).toThrow(ExitError);
       expect(getMockExit()).toHaveBeenCalledWith(1);
     });
 
     it('should error when no date mode specified', () => {
-      expect(() => validateDateMode(undefined, undefined, undefined)).toThrow(ExitError);
+      expect(() => validateDateMode(undefined, undefined, undefined, undefined)).toThrow(ExitError);
+      expect(getMockExit()).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('validateSinceDate', () => {
+    const { getMockExit } = mockProcessExit();
+
+    it('should pass with a valid past date', () => {
+      validateSinceDate('2025-01-01');
+      expect(getMockExit()).not.toHaveBeenCalled();
+    });
+
+    it('should error with invalid date format', () => {
+      expect(() => validateSinceDate('01-01-2025')).toThrow(ExitError);
+      expect(getMockExit()).toHaveBeenCalledWith(1);
+    });
+
+    it('should error with a future date', () => {
+      expect(() => validateSinceDate('2099-01-01')).toThrow(ExitError);
+      expect(getMockExit()).toHaveBeenCalledWith(1);
+    });
+
+    it('should error when since date is more than 36 months ago', () => {
+      expect(() => validateSinceDate('2020-01-01')).toThrow(ExitError);
       expect(getMockExit()).toHaveBeenCalledWith(1);
     });
   });
