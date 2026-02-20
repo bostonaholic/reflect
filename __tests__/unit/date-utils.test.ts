@@ -81,9 +81,9 @@ describe('formatDateForDisplay', () => {
         (date: Date) => {
           fc.pre(!isNaN(date.getTime()));
           const result = formatDateForDisplay(date);
-          const month = date.toLocaleString('default', { month: 'long' });
-          const day = date.getDate();
-          const year = date.getFullYear();
+          const month = date.toLocaleString('default', { month: 'long', timeZone: 'UTC' });
+          const day = date.getUTCDate();
+          const year = date.getUTCFullYear();
           expect(result).toBe(`${month} ${day}, ${year}`);
         }
       ),
