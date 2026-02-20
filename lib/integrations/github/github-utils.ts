@@ -38,10 +38,8 @@ export async function fetchGitHubData(
   includeRepos?: string[],
   excludeRepos?: string[]
 ): Promise<{ prs: GitHubPr[]; issues: GitHubIssue[]; reviews: GitHubPr[] }> {
-  const [prs, issues, reviews] = await Promise.all([
-    fetchMergedPRs(username, dateRange, includeOrgs, excludeOrgs, includeRepos, excludeRepos),
-    fetchClosedIssues(username, dateRange, includeOrgs, excludeOrgs, includeRepos, excludeRepos),
-    fetchReviewedPRs(username, dateRange, includeOrgs, excludeOrgs, includeRepos, excludeRepos)
-  ]);
+  const prs = await fetchMergedPRs(username, dateRange, includeOrgs, excludeOrgs, includeRepos, excludeRepos);
+  const issues = await fetchClosedIssues(username, dateRange, includeOrgs, excludeOrgs, includeRepos, excludeRepos);
+  const reviews = await fetchReviewedPRs(username, dateRange, includeOrgs, excludeOrgs, includeRepos, excludeRepos);
   return { prs, issues, reviews };
 }
