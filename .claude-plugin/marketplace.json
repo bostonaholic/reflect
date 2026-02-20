@@ -1,0 +1,21 @@
+{
+  "name": "reflect",
+  "description": "Skills for using the Reflect CLI to generate brag documents",
+  "owner": {
+    "name": "Matthew Boston"
+  },
+  "metadata": {
+    "description": "Reflect CLI skill for setup, usage, and troubleshooting of the brag document generator"
+  },
+  "plugins": [
+    {
+      "name": "reflect",
+      "description": "Skills for using the Reflect CLI",
+      "version": "0.1.0",
+      "source": "./",
+      "author": {
+        "name": "Matthew Boston"
+      }
+    }
+  ]
+}
