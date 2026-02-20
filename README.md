@@ -74,7 +74,7 @@ Example:
 **Optional:**
 
 - `--provider <provider>`: LLM provider to use (e.g., openai, anthropic), defaults to openai
-- `--model <model>`: LLM model to use. For OpenAI (e.g., gpt-4, gpt-3.5-turbo), defaults to gpt-4o. For Anthropic (e.g., claude-3-7-sonnet-20250219), defaults to claude-3-7-sonnet-20250219
+- `--model <model>`: LLM model to use. For OpenAI (e.g., gpt-4.1, gpt-4.1-mini), defaults to gpt-4.1. For Anthropic (e.g., claude-sonnet-4-6, claude-sonnet-4-5), defaults to claude-sonnet-4-6
 - `--brag`: Optional flag to generate a summary and brag document
 - `--include-orgs <orgs...>`: Only include contributions from these organizations (mutually exclusive with --exclude-orgs)
 - `--exclude-orgs <orgs...>`: Exclude contributions from these organizations (mutually exclusive with --include-orgs)
@@ -98,7 +98,7 @@ Choose a model:
 Choose an LLM provider and model
 
 ```bash
-./reflect --username bostonaholic --lookback 6 --provider anthropic --model claude-3-7-sonnet-20250219 --brag
+./reflect --username bostonaholic --lookback 6 --provider anthropic --model claude-sonnet-4-6 --brag
 ```
 
 Filter by specific organizations:
