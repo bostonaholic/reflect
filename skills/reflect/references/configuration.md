@@ -88,8 +88,9 @@ DEBUG=1
 ### Notes on the `.env` File
 
 - Only `GITHUB_TOKEN` is always required. The setup
-  script (`bin/setup`) checks for both `GITHUB_TOKEN`
-  and `OPENAI_API_KEY` during initial setup.
+  script (`bin/setup`) copies `.env.example` to `.env`
+  on first run, then validates `GITHUB_TOKEN` and
+  `OPENAI_API_KEY` on subsequent runs.
 - Set either `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`
   based on the chosen `--provider` value. Setting both
   is harmless but only the key matching the active

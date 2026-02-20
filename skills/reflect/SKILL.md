@@ -59,24 +59,12 @@ Follow these steps to prepare the local environment:
    ./bin/setup
    ```
 
-   The setup script installs all npm dependencies via
-   the bootstrap process, then validates that the required
-   environment variables are present in the `.env` file.
-   If any required variable is missing, the script exits
-   with an error listing the missing variables.
+   On first run, the setup script installs all npm
+   dependencies via the bootstrap process, then copies
+   `.env.example` to `.env` and exits with a message
+   asking the user to fill in their tokens.
 
-2. Copy the example environment file and fill in values:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-   The `.env.example` file contains placeholder entries
-   for every supported environment variable. Copying it
-   creates a local `.env` file that Reflect reads at
-   startup using the `dotenv` library.
-
-3. Edit `.env` and set the required variables:
+2. Edit `.env` and set the required variables:
 
    ```text
    GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
@@ -89,6 +77,22 @@ Follow these steps to prepare the local environment:
    are no spaces around the `=` sign in each line. The
    `.env` file must reside in the repository root
    directory.
+
+3. Re-run the setup script:
+
+   ```bash
+   ./bin/setup
+   ```
+
+   This time the script validates that the required
+   environment variables are present. If any required
+   variable is missing, the script exits with an error
+   listing the missing variables. After successful
+   validation, the script offers to encrypt `.env`
+   with [dotenvx](https://dotenvx.com). Accepting
+   creates a `.env.keys` file with the private
+   decryption key. Keep `.env.keys` safe and never
+   commit it.
 
 For detailed environment variable documentation, including
 optional base URL overrides and debug mode, see
@@ -375,10 +379,11 @@ entry describes the symptom and the recommended fix. For
 detailed step-by-step troubleshooting procedures, see
 [references/troubleshooting.md](references/troubleshooting.md).
 
-- **"No .env file found"** -- Copy `.env.example` to
-  `.env` and populate the required variables. Ensure no
-  spaces surround the `=` sign in each entry. Verify the
-  `.env` file is in the repository root directory.
+- **"No .env file found"** -- Run `./bin/setup` to
+  automatically copy `.env.example` to `.env`. Edit
+  `.env` with the required variables and re-run
+  `./bin/setup`. Ensure no spaces surround the `=` sign
+  in each entry.
 - **GitHub API errors** -- Verify the `GITHUB_TOKEN` is
   set in `.env`, has both `repo` and `read:org` scopes,
   and has not expired. Re-generate the token if the
