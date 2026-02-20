@@ -40,6 +40,10 @@ Required: `GITHUB_TOKEN`
 For LLM features: `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`
 Debug mode: `DEBUG=1`
 
+Env files use `@dotenvx/dotenvx` for optional encryption.
+If `.env` is encrypted, `.env.keys` must exist with
+`DOTENV_PRIVATE_KEY` for decryption.
+
 ## TypeScript
 
 - ES modules with `.js` extension in imports (NodeNext resolution)

@@ -22,6 +22,16 @@ Set up your environment variables:
 cp .env{.example,}
 ```
 
+Optionally, encrypt your `.env` file with [dotenvx](https://dotenvx.com):
+
+```bash
+npx dotenvx encrypt
+```
+
+This encrypts secrets in `.env` and creates a `.env.keys`
+file with your private decryption key. Keep `.env.keys`
+safe and never commit it.
+
 Run the setup script to configure your environment:
 
 ```bash

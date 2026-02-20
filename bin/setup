@@ -19,9 +19,22 @@ if [ "$ENV" != "test" ]; then
     exit 1
   fi
 
-  # Source the .env file
-  # shellcheck disable=SC1091
-  source .env
+  # Check if .env is encrypted (contains encrypted: values)
+  if grep -q "encrypted:" .env 2>/dev/null; then
+    echo "==> Detected encrypted .env file…"
+    if [ ! -f ".env.keys" ]; then
+      echo "Error: .env is encrypted but .env.keys not found."
+      echo "Either decrypt with: npx dotenvx decrypt"
+      echo "Or restore your .env.keys file containing DOTENV_PRIVATE_KEY."
+      exit 1
+    fi
+    # Use dotenvx to decrypt and export variables for validation
+    eval "$(npx dotenvx get --format shell 2>/dev/null)"
+  else
+    # Source the plain .env file
+    # shellcheck disable=SC1091
+    source .env
+  fi
 
   # Check required environment variables
   required_vars=(
