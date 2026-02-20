@@ -42,19 +42,46 @@ export async function promptForOverwrite(filePath: string): Promise<boolean> {
   return answer.toLowerCase() === 'y';
 }
 
-export async function writeFileSafely(filename: string, content: string): Promise<{ content: string; didWrite: boolean }> {
+export async function promptForLocalFile(filename: string): Promise<string | null> {
+  const safeFilename = sanitizeFilename(filename);
+  const outputPath = path.join(OUTPUT_DIR, safeFilename);
+
+  if (!await checkFileExists(outputPath)) {
+    return null;
+  }
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  const answer = await new Promise<string>((resolve) => {
+    rl.question(chalk.yellow(`? output/${safeFilename} already exists. Use local file? (Y/n) `), resolve);
+  });
+  rl.close();
+
+  if (answer.toLowerCase() === 'n') {
+    return null;
+  }
+
+  return fs.readFile(outputPath, 'utf-8');
+}
+
+export async function writeFileSafely(filename: string, content: string, options?: { forceOverwrite?: boolean }): Promise<{ content: string; didWrite: boolean }> {
   const safeFilename = sanitizeFilename(filename);
   const outputPath = path.join(OUTPUT_DIR, safeFilename);
 
   await createOutputDirectory();
 
-  const fileExists = await checkFileExists(outputPath);
-  if (fileExists) {
-    const relativePath = path.join(OUTPUT_DIR, safeFilename);
-    const shouldOverwrite = await promptForOverwrite(relativePath);
-    if (!shouldOverwrite) {
-      console.log(chalk.yellow(`! Using existing contents of ${relativePath}`));
-      return { content: await fs.readFile(outputPath, 'utf-8'), didWrite: false };
+  if (!options?.forceOverwrite) {
+    const fileExists = await checkFileExists(outputPath);
+    if (fileExists) {
+      const relativePath = path.join(OUTPUT_DIR, safeFilename);
+      const shouldOverwrite = await promptForOverwrite(relativePath);
+      if (!shouldOverwrite) {
+        console.log(chalk.yellow(`! Using existing contents of ${relativePath}`));
+        return { content: await fs.readFile(outputPath, 'utf-8'), didWrite: false };
+      }
     }
   }
 
