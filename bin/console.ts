@@ -19,7 +19,7 @@ const replServer = repl.start({
 });
 
 // Load environment variables
-import 'dotenv/config';
+import '@dotenvx/dotenvx/config';
 
 // Define the modules that will be available in the REPL context
 const modulesToLoad = {
