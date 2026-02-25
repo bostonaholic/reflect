@@ -1,6 +1,46 @@
-import { buildOrgFilter, buildRepoFilter } from '../../lib/integrations/github/github-utils.js';
+import { buildOrgFilter, buildRepoFilter, deduplicateByUrl, fetchGitHubData } from '../../lib/integrations/github/github-utils.js';
 import * as fc from 'fast-check';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { GitHubPr, GitHubIssue } from '../../lib/core/types.js';
+
+vi.mock('../../lib/integrations/github/github.js', () => ({
+  fetchMergedPRs: vi.fn().mockResolvedValue([]),
+  fetchClosedIssues: vi.fn().mockResolvedValue([]),
+  fetchReviewedPRs: vi.fn().mockResolvedValue([]),
+}));
+
+import { fetchMergedPRs, fetchClosedIssues, fetchReviewedPRs } from '../../lib/integrations/github/github.js';
+
+const mockedFetchMergedPRs = vi.mocked(fetchMergedPRs);
+const mockedFetchClosedIssues = vi.mocked(fetchClosedIssues);
+const mockedFetchReviewedPRs = vi.mocked(fetchReviewedPRs);
+
+function makePr(url: string): GitHubPr {
+  return {
+    type: 'pr',
+    url,
+    title: `PR ${url}`,
+    permalink: null,
+    body: '',
+    closedAt: '2025-01-01',
+    repository: 'test/repo',
+    comments: [],
+    reviews: [],
+  };
+}
+
+function makeIssue(url: string): GitHubIssue {
+  return {
+    type: 'issue',
+    url,
+    title: `Issue ${url}`,
+    permalink: null,
+    body: '',
+    closedAt: '2025-01-01',
+    repository: 'test/repo',
+    comments: [],
+  };
+}
 
 describe('buildOrgFilter', () => {
   it('should return empty string for undefined or empty arrays', () => {
@@ -269,5 +309,156 @@ describe('buildRepoFilter', () => {
       ),
       { numRuns: 100 }
     );
+  });
+});
+
+describe('deduplicateByUrl', () => {
+  it('should remove duplicates based on url', () => {
+    const items = [
+      makePr('https://github.com/org/repo/pull/1'),
+      makePr('https://github.com/org/repo/pull/2'),
+      makePr('https://github.com/org/repo/pull/1'),
+    ];
+    const result = deduplicateByUrl(items);
+    expect(result).toHaveLength(2);
+    expect(result.map(r => r.url)).toEqual([
+      'https://github.com/org/repo/pull/1',
+      'https://github.com/org/repo/pull/2',
+    ]);
+  });
+
+  it('should preserve first occurrence when duplicates exist', () => {
+    const first = makePr('https://github.com/org/repo/pull/1');
+    first.title = 'First';
+    const duplicate = makePr('https://github.com/org/repo/pull/1');
+    duplicate.title = 'Duplicate';
+    const result = deduplicateByUrl([first, duplicate]);
+    expect(result).toHaveLength(1);
+    expect(result[0].title).toBe('First');
+  });
+
+  it('should return empty array for empty input', () => {
+    expect(deduplicateByUrl([])).toEqual([]);
+  });
+
+  it('should return all items when no duplicates', () => {
+    const items = [
+      makePr('https://github.com/org/repo/pull/1'),
+      makePr('https://github.com/org/repo/pull/2'),
+      makePr('https://github.com/org/repo/pull/3'),
+    ];
+    expect(deduplicateByUrl(items)).toHaveLength(3);
+  });
+
+  it('should work with issues', () => {
+    const items = [
+      makeIssue('https://github.com/org/repo/issues/1'),
+      makeIssue('https://github.com/org/repo/issues/1'),
+      makeIssue('https://github.com/org/repo/issues/2'),
+    ];
+    const result = deduplicateByUrl(items);
+    expect(result).toHaveLength(2);
+  });
+});
+
+describe('fetchGitHubData', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockedFetchMergedPRs.mockResolvedValue([]);
+    mockedFetchClosedIssues.mockResolvedValue([]);
+    mockedFetchReviewedPRs.mockResolvedValue([]);
+  });
+
+  it('should call fetch functions once with single org', async () => {
+    await fetchGitHubData('user', '2025-01-01..2025-02-01', ['Shopify']);
+
+    expect(mockedFetchMergedPRs).toHaveBeenCalledTimes(1);
+    expect(mockedFetchMergedPRs).toHaveBeenCalledWith(
+      'user', '2025-01-01..2025-02-01', ['Shopify'], undefined, undefined, undefined
+    );
+    expect(mockedFetchClosedIssues).toHaveBeenCalledTimes(1);
+    expect(mockedFetchReviewedPRs).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call fetch functions once with no filters', async () => {
+    await fetchGitHubData('user', '2025-01-01..2025-02-01');
+
+    expect(mockedFetchMergedPRs).toHaveBeenCalledTimes(1);
+    expect(mockedFetchClosedIssues).toHaveBeenCalledTimes(1);
+    expect(mockedFetchReviewedPRs).toHaveBeenCalledTimes(1);
+  });
+
+  it('should query each org separately with multiple include orgs', async () => {
+    await fetchGitHubData('user', '2025-01-01..2025-02-01', ['Shopify', 'shop']);
+
+    expect(mockedFetchMergedPRs).toHaveBeenCalledTimes(2);
+    expect(mockedFetchMergedPRs).toHaveBeenCalledWith(
+      'user', '2025-01-01..2025-02-01', ['Shopify'], undefined, undefined, undefined, true
+    );
+    expect(mockedFetchMergedPRs).toHaveBeenCalledWith(
+      'user', '2025-01-01..2025-02-01', ['shop'], undefined, undefined, undefined, true
+    );
+    expect(mockedFetchClosedIssues).toHaveBeenCalledTimes(2);
+    expect(mockedFetchReviewedPRs).toHaveBeenCalledTimes(2);
+  });
+
+  it('should deduplicate results by URL across multiple org queries', async () => {
+    const sharedPr = makePr('https://github.com/Shopify/world/pull/1');
+    const uniquePr = makePr('https://github.com/shop/app/pull/2');
+
+    mockedFetchMergedPRs
+      .mockResolvedValueOnce([sharedPr])
+      .mockResolvedValueOnce([sharedPr, uniquePr]);
+
+    const result = await fetchGitHubData('user', '2025-01-01..2025-02-01', ['Shopify', 'shop']);
+
+    expect(result.prs).toHaveLength(2);
+    expect(result.prs.map(p => p.url)).toEqual([sharedPr.url, uniquePr.url]);
+  });
+
+  it('should pass exclude orgs through when iterating include orgs', async () => {
+    await fetchGitHubData('user', '2025-01-01..2025-02-01', ['Shopify', 'shop'], ['private-org']);
+
+    expect(mockedFetchMergedPRs).toHaveBeenCalledWith(
+      'user', '2025-01-01..2025-02-01', ['Shopify'], ['private-org'], undefined, undefined, true
+    );
+    expect(mockedFetchMergedPRs).toHaveBeenCalledWith(
+      'user', '2025-01-01..2025-02-01', ['shop'], ['private-org'], undefined, undefined, true
+    );
+  });
+
+  it('should not iterate when only exclude orgs are provided', async () => {
+    await fetchGitHubData('user', '2025-01-01..2025-02-01', undefined, ['private-org', 'secret-org']);
+
+    expect(mockedFetchMergedPRs).toHaveBeenCalledTimes(1);
+    expect(mockedFetchMergedPRs).toHaveBeenCalledWith(
+      'user', '2025-01-01..2025-02-01', undefined, ['private-org', 'secret-org'], undefined, undefined
+    );
+  });
+
+  it('should query each repo separately with multiple include repos', async () => {
+    await fetchGitHubData('user', '2025-01-01..2025-02-01', undefined, undefined, ['org/repo1', 'org/repo2']);
+
+    expect(mockedFetchMergedPRs).toHaveBeenCalledTimes(2);
+    expect(mockedFetchMergedPRs).toHaveBeenCalledWith(
+      'user', '2025-01-01..2025-02-01', undefined, undefined, ['org/repo1'], undefined, true
+    );
+    expect(mockedFetchMergedPRs).toHaveBeenCalledWith(
+      'user', '2025-01-01..2025-02-01', undefined, undefined, ['org/repo2'], undefined, true
+    );
+  });
+
+  it('should deduplicate issues across multiple repo queries', async () => {
+    const sharedIssue = makeIssue('https://github.com/org/repo1/issues/1');
+    const uniqueIssue = makeIssue('https://github.com/org/repo2/issues/2');
+
+    mockedFetchClosedIssues
+      .mockResolvedValueOnce([sharedIssue])
+      .mockResolvedValueOnce([sharedIssue, uniqueIssue]);
+
+    const result = await fetchGitHubData('user', '2025-01-01..2025-02-01', undefined, undefined, ['org/repo1', 'org/repo2']);
+
+    expect(result.issues).toHaveLength(2);
+    expect(result.issues.map(i => i.url)).toEqual([sharedIssue.url, uniqueIssue.url]);
   });
 });

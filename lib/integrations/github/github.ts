@@ -117,9 +117,10 @@ export async function fetchReviewedPRs(
   includeOrgs?: string[],
   excludeOrgs?: string[],
   includeRepos?: string[],
-  excludeRepos?: string[]
+  excludeRepos?: string[],
+  quiet?: boolean
 ): Promise<GitHubPr[]> {
-  const spinner = ora(chalk.cyan('Fetching reviewed pull requests...')).start();
+  const spinner = ora({ text: chalk.cyan('Fetching reviewed pull requests...'), isSilent: quiet }).start();
   const graphqlClient = getGraphQLClient(spinner);
   try {
     const [startDate, endDate] = dateRange.split('..');
@@ -239,9 +240,10 @@ export async function fetchMergedPRs(
   includeOrgs?: string[],
   excludeOrgs?: string[],
   includeRepos?: string[],
-  excludeRepos?: string[]
+  excludeRepos?: string[],
+  quiet?: boolean
 ): Promise<GitHubPr[]> {
-  const spinner = ora(chalk.cyan('Fetching merged pull requests...')).start();
+  const spinner = ora({ text: chalk.cyan('Fetching merged pull requests...'), isSilent: quiet }).start();
   const graphqlClient = getGraphQLClient(spinner);
 
   try {
@@ -302,9 +304,10 @@ export async function fetchClosedIssues(
   includeOrgs?: string[],
   excludeOrgs?: string[],
   includeRepos?: string[],
-  excludeRepos?: string[]
+  excludeRepos?: string[],
+  quiet?: boolean
 ): Promise<GitHubIssue[]> {
-  const spinner = ora(chalk.cyan('Fetching closed issues...')).start();
+  const spinner = ora({ text: chalk.cyan('Fetching closed issues...'), isSilent: quiet }).start();
   const graphqlClient = getGraphQLClient(spinner);
 
   try {
