@@ -78,7 +78,7 @@ type SearchResultItem = {
 
 interface SearchResult {
   search: {
-    nodes: SearchResultItem[];
+    nodes: (SearchResultItem | null)[];
     pageInfo: {
       hasNextPage: boolean;
       endCursor: string;
@@ -99,7 +99,10 @@ async function fetchAllSearchResults(
     const paginatedQuery: string = query.replace('first: 100', `first: 100${endCursor ? `, after: "${endCursor}"` : ''}`);
     const result: SearchResult = await graphqlClient(paginatedQuery);
 
-    allResults = allResults.concat(result.search.nodes);
+    const validNodes = result.search.nodes.filter(
+      (node): node is SearchResultItem => node != null && 'title' in node
+    );
+    allResults = allResults.concat(validNodes);
     hasNextPage = result.search.pageInfo.hasNextPage;
     endCursor = result.search.pageInfo.endCursor;
 
