@@ -200,6 +200,32 @@ Optional for using a different provider-compatible endpoint:
 - `OPENAI_BASE_URL`
 - `ANTHROPIC_BASE_URL`
 
+## Encrypting & Decrypting `.env` 🔑
+
+This project uses [dotenvx](https://dotenvx.com)
+for optional `.env` encryption.
+
+### Encrypt
+
+```bash
+npx @dotenvx/dotenvx encrypt
+```
+
+This encrypts the values in `.env` in-place and
+creates a `.env.keys` file containing your private
+decryption key. Keep `.env.keys` safe and never
+commit it.
+
+### Decrypt
+
+```bash
+npx @dotenvx/dotenvx decrypt
+```
+
+This decrypts `.env` in-place, replacing encrypted
+values with plaintext. You can then delete
+`.env.keys` if you no longer need encryption.
+
 ## Security Considerations 🔒
 
 - API keys are only accepted through environment variables, not command-line arguments
