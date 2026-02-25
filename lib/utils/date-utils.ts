@@ -18,6 +18,14 @@ export function formatDateForDisplay(date: Date): string {
   });
 }
 
+export function formatMonthYear(date: Date): string {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    timeZone: 'UTC'
+  });
+}
+
 export function isValidDateFormat(dateString: string): boolean {
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
   if (!dateRegex.test(dateString)) {

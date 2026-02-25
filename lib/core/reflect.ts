@@ -1,6 +1,6 @@
 import { calculateDateRange, formatDateRangeForGitHub, parseDate } from "../utils/date-utils.js";
 import { fetchGitHubData } from "../integrations/github/github-utils.js";
-import { generateAndWriteContributions, generateAndWriteReviewContributions, handleBragGeneration } from "../generators/document-utils.js";
+import { generateAndWriteContributions, generateAndWriteReviewContributions, handleBragGeneration, handleStarGeneration } from "../generators/document-utils.js";
 import { promptForLocalFile } from "../utils/file-utils.js";
 import { CliArgs } from "./cli.js";
 import { setDebug } from "../utils/debug-utils.js";
@@ -21,6 +21,7 @@ export async function reflect(args: CliArgs): Promise<void> {
         startDate: startDateArg,
         endDate: endDateArg,
         generateBrag,
+        generateStar,
         debug,
         includeOrgs,
         excludeOrgs,
@@ -88,5 +89,13 @@ export async function reflect(args: CliArgs): Promise<void> {
             throw new Error('LLM API key environment variable is required for brag document generation');
         }
         await handleBragGeneration(contributions, apiKey, startDate, endDate, llmOptions, true);
+    }
+
+    if (generateStar) {
+        const apiKey = getApiKeyFromEnv(llmOptions.provider);
+        if (!apiKey) {
+            throw new Error('LLM API key environment variable is required for STAR document generation');
+        }
+        await handleStarGeneration(contributions, apiKey, startDate, endDate, llmOptions, true);
     }
 } 

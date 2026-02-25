@@ -6,6 +6,7 @@ import { generateContributionsDocument } from "./contributions-generator.js";
 import { generateReviewCommentsDocument } from "./review-comments-generator.js";
 import { generateContributionsSummary } from "./contributions-summarizer.js";
 import { generateBragDocument } from "./brag-generator.js";
+import { generateStarDocument } from "./star-generator.js";
 import { GitHubPr, GitHubIssue } from "../core/types.js";
 
 export async function generateAndWriteContributions(prs: GitHubPr[], issues: GitHubIssue[], forceOverwrite?: boolean): Promise<string> {
@@ -59,4 +60,21 @@ export async function generateAndWriteBrag(summary: string, apiKey: string, star
 export async function handleBragGeneration(contributions: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions, forceOverwrite?: boolean): Promise<string> {
   const summary = await generateAndWriteSummary(contributions, apiKey, llmOptions, forceOverwrite);
   return generateAndWriteBrag(summary, apiKey, startDate, endDate, llmOptions, forceOverwrite);
+}
+
+export async function generateAndWriteStar(summary: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions, forceOverwrite?: boolean): Promise<string> {
+  const spinner = ora(chalk.cyan('Generating STAR document...')).start();
+  let star = await generateStarDocument(summary, apiKey, startDate, endDate, llmOptions);
+  const result = await writeFileSafely("star_document.md", star, { forceOverwrite });
+  if (result.didWrite) {
+    spinner.succeed(chalk.green('STAR document generated: output/star_document.md'));
+  } else {
+    spinner.stop();
+  }
+  return result.content;
+}
+
+export async function handleStarGeneration(contributions: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions, forceOverwrite?: boolean): Promise<string> {
+  const summary = await generateAndWriteSummary(contributions, apiKey, llmOptions, forceOverwrite);
+  return generateAndWriteStar(summary, apiKey, startDate, endDate, llmOptions, forceOverwrite);
 }
