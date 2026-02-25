@@ -3,7 +3,18 @@
 ![Reflect: An AI tool to generate your brag document](assets/github-header-image.png)
 
 > [!IMPORTANT]
-> While this tool helps document your GitHub contributions, it's crucial to remember that your impact and value to a company extends far beyond what's visible in GitHub. Many critical aspects of software engineering - such as mentoring, documentation, cross-team collaboration, and technical leadership - often happen outside of version control. For more on this topic, check out [Glue Work](https://www.noidea.dog/glue), an excellent resource about the often-overlooked but essential work that makes teams successful.
+> While this tool helps document your GitHub
+> contributions, it's crucial to remember that
+> your impact and value to a company extends far
+> beyond what's visible in GitHub. Many critical
+> aspects of software engineering - such as
+> mentoring, documentation, cross-team
+> collaboration, and technical leadership - often
+> happen outside of version control. For more on
+> this topic, check out
+> [Glue Work](https://www.noidea.dog/glue), an
+> excellent resource about the often-overlooked
+> but essential work that makes teams successful.
 
 ## Quickstart 🚀
 
@@ -22,7 +33,15 @@ Run the setup script:
 ./bin/setup
 ```
 
-On first run, this copies `.env.example` to `.env` and asks you to fill in your tokens. Edit `.env`, then re-run `./bin/setup` to validate your environment. After validation, the script offers to encrypt your `.env` with [dotenvx](https://dotenvx.com). If you accept, it creates a `.env.keys` file with your private decryption key. Keep `.env.keys` safe and never commit it.
+On first run, this copies `.env.example` to `.env`
+and asks you to fill in your tokens. Edit `.env`,
+then re-run `./bin/setup` to validate your
+environment. After validation, the script offers
+to encrypt your `.env` with
+[dotenvx](https://dotenvx.com). If you accept, it
+creates a `.env.keys` file with your private
+decryption key. Keep `.env.keys` safe and never
+commit it.
 
 Run the tool:
 
@@ -70,18 +89,33 @@ Example:
 **Date range (one required, mutually exclusive):**
 
 - `--lookback <number>`: Number of months to look back for activity (1-36)
-- `--since <date>`: Start date in YYYY-MM-DD format; fetches activity from this date to today
-- `--start-date <date>` + `--end-date <date>`: Specify an exact date range (both required)
+- `--since <date>`: Start date in YYYY-MM-DD
+  format; fetches activity from this date to today
+- `--start-date <date>` + `--end-date <date>`:
+  Specify an exact date range (both required)
 
 **Optional:**
 
-- `--provider <provider>`: LLM provider to use (e.g., openai, anthropic), defaults to openai
-- `--model <model>`: LLM model to use. For OpenAI (e.g., gpt-4.1, gpt-4.1-mini), defaults to gpt-4.1. For Anthropic (e.g., claude-sonnet-4-6, claude-sonnet-4-5), defaults to claude-sonnet-4-6
+- `--provider <provider>`: LLM provider to use
+  (e.g., openai, anthropic), defaults to openai
+- `--model <model>`: LLM model to use. For OpenAI
+  (e.g., gpt-4.1, gpt-4.1-mini), defaults to
+  gpt-4.1. For Anthropic (e.g.,
+  claude-sonnet-4-6, claude-sonnet-4-5), defaults
+  to claude-sonnet-4-6
 - `--brag`: Optional flag to generate a summary and brag document
-- `--include-orgs <orgs...>`: Only include contributions from these organizations (mutually exclusive with --exclude-orgs)
-- `--exclude-orgs <orgs...>`: Exclude contributions from these organizations (mutually exclusive with --include-orgs)
-- `--include-repos <repos...>`: Only include contributions from these repositories (mutually exclusive with --exclude-repos)
-- `--exclude-repos <repos...>`: Exclude contributions from these repositories (mutually exclusive with --include-repos)
+- `--include-orgs <orgs...>`: Only include
+  contributions from these organizations
+  (mutually exclusive with --exclude-orgs)
+- `--exclude-orgs <orgs...>`: Exclude
+  contributions from these organizations
+  (mutually exclusive with --include-orgs)
+- `--include-repos <repos...>`: Only include
+  contributions from these repositories
+  (mutually exclusive with --exclude-repos)
+- `--exclude-repos <repos...>`: Exclude
+  contributions from these repositories
+  (mutually exclusive with --include-repos)
 
 ### Examples 🚀
 
@@ -106,7 +140,9 @@ Choose a model:
 Choose an LLM provider and model
 
 ```bash
-./reflect --username bostonaholic --lookback 6 --provider anthropic --model claude-sonnet-4-6 --brag
+./reflect --username bostonaholic \
+  --lookback 6 --provider anthropic \
+  --model claude-sonnet-4-6 --brag
 ```
 
 Filter by specific organizations:
@@ -124,13 +160,19 @@ Exclude specific organizations:
 Filter by specific repositories:
 
 ```bash
-./reflect --username bostonaholic --lookback 6 --include-repos bostonaholic/reflect bostonaholic/dotfiles
+./reflect --username bostonaholic \
+  --lookback 6 \
+  --include-repos bostonaholic/reflect \
+  bostonaholic/dotfiles
 ```
 
 Exclude specific repositories:
 
 ```bash
-./reflect --username bostonaholic --lookback 6 --exclude-repos bostonaholic/secret bostonaholic/archived
+./reflect --username bostonaholic \
+  --lookback 6 \
+  --exclude-repos bostonaholic/secret \
+  bostonaholic/archived
 ```
 
 ### Environment Variables 🔐
@@ -141,7 +183,8 @@ Required environment variables:
 
 To create a GitHub Personal Access Token:
 
-1. Go to GitHub Settings > Developer Settings > Personal Access Tokens > Tokens (classic)
+1. Go to GitHub Settings > Developer Settings >
+   Personal Access Tokens > Tokens (classic)
 2. Generate a new token with the following scopes:
    - `repo` (Full control of private repositories)
    - `read:org` (Read organization data)
@@ -202,7 +245,9 @@ Contains:
 - Highlights key metrics and improvements
 - Suitable for performance reviews or portfolio
 
-Note: The `output` directory and all generated files are automatically git-ignored to prevent accidental commits.
+Note: The `output` directory and all generated
+files are automatically git-ignored to prevent
+accidental commits.
 
 ## Troubleshooting 🔍
 
@@ -214,7 +259,8 @@ node --version
 
 If you get GitHub API errors:
 
-- Verify your GitHub Personal Access Token (PAT) is correctly set in your `.env` file
+- Verify your GitHub Personal Access Token (PAT)
+  is correctly set in your `.env` file
 - Check that your PAT has the required scopes (`repo` and `read:org`)
 - Ensure your PAT hasn't expired (they can be set to expire after a certain time)
 - Verify you have access to the repositories you're trying to fetch data from
