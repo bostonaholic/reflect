@@ -1,4 +1,4 @@
-import { isValidGitHubUsername, isValidMonths, isValidRepo, validateDateMode, validateSinceDate, validateDateInputs } from '../../lib/core/cli.js';
+import { isValidGitHubUsername, isValidMonths, isValidRepo, validateDateMode, validateSinceDate, validateDateInputs, getCommandLineArgs } from '../../lib/core/cli.js';
 import * as fc from 'fast-check';
 import { describe, it, expect, vi, beforeEach, afterEach, type MockInstance } from 'vitest';
 
@@ -26,6 +26,37 @@ function mockProcessExit() {
 
   return { getMockExit: () => mockExit };
 }
+
+describe('CLI --roast flag parsing', () => {
+  let originalArgv: string[];
+
+  beforeEach(() => {
+    originalArgv = process.argv;
+  });
+
+  afterEach(() => {
+    process.argv = originalArgv;
+  });
+
+  it('should set generateRoast to true when --roast is present', () => {
+    process.argv = ['node', 'reflect', '--username', 'testuser', '--lookback', '6', '--roast'];
+    const args = getCommandLineArgs();
+    expect(args.generateRoast).toBe(true);
+  });
+
+  it('should set generateRoast to false when --roast is absent', () => {
+    process.argv = ['node', 'reflect', '--username', 'testuser', '--lookback', '6'];
+    const args = getCommandLineArgs();
+    expect(args.generateRoast).toBe(false);
+  });
+
+  it('should allow --roast combined with --brag', () => {
+    process.argv = ['node', 'reflect', '--username', 'testuser', '--lookback', '6', '--roast', '--brag'];
+    const args = getCommandLineArgs();
+    expect(args.generateRoast).toBe(true);
+    expect(args.generateBrag).toBe(true);
+  });
+});
 
 describe('CLI Validation Functions', () => {
   describe('isValidGitHubUsername', () => {

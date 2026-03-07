@@ -34,6 +34,7 @@ export interface CliArgs {
   endDate?: string;
   generateBrag: boolean;
   generateStar: boolean;
+  generateRoast: boolean;
   debug?: boolean;
   includeOrgs?: string[];
   excludeOrgs?: string[];
@@ -239,6 +240,7 @@ export function getCommandLineArgs(): CliArgs {
     .option('--model <model>', 'LLM model to use (defaults to gpt-4.1 for openai, claude-sonnet-4-6 for anthropic)')
     .option('--brag', 'Generate a brag document')
     .option('--star', 'Generate a STAR-format (Situation/Task/Action/Result) document')
+    .option('--roast', 'Generate a roast document')
     .option('--debug', 'Enable debug mode for detailed LLM API information')
     .option('--include-orgs <orgs...>', 'Only include contributions to these organizations')
     .option('--exclude-orgs <orgs...>', 'Exclude contributions to these organizations')
@@ -255,6 +257,7 @@ export function getCommandLineArgs(): CliArgs {
         Examples:
           reflect --username bostonaholic --lookback 6 --brag
           reflect --username bostonaholic --lookback 6 --star
+          reflect --username bostonaholic --lookback 6 --roast
           reflect --username bostonaholic --since 2025-01-01
           reflect --username bostonaholic --start-date 2025-01-01 --end-date 2025-06-30
           reflect --username bostonaholic --lookback 6 --include-orgs "Shopify"
@@ -294,6 +297,7 @@ export function getCommandLineArgs(): CliArgs {
       endDate: options.endDate,
       generateBrag: options.brag || false,
       generateStar: options.star || false,
+      generateRoast: options.roast || false,
       debug: options.debug,
       includeOrgs: options.includeOrgs,
       excludeOrgs: options.excludeOrgs,

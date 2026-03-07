@@ -7,6 +7,7 @@ import { generateReviewCommentsDocument } from "./review-comments-generator.js";
 import { generateContributionsSummary } from "./contributions-summarizer.js";
 import { generateBragDocument } from "./brag-generator.js";
 import { generateStarDocument } from "./star-generator.js";
+import { generateRoastDocument } from "./roast-generator.js";
 import { GitHubPr, GitHubIssue } from "../core/types.js";
 
 export async function generateAndWriteContributions(prs: GitHubPr[], issues: GitHubIssue[], forceOverwrite?: boolean): Promise<string> {
@@ -77,4 +78,21 @@ export async function generateAndWriteStar(summary: string, apiKey: string, star
 export async function handleStarGeneration(contributions: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions, forceOverwrite?: boolean): Promise<string> {
   const summary = await generateAndWriteSummary(contributions, apiKey, llmOptions, forceOverwrite);
   return generateAndWriteStar(summary, apiKey, startDate, endDate, llmOptions, forceOverwrite);
+}
+
+export async function generateAndWriteRoast(summary: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions, forceOverwrite?: boolean): Promise<string> {
+  const spinner = ora(chalk.cyan('Generating roast document...')).start();
+  let roast = await generateRoastDocument(summary, apiKey, startDate, endDate, llmOptions);
+  const result = await writeFileSafely("roast_document.md", roast, { forceOverwrite });
+  if (result.didWrite) {
+    spinner.succeed(chalk.green('Roast document generated: output/roast_document.md'));
+  } else {
+    spinner.stop();
+  }
+  return result.content;
+}
+
+export async function handleRoastGeneration(contributions: string, apiKey: string, startDate: Date, endDate: Date, llmOptions: LlmOptions, forceOverwrite?: boolean): Promise<string> {
+  const summary = await generateAndWriteSummary(contributions, apiKey, llmOptions, forceOverwrite);
+  return generateAndWriteRoast(summary, apiKey, startDate, endDate, llmOptions, forceOverwrite);
 }
