@@ -104,6 +104,7 @@ Example:
   claude-sonnet-4-6, claude-sonnet-4-5), defaults
   to claude-sonnet-4-6
 - `--brag`: Optional flag to generate a summary and brag document
+- `--roast`: Optional flag to generate a humorous roast document
 - `--include-orgs <orgs...>`: Only include
   contributions from these organizations
   (mutually exclusive with --exclude-orgs)
@@ -164,6 +165,12 @@ Filter by specific repositories:
   --lookback 6 \
   --include-repos bostonaholic/reflect \
   bostonaholic/dotfiles
+```
+
+Generate a roast document:
+
+```bash
+./reflect --username bostonaholic --lookback 6 --roast
 ```
 
 Exclude specific repositories:
@@ -270,6 +277,15 @@ Contains:
 - Emphasizes collaboration and leadership
 - Highlights key metrics and improvements
 - Suitable for performance reviews or portfolio
+
+### output/roast_document.md (with --roast flag) 🔥
+
+Contains:
+
+- A humorous roast of your contributions
+- Playfully pokes fun at coding habits and PR patterns
+- Comedy roast tone — witty and self-deprecating, not mean
+- Based on your actual GitHub activity
 
 Note: The `output` directory and all generated
 files are automatically git-ignored to prevent
