@@ -39,6 +39,11 @@ export interface CliArgs {
   llmOptions: LlmOptions;
 }
 
+function exitWithError(message: string): never {
+  console.error(chalk.red(`✖ Error: ${message}`));
+  process.exit(1);
+}
+
 const GITHUB_USERNAME_REGEX = /^[a-zA-Z0-9_-]+$/;
 
 function isValidGitHubUsername(username: string): boolean {
@@ -53,22 +58,19 @@ export { isValidGitHubUsername, isValidMonths };
 
 function validateUsername(username: string): void {
   if (!isValidGitHubUsername(username)) {
-    console.error(chalk.red('✖ Error: Invalid GitHub username format'));
-    process.exit(1);
+    exitWithError('Invalid GitHub username format');
   }
 }
 
 function validateMonths(months: number): void {
   if (!isValidMonths(months)) {
-    console.error(chalk.red('✖ Error: Months must be a positive number and not exceed 36'));
-    process.exit(1);
+    exitWithError('Months must be a positive number and not exceed 36');
   }
 }
 
 function validateOrgFilters(includeOrgs?: string[], excludeOrgs?: string[]): void {
   if (includeOrgs?.length && excludeOrgs?.length) {
-    console.error(chalk.red('✖ Error: Cannot use both --include-orgs and --exclude-orgs simultaneously'));
-    process.exit(1);
+    exitWithError('Cannot use both --include-orgs and --exclude-orgs simultaneously');
   }
 
   const invalidOrgs = new Set<string>();
@@ -90,8 +92,7 @@ function validateOrgFilters(includeOrgs?: string[], excludeOrgs?: string[]): voi
   }
 
   if (invalidOrgs.size > 0) {
-    console.error(chalk.red(`✖ Error: Invalid organization names: ${Array.from(invalidOrgs).join(', ')}`));
-    process.exit(1);
+    exitWithError(`Invalid organization names: ${Array.from(invalidOrgs).join(', ')}`);
   }
 }
 const REPO_NAME_REGEX = /^[a-zA-Z0-9_.-]+$/;
@@ -107,8 +108,7 @@ export function isValidRepo(repo: string): boolean {
 
 function validateRepoFilters(includeRepos?: string[], excludeRepos?: string[]): void {
   if (includeRepos?.length && excludeRepos?.length) {
-    console.error(chalk.red('✖ Error: Cannot use both --include-repos and --exclude-repos simultaneously'));
-    process.exit(1);
+    exitWithError('Cannot use both --include-repos and --exclude-repos simultaneously');
   }
 
   const invalidRepos = new Set<string>();
@@ -130,16 +130,13 @@ function validateRepoFilters(includeRepos?: string[], excludeRepos?: string[]): 
   }
 
   if (invalidRepos.size > 0) {
-    console.error(chalk.red(`✖ Error: Invalid repository names: ${Array.from(invalidRepos).join(', ')}`));
-    process.exit(1);
+    exitWithError(`Invalid repository names: ${Array.from(invalidRepos).join(', ')}`);
   }
 }
 
 function validateProvider(provider: LlmProvider): void {
   if (!VALID_PROVIDERS.includes(provider)) {
-    console.error(chalk.red(`✖ Error: Invalid provider ${provider}`))
-    console.log(chalk.cyan(`! Valid providers are: ${VALID_PROVIDERS.join(', ')}`));
-    process.exit(1);
+    exitWithError(`Invalid provider ${provider}. Valid providers are: ${VALID_PROVIDERS.join(', ')}`);
   }
 }
 
@@ -152,18 +149,15 @@ export function validateDateMode(lookback?: number, since?: string, startDate?: 
   const modeCount = [hasLookback, hasSince, hasStartDate || hasEndDate].filter(Boolean).length;
 
   if (modeCount > 1) {
-    console.error(chalk.red('✖ Error: Cannot combine --lookback, --since, and --start-date/--end-date'));
-    process.exit(1);
+    exitWithError('Cannot combine --lookback, --since, and --start-date/--end-date');
   }
 
   if ((hasStartDate && !hasEndDate) || (!hasStartDate && hasEndDate)) {
-    console.error(chalk.red('✖ Error: Both --start-date and --end-date are required when using date range'));
-    process.exit(1);
+    exitWithError('Both --start-date and --end-date are required when using date range');
   }
 
   if (!hasLookback && !hasSince && !hasStartDate && !hasEndDate) {
-    console.error(chalk.red('✖ Error: Must specify either --lookback, --since, or both --start-date and --end-date'));
-    process.exit(1);
+    exitWithError('Must specify either --lookback, --since, or both --start-date and --end-date');
   }
 }
 
@@ -171,46 +165,39 @@ const MAX_DATE_RANGE_MONTHS = 36;
 
 export function validateSinceDate(since: string): void {
   if (!isValidDateFormat(since)) {
-    console.error(chalk.red('✖ Error: Invalid since date format. Use YYYY-MM-DD'));
-    process.exit(1);
+    exitWithError('Invalid since date format. Use YYYY-MM-DD');
   }
 
   const parsedSince = parseDate(since);
   const now = new Date();
 
   if (!isStartBeforeEnd(parsedSince, now)) {
-    console.error(chalk.red('✖ Error: Since date must be in the past'));
-    process.exit(1);
+    exitWithError('Since date must be in the past');
   }
 
   if (!isDateRangeWithinLimit(parsedSince, now, MAX_DATE_RANGE_MONTHS)) {
-    console.error(chalk.red(`✖ Error: Since date cannot be more than ${MAX_DATE_RANGE_MONTHS} months ago`));
-    process.exit(1);
+    exitWithError(`Since date cannot be more than ${MAX_DATE_RANGE_MONTHS} months ago`);
   }
 }
 
 export function validateDateInputs(startDate: string, endDate: string): void {
   if (!isValidDateFormat(startDate)) {
-    console.error(chalk.red('✖ Error: Invalid start date format. Use YYYY-MM-DD'));
-    process.exit(1);
+    exitWithError('Invalid start date format. Use YYYY-MM-DD');
   }
 
   if (!isValidDateFormat(endDate)) {
-    console.error(chalk.red('✖ Error: Invalid end date format. Use YYYY-MM-DD'));
-    process.exit(1);
+    exitWithError('Invalid end date format. Use YYYY-MM-DD');
   }
 
   const parsedStart = parseDate(startDate);
   const parsedEnd = parseDate(endDate);
 
   if (!isStartBeforeEnd(parsedStart, parsedEnd)) {
-    console.error(chalk.red('✖ Error: Start date must be before or equal to end date'));
-    process.exit(1);
+    exitWithError('Start date must be before or equal to end date');
   }
 
   if (!isDateRangeWithinLimit(parsedStart, parsedEnd, MAX_DATE_RANGE_MONTHS)) {
-    console.error(chalk.red(`✖ Error: Date range cannot exceed ${MAX_DATE_RANGE_MONTHS} months`));
-    process.exit(1);
+    exitWithError(`Date range cannot exceed ${MAX_DATE_RANGE_MONTHS} months`);
   }
 }
 
