@@ -2,7 +2,6 @@ import { config } from '@dotenvx/dotenvx';
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { LlmOptions, LlmProvider } from './types.js';
-import ora from 'ora';
 import { VALID_PROVIDERS } from '../integrations/llm/llm.js';
 import {
   isValidDateFormat,
@@ -16,12 +15,9 @@ let envLoaded = false;
 function loadEnv() {
   if (envLoaded) return;
 
-  const spinner = ora('Loading environment variables...').start();
   const configResult = config();
   if (configResult.error) {
-    spinner.warn(chalk.yellow('No .env file found, proceeding without it'));
-  } else {
-    spinner.succeed(chalk.green('Loaded environment variables from .env file'));
+    console.warn(chalk.yellow('! No .env file found, proceeding without it'));
   }
   envLoaded = true;
 }
