@@ -68,33 +68,24 @@ function validateMonths(months: number): void {
   }
 }
 
-function validateOrgFilters(includeOrgs?: string[], excludeOrgs?: string[]): void {
-  if (includeOrgs?.length && excludeOrgs?.length) {
-    exitWithError('Cannot use both --include-orgs and --exclude-orgs simultaneously');
+function validateFilters(
+  includeItems: string[] | undefined,
+  excludeItems: string[] | undefined,
+  validator: (item: string) => boolean,
+  filterName: string
+): void {
+  if (includeItems?.length && excludeItems?.length) {
+    exitWithError(`Cannot use both --include-${filterName} and --exclude-${filterName} simultaneously`);
   }
 
-  const invalidOrgs = new Set<string>();
+  const allItems = [...(includeItems ?? []), ...(excludeItems ?? [])];
+  const invalid = allItems.filter(item => !validator(item));
 
-  if (includeOrgs?.length) {
-    for (const org of includeOrgs) {
-      if (!isValidGitHubUsername(org)) {
-        invalidOrgs.add(org);
-      }
-    }
-  }
-
-  if (excludeOrgs?.length) {
-    for (const org of excludeOrgs) {
-      if (!isValidGitHubUsername(org)) {
-        invalidOrgs.add(org);
-      }
-    }
-  }
-
-  if (invalidOrgs.size > 0) {
-    exitWithError(`Invalid organization names: ${Array.from(invalidOrgs).join(', ')}`);
+  if (invalid.length > 0) {
+    exitWithError(`Invalid ${filterName}: ${invalid.join(', ')}`);
   }
 }
+
 const REPO_NAME_REGEX = /^[a-zA-Z0-9_.-]+$/;
 
 export function isValidRepo(repo: string): boolean {
@@ -104,34 +95,6 @@ export function isValidRepo(repo: string): boolean {
   }
   const [owner, name] = parts;
   return GITHUB_USERNAME_REGEX.test(owner) && REPO_NAME_REGEX.test(name);
-}
-
-function validateRepoFilters(includeRepos?: string[], excludeRepos?: string[]): void {
-  if (includeRepos?.length && excludeRepos?.length) {
-    exitWithError('Cannot use both --include-repos and --exclude-repos simultaneously');
-  }
-
-  const invalidRepos = new Set<string>();
-
-  if (includeRepos?.length) {
-    for (const repo of includeRepos) {
-      if (!isValidRepo(repo)) {
-        invalidRepos.add(repo);
-      }
-    }
-  }
-
-  if (excludeRepos?.length) {
-    for (const repo of excludeRepos) {
-      if (!isValidRepo(repo)) {
-        invalidRepos.add(repo);
-      }
-    }
-  }
-
-  if (invalidRepos.size > 0) {
-    exitWithError(`Invalid repository names: ${Array.from(invalidRepos).join(', ')}`);
-  }
 }
 
 function validateProvider(provider: LlmProvider): void {
@@ -268,8 +231,8 @@ export function getCommandLineArgs(): CliArgs {
     if (options.startDate && options.endDate) {
       validateDateInputs(options.startDate, options.endDate);
     }
-    validateOrgFilters(options.includeOrgs, options.excludeOrgs);
-    validateRepoFilters(options.includeRepos, options.excludeRepos);
+    validateFilters(options.includeOrgs, options.excludeOrgs, isValidGitHubUsername, 'orgs');
+    validateFilters(options.includeRepos, options.excludeRepos, isValidRepo, 'repos');
     validateProvider(options.provider);
 
     return {
