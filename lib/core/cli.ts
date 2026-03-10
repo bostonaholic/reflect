@@ -126,42 +126,31 @@ export function validateDateMode(lookback?: number, since?: string, startDate?: 
 
 const MAX_DATE_RANGE_MONTHS = 36;
 
-export function validateSinceDate(since: string): void {
-  if (!isValidDateFormat(since)) {
-    exitWithError('Invalid since date format. Use YYYY-MM-DD');
+function validateDateFormat(date: string, label: string): Date {
+  if (!isValidDateFormat(date)) {
+    exitWithError(`Invalid ${label} format. Use YYYY-MM-DD`);
   }
+  return parseDate(date);
+}
 
-  const parsedSince = parseDate(since);
-  const now = new Date();
-
-  if (!isStartBeforeEnd(parsedSince, now)) {
-    exitWithError('Since date must be in the past');
+function validateDateRange(start: Date, end: Date, startLabel: string, endLabel: string): void {
+  if (!isStartBeforeEnd(start, end)) {
+    exitWithError(`${startLabel} must be before or equal to ${endLabel}`);
   }
-
-  if (!isDateRangeWithinLimit(parsedSince, now, MAX_DATE_RANGE_MONTHS)) {
-    exitWithError(`Since date cannot be more than ${MAX_DATE_RANGE_MONTHS} months ago`);
+  if (!isDateRangeWithinLimit(start, end, MAX_DATE_RANGE_MONTHS)) {
+    exitWithError(`Date range cannot exceed ${MAX_DATE_RANGE_MONTHS} months`);
   }
 }
 
+export function validateSinceDate(since: string): void {
+  const parsedSince = validateDateFormat(since, 'since date');
+  validateDateRange(parsedSince, new Date(), 'Since date', 'today');
+}
+
 export function validateDateInputs(startDate: string, endDate: string): void {
-  if (!isValidDateFormat(startDate)) {
-    exitWithError('Invalid start date format. Use YYYY-MM-DD');
-  }
-
-  if (!isValidDateFormat(endDate)) {
-    exitWithError('Invalid end date format. Use YYYY-MM-DD');
-  }
-
-  const parsedStart = parseDate(startDate);
-  const parsedEnd = parseDate(endDate);
-
-  if (!isStartBeforeEnd(parsedStart, parsedEnd)) {
-    exitWithError('Start date must be before or equal to end date');
-  }
-
-  if (!isDateRangeWithinLimit(parsedStart, parsedEnd, MAX_DATE_RANGE_MONTHS)) {
-    exitWithError(`Date range cannot exceed ${MAX_DATE_RANGE_MONTHS} months`);
-  }
+  const parsedStart = validateDateFormat(startDate, 'start date');
+  const parsedEnd = validateDateFormat(endDate, 'end date');
+  validateDateRange(parsedStart, parsedEnd, 'Start date', 'end date');
 }
 
 function warnDebugDeprecation(): void {
