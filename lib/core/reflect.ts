@@ -84,27 +84,22 @@ export async function reflect(args: CliArgs): Promise<void> {
         contributions = await generateAndWriteContributions(prs, issues, true);
     }
 
-    if (generateBrag) {
-        const apiKey = getApiKeyFromEnv(llmOptions.provider);
-        if (!apiKey) {
-            throw new Error('LLM API key environment variable is required for brag document generation');
-        }
-        await handleBragGeneration(contributions, apiKey, startDate, endDate, llmOptions, true);
-    }
+    const needsLlm = generateBrag || generateStar || generateRoast;
 
-    if (generateStar) {
+    if (needsLlm) {
         const apiKey = getApiKeyFromEnv(llmOptions.provider);
         if (!apiKey) {
-            throw new Error('LLM API key environment variable is required for STAR document generation');
+            throw new Error('LLM API key environment variable is required for document generation');
         }
-        await handleStarGeneration(contributions, apiKey, startDate, endDate, llmOptions, true);
-    }
 
-    if (generateRoast) {
-        const apiKey = getApiKeyFromEnv(llmOptions.provider);
-        if (!apiKey) {
-            throw new Error('LLM API key environment variable is required for roast document generation');
+        if (generateBrag) {
+            await handleBragGeneration(contributions, apiKey, startDate, endDate, llmOptions, true);
         }
-        await handleRoastGeneration(contributions, apiKey, startDate, endDate, llmOptions, true);
+        if (generateStar) {
+            await handleStarGeneration(contributions, apiKey, startDate, endDate, llmOptions, true);
+        }
+        if (generateRoast) {
+            await handleRoastGeneration(contributions, apiKey, startDate, endDate, llmOptions, true);
+        }
     }
 } 
