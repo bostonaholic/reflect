@@ -11,7 +11,13 @@ export async function callAnthropic(systemMessage: string, userMessage: string, 
 
   const message = await anthropic.messages.create({
     model: llmOptions.model || 'claude-sonnet-4-6',
-    system: systemMessage,
+    system: [
+      {
+        type: 'text' as const,
+        text: systemMessage,
+        cache_control: { type: 'ephemeral' as const },
+      },
+    ],
     messages: [
       {
         role: 'user',
@@ -29,6 +35,8 @@ export async function callAnthropic(systemMessage: string, userMessage: string, 
     console.log(chalk.yellow('[DEBUG] Total Tokens:'), chalk.white(message.usage?.input_tokens + message.usage?.output_tokens));
     console.log(chalk.yellow('[DEBUG] Model:'), chalk.white(message.model));
     console.log(chalk.yellow('[DEBUG] Finish Reason:'), chalk.white(message.stop_reason));
+    console.log(chalk.yellow('[DEBUG] Cache Creation Tokens:'), chalk.white(message.usage?.cache_creation_input_tokens));
+    console.log(chalk.yellow('[DEBUG] Cache Read Tokens:'), chalk.white(message.usage?.cache_read_input_tokens));
   }
 
   return message.content[0].type === 'text' ? message.content[0].text : 'Empty response from Anthropic';
