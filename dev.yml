@@ -1,0 +1,23 @@
+name: reflect
+
+up:
+  - node
+  - npm
+  - custom:
+      name: "setup environment"
+      met?: "test -f .env"
+      meet: "bin/setup"
+
+test:
+  run: "bin/test"
+  subcommands:
+    watch: "bin/test --watch"
+    coverage: "bin/test --coverage"
+
+check:
+  typecheck: "npm run typecheck"
+
+console: "npm run console"
+
+open:
+  ci: "https://github.com/bostonaholic/reflect/actions"
