@@ -9,11 +9,12 @@ Reflect is a CLI tool that fetches GitHub activity (merged PRs, closed issues, P
 ## Development Commands
 
 ```bash
-./bin/setup              # First-time setup (installs deps, checks .env)
-./bin/test               # Run all tests
-./bin/test --watch       # Run tests in watch mode
-./bin/test <path>        # Run single test: ./bin/test __tests__/unit/cli.test.ts
-npm run typecheck           # TypeScript type checking
+dev up                   # First-time setup (installs node, npm deps, checks .env)
+dev test                 # Run all tests
+dev test watch           # Run tests in watch mode
+dev test coverage        # Run tests with coverage
+dev check typecheck      # TypeScript type checking
+dev console              # Interactive REPL
 ./reflect --username <user> --lookback <months> --brag  # Run the tool
 ```
 

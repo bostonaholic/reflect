@@ -7,8 +7,6 @@ fi
 
 cd "$(dirname "$0")/.."
 
-bin/bootstrap
-
 echo "==> Setting up environment variables…"
 
 # Skip environment setup in test environment

@@ -5,7 +5,4 @@ if [ "${DEBUG:-}" = "1" ]; then
   set -x
 fi
 
-# ensure everything in the app is up to date.
-bin/update
-
-npx tsx index.ts "$@" 
+npx tsx index.ts "$@"

@@ -9,15 +9,15 @@ up:
       meet: "bin/setup"
 
 test:
-  run: "bin/test"
+  run: "npm run test"
   subcommands:
-    watch: "bin/test --watch"
-    coverage: "bin/test --coverage"
+    watch: "npm run test:watch"
+    coverage: "npm run test:coverage"
 
 check:
   typecheck: "npm run typecheck"
 
-console: "npm run console"
+console: "npx tsx bin/console.ts"
 
 open:
   ci: "https://github.com/bostonaholic/reflect/actions"
