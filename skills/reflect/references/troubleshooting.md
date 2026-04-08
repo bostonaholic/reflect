@@ -21,7 +21,7 @@ API calls and calls `process.exit(1)` when it is absent.
 
 **Fix:**
 
-1. Run `./bin/setup` to copy `.env.example` to `.env`
+1. Run `dev up` to copy `.env.example` to `.env`
    if it does not already exist.
 2. Edit `.env` and add the token value:
 
@@ -30,8 +30,7 @@ API calls and calls `process.exit(1)` when it is absent.
    ```
 
 3. Ensure there are no spaces around the `=` sign.
-4. Re-run `./bin/setup` to validate, then run the
-   command.
+4. Re-run the command.
 
 ### Expired or Invalid Token
 

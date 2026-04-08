@@ -53,16 +53,14 @@ for the first time:
 
 Follow these steps to prepare the local environment:
 
-1. Run the setup script from the repository root:
+1. Run the dev setup from the repository root:
 
    ```bash
-   ./bin/setup
+   dev up
    ```
 
-   On first run, the setup script installs all npm
-   dependencies via the bootstrap process, then copies
-   `.env.example` to `.env` and exits with a message
-   asking the user to fill in their tokens.
+   This installs Node.js, npm dependencies, and copies
+   `.env.example` to `.env` if it doesn't already exist.
 
 2. Edit `.env` and set the required variables:
 
@@ -77,22 +75,6 @@ Follow these steps to prepare the local environment:
    are no spaces around the `=` sign in each line. The
    `.env` file must reside in the repository root
    directory.
-
-3. Re-run the setup script:
-
-   ```bash
-   ./bin/setup
-   ```
-
-   This time the script validates that the required
-   environment variables are present. If any required
-   variable is missing, the script exits with an error
-   listing the missing variables. After successful
-   validation, the script offers to encrypt `.env`
-   with [dotenvx](https://dotenvx.com). Accepting
-   creates a `.env.keys` file with the private
-   decryption key. Keep `.env.keys` safe and never
-   commit it.
 
 For detailed environment variable documentation, including
 optional base URL overrides and debug mode, see
@@ -379,11 +361,10 @@ entry describes the symptom and the recommended fix. For
 detailed step-by-step troubleshooting procedures, see
 [references/troubleshooting.md](references/troubleshooting.md).
 
-- **"No .env file found"** -- Run `./bin/setup` to
+- **"No .env file found"** -- Run `dev up` to
   automatically copy `.env.example` to `.env`. Edit
-  `.env` with the required variables and re-run
-  `./bin/setup`. Ensure no spaces surround the `=` sign
-  in each entry.
+  `.env` with the required variables. Ensure no spaces
+  surround the `=` sign in each entry.
 - **GitHub API errors** -- Verify the `GITHUB_TOKEN` is
   set in `.env`, has both `repo` and `read:org` scopes,
   and has not expired. Re-generate the token if the

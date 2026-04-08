@@ -6,7 +6,7 @@ up:
   - custom:
       name: "setup environment"
       met?: "test -f .env"
-      meet: "bin/setup"
+      meet: "cp .env.example .env"
 
 test:
   run: "npm run test"

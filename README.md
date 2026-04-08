@@ -33,15 +33,9 @@ Set up the development environment:
 dev up
 ```
 
-This installs Node.js, npm dependencies, and runs
-`bin/setup` which copies `.env.example` to `.env`
-and asks you to fill in your tokens. Edit `.env`,
-then re-run `dev up` to validate your environment.
-After validation, the setup script offers to encrypt
-your `.env` with [dotenvx](https://dotenvx.com). If
-you accept, it creates a `.env.keys` file with your
-private decryption key. Keep `.env.keys` safe and
-never commit it.
+This installs Node.js, npm dependencies, and copies
+`.env.example` to `.env` if it doesn't exist. Edit
+`.env` with your tokens.
 
 Run the tool:
 
