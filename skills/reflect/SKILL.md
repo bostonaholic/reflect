@@ -156,10 +156,10 @@ exactly one:
   with an error if it is not recognized.
 - **`--model <model>`** --
   LLM model to use for text generation. Defaults to
-  `gpt-4.1` when the provider is `openai` and to
+  `gpt-5.5` when the provider is `openai` and to
   `claude-opus-4-7` when the provider is `anthropic`.
   Override this to use a different model from the
-  chosen provider, such as `gpt-4.1-mini` for OpenAI
+  chosen provider, such as `gpt-5.5-mini` for OpenAI
   or `claude-sonnet-4-6` for Anthropic.
 - **`--debug`** --
   Enable debug mode for detailed LLM API information.
@@ -224,7 +224,7 @@ reports):
 ```
 
 Generate a full brag document with the default OpenAI
-provider and default model (`gpt-4.1`):
+provider and default model (`gpt-5.5`):
 
 ```bash
 ./reflect --username bostonaholic --lookback 6 --brag

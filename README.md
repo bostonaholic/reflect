@@ -93,8 +93,8 @@ Example:
 - `--provider <provider>`: LLM provider to use
   (e.g., openai, anthropic), defaults to openai
 - `--model <model>`: LLM model to use. For OpenAI
-  (e.g., gpt-4.1, gpt-4.1-mini), defaults to
-  gpt-4.1. For Anthropic (e.g.,
+  (e.g., gpt-5.5, gpt-5.5-mini), defaults to
+  gpt-5.5. For Anthropic (e.g.,
   claude-opus-4-7, claude-sonnet-4-6), defaults
   to claude-opus-4-7
 - `--brag`: Optional flag to generate a summary and brag document

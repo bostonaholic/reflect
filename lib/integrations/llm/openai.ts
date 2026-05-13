@@ -10,8 +10,7 @@ export async function callOpenAI(systemMessage: string, userMessage: string, api
   });
 
   const response = await openai.responses.create({
-    model: llmOptions.model || 'gpt-4.1',
-    temperature: 0.7,
+    model: llmOptions.model || 'gpt-5.5',
     instructions: systemMessage,
     input: userMessage,
   });

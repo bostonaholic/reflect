@@ -113,14 +113,14 @@ flag.
 ### OpenAI
 
 - **Provider flag value:** `openai`
-- **Default model:** `gpt-4.1`
+- **Default model:** `gpt-5.5`
 - **Required environment variable:** `OPENAI_API_KEY`
 - **Optional environment variable:**
   `OPENAI_BASE_URL`
 
 OpenAI is the default provider. When `--provider` is
 omitted, Reflect uses OpenAI. The default model is
-`gpt-4.1`, which balances quality and cost for
+`gpt-5.5`, which balances quality and cost for
 document generation tasks.
 
 ### Anthropic
@@ -143,7 +143,7 @@ the `--model` flag:
 
 ```bash
 ./reflect --username bostonaholic --lookback 6 \
-  --provider openai --model gpt-4.1-mini --brag
+  --provider openai --model gpt-5.5-mini --brag
 ```
 
 ```bash
