@@ -172,7 +172,7 @@ export function getCommandLineArgs(): CliArgs {
     .option('--start-date <date>', 'Start date (YYYY-MM-DD)')
     .option('--end-date <date>', 'End date (YYYY-MM-DD)')
     .option('--provider <provider>', 'LLM provider to use (e.g., openai, anthropic)', 'openai')
-    .option('--model <model>', 'LLM model to use (defaults to gpt-4.1 for openai, claude-sonnet-4-6 for anthropic)')
+    .option('--model <model>', 'LLM model to use (defaults to gpt-4.1 for openai, claude-opus-4-7 for anthropic)')
     .option('--brag', 'Generate a brag document')
     .option('--star', 'Generate a STAR-format (Situation/Task/Action/Result) document')
     .option('--roast', 'Generate a roast document')

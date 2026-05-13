@@ -15,7 +15,7 @@ vi.mock('@anthropic-ai/sdk', () => {
 function buildMockResponse(overrides: Record<string, unknown> = {}) {
   return {
     content: [{ type: 'text', text: 'Test response' }],
-    model: 'claude-sonnet-4-6',
+    model: 'claude-opus-4-7',
     stop_reason: 'end_turn',
     usage: {
       input_tokens: 10,
@@ -27,7 +27,7 @@ function buildMockResponse(overrides: Record<string, unknown> = {}) {
   };
 }
 
-const llmOptions = { provider: 'anthropic' as const, model: 'claude-sonnet-4-6' };
+const llmOptions = { provider: 'anthropic' as const, model: 'claude-opus-4-7' };
 
 describe('callAnthropic', () => {
   let consoleSpy: MockInstance;

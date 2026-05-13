@@ -126,7 +126,7 @@ document generation tasks.
 ### Anthropic
 
 - **Provider flag value:** `anthropic`
-- **Default model:** `claude-sonnet-4-6`
+- **Default model:** `claude-opus-4-7`
 - **Required environment variable:**
   `ANTHROPIC_API_KEY`
 - **Optional environment variable:**
@@ -134,7 +134,7 @@ document generation tasks.
 
 Select the Anthropic provider by passing
 `--provider anthropic`. The default model is
-`claude-sonnet-4-6`.
+`claude-opus-4-7`.
 
 ### Custom Model Selection
 
@@ -148,7 +148,7 @@ the `--model` flag:
 
 ```bash
 ./reflect --username bostonaholic --lookback 6 \
-  --provider anthropic --model claude-sonnet-4-5 \
+  --provider anthropic --model claude-sonnet-4-6 \
   --brag
 ```
 

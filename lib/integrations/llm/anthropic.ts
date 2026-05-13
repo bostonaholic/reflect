@@ -10,7 +10,7 @@ export async function callAnthropic(systemMessage: string, userMessage: string, 
   });
 
   const message = await anthropic.messages.create({
-    model: llmOptions.model || 'claude-sonnet-4-6',
+    model: llmOptions.model || 'claude-opus-4-7',
     system: [
       {
         type: 'text' as const,

@@ -157,10 +157,10 @@ exactly one:
 - **`--model <model>`** --
   LLM model to use for text generation. Defaults to
   `gpt-4.1` when the provider is `openai` and to
-  `claude-sonnet-4-6` when the provider is `anthropic`.
+  `claude-opus-4-7` when the provider is `anthropic`.
   Override this to use a different model from the
   chosen provider, such as `gpt-4.1-mini` for OpenAI
-  or `claude-sonnet-4-5` for Anthropic.
+  or `claude-sonnet-4-6` for Anthropic.
 - **`--debug`** --
   Enable debug mode for detailed LLM API information.
   When present, Reflect logs additional diagnostic
@@ -241,7 +241,7 @@ Use the Anthropic provider with a specific model:
 
 ```bash
 ./reflect --username bostonaholic --lookback 6 \
-  --provider anthropic --model claude-sonnet-4-6 \
+  --provider anthropic --model claude-opus-4-7 \
   --brag
 ```
 

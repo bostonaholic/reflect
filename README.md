@@ -95,8 +95,8 @@ Example:
 - `--model <model>`: LLM model to use. For OpenAI
   (e.g., gpt-4.1, gpt-4.1-mini), defaults to
   gpt-4.1. For Anthropic (e.g.,
-  claude-sonnet-4-6, claude-sonnet-4-5), defaults
-  to claude-sonnet-4-6
+  claude-opus-4-7, claude-sonnet-4-6), defaults
+  to claude-opus-4-7
 - `--brag`: Optional flag to generate a summary and brag document
 - `--roast`: Optional flag to generate a humorous roast document
 - `--include-orgs <orgs...>`: Only include
@@ -137,7 +137,7 @@ Choose an LLM provider and model
 ```bash
 ./reflect --username bostonaholic \
   --lookback 6 --provider anthropic \
-  --model claude-sonnet-4-6 --brag
+  --model claude-opus-4-7 --brag
 ```
 
 Filter by specific organizations:
