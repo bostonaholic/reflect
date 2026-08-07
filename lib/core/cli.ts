@@ -1,3 +1,4 @@
+import { createRequire } from 'node:module';
 import { config } from '@dotenvx/dotenvx';
 import { Command } from 'commander';
 import chalk from 'chalk';
@@ -9,6 +10,8 @@ import {
   isStartBeforeEnd,
   isDateRangeWithinLimit
 } from '../utils/date-utils.js';
+
+const { version } = createRequire(import.meta.url)('../../package.json') as { version: string };
 
 let envLoaded = false;
 
@@ -165,7 +168,7 @@ export function getCommandLineArgs(): CliArgs {
   program
     .name('reflect')
     .description('Generate GitHub activity reports and brag documents')
-    .version('0.1.0')
+    .version(version)
     .requiredOption('--username <username>', 'GitHub username to analyze')
     .option('--lookback <number>', 'Number of months to look back', parseInt)
     .option('--since <date>', 'Start date (YYYY-MM-DD), fetches activity from this date to today')

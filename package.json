@@ -1,5 +1,6 @@
 {
   "name": "reflect",
+  "version": "0.22.2",
   "description": "An AI tool to generate your brag document",
   "type": "module",
   "engines": {

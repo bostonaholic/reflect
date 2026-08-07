@@ -11,7 +11,7 @@
     {
       "name": "reflect",
       "description": "Skills for using the Reflect CLI",
-      "version": "0.1.0",
+      "version": "0.22.2",
       "source": "./",
       "author": {
         "name": "Matthew Boston"
