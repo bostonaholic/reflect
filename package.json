@@ -10,7 +10,7 @@
   "devDependencies": {
     "@types/node": "26.6.3",
     "@vitest/coverage-v8": "4.1.11",
-    "fast-check": "4.9.0",
+    "fast-check": "4.10.2",
     "husky": "9.1.7",
     "ts-node": "10.9.2",
     "tsx": "4.23.15",
