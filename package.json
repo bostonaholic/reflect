@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.115.0",
-    "@dotenvx/dotenvx": "^2.31.1",
+    "@dotenvx/dotenvx": "^2.38.2",
     "@octokit/graphql": "9.0.5",
     "chalk": "6.0.1",
     "commander": "15.0.0",
