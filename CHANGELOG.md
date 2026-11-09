@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- Removed the hardcoded `temperature: 0.7` parameter from Anthropic requests. `@anthropic-ai/sdk` 1.0 dropped `temperature` from `messages.create` because API version 2026-10-21 no longer accepts it, and the API default is sufficient.
+
 ## [0.22.2] - 2026-08-07
 
 ### Changed
