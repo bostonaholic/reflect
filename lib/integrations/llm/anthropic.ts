@@ -24,7 +24,6 @@ export async function callAnthropic(systemMessage: string, userMessage: string, 
         content: userMessage
       }
     ],
-    temperature: 0.7,
     max_tokens: 1000
   });
 

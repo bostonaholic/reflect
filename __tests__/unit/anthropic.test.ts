@@ -43,6 +43,17 @@ describe('callAnthropic', () => {
     setDebug(undefined as unknown as boolean);
   });
 
+  describe('request shape', () => {
+    it('does not pass a temperature parameter', async () => {
+      mockCreate.mockResolvedValue(buildMockResponse());
+
+      await callAnthropic('system prompt', 'user prompt', 'test-key', llmOptions);
+
+      const requestArg = mockCreate.mock.calls[0][0];
+      expect(requestArg).not.toHaveProperty('temperature');
+    });
+  });
+
   describe('cache_control parameter', () => {
     it('includes cache_control with type ephemeral in the API request', async () => {
       mockCreate.mockResolvedValue(buildMockResponse());
